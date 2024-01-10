@@ -1,0 +1,23 @@
+{
+  "locale": {
+    "menu": {
+      "header": "گزینه‌ها",
+      "columns": {
+        "label": "ستون‌ها",
+        "add": "افزودن ستون",
+        "edit": "ویرایش ستون",
+        "remove": "حذف ستون",
+        "filter": "فیلتر"
+      },
+      "data": {
+        "label": "داده‌ها",
+        "refresh": "بازنشانی داده‌ها"
+      },
+      "actions": {
+        "label": "عملیات"
+      }
+    }
+  }
+}
+
+module.exports = locale;
