@@ -11,3 +11,45 @@
   font-style: normal;
   font-display: swap;
 }
+
+.MuiTablePagination-actions {
+  flex-direction: row-reverse;
+}
+
+/* antd table */
+.list thead.ant-table-thead tr td,
+.list thead.ant-table-thead tr th {
+  background-color: #47576b !important;
+  color: #ffffff !important;
+  padding: 12px !important;
+  font-size: 18px;
+}
+
+.custom-row-0 {
+  background-color: rgb(204, 204, 204);
+}
+
+.ant-table-filter-trigger:hover .ant-table-filter-icon {
+  color: red;
+}
+
+.custom-row-1 {
+  background-color: rgb(218, 218, 218);
+}
+
+.list ul.ant-pagination {
+  direction: ltr !important;
+}
+
+.list thead.ant-table-thead tr td span,
+.list thead.ant-table-thead tr th span {
+  font-size: 13px;
+  margin-inline: 0px !important;
+}
+
+.list tbody.ant-table-tbody tr td {
+  font-size: 15px !important;
+}
+.mainlist .ant-table-tbody tr :hover {
+  cursor: pointer;
+}

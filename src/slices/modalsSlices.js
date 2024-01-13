@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  darkMode: false,
-  data: [],
-  column: [],
+  sentOrderModal: false,
 };
 
 // export const handleCommonUserList = createAsyncThunk(
@@ -23,21 +21,18 @@ const initialState = {
 //     }
 //   );
 
-const mainSlices = createSlice({
-  name: "main",
+const modalsSlices = createSlice({
+  name: "modals",
   initialState,
   reducers: {
-    RsetDarkMode: (state, { payload }) => {
-      return { ...state, darkMode: payload };
-    },
-    RsetDarkMode: (state, { payload }) => {
-      return { ...state, darkMode: payload };
+    RsetSentOrderModal: (state, { payload }) => {
+      return { ...state, sentOrderModal: payload };
     },
   },
 });
 
-export const { RsetDarkMode } = mainSlices.actions;
+export const { RsetSentOrderModal } = modalsSlices.actions;
 
-export const selectDarkMode = (state) => state.main.darkMode;
+export const selectSentOrderModal = (state) => state.modals.sentOrderModal;
 
-export default mainSlices.reducer;
+export default modalsSlices.reducer;

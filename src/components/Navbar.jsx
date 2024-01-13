@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useSelect, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RsetDarkMode, selectDarkMode } from "../slices/mainSlices";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import Brightness3Icon from "@mui/icons-material/Brightness3";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Button } from "@mui/material";
 import Clock from "react-live-clock";
 
-
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const darkMode = useSelector(selectDarkMode);
+
   const currentTime = new Date();
   const isAM = currentTime.getHours() < 12;
 
   return (
-    <section className="">
-      <nav className="grid grid-cols-6 justify-between border border-blue-500">
+    <section className="bg-white dark:bg-gray-800">
+      <nav className="grid grid-cols-6 justify-between py-3">
         <div className="col-span-3 flex items-center">
-          <div id="profile" className="flex items-center ms-14">
-            <div id="profile_pic" className="text-black">
+          <div id="profile" className="flex items-center ms-8">
+            <div id="profile_pic" className="text-black dark:text-gray-400">
               <AccountCircleIcon className="text-[70px]" />
             </div>
-            <div id="profile_name" className="text-black ms-3">
+            <div id="profile_name" className="text-black dark:text-white ms-3">
               <div className="font-bold">shayan golestanipour</div>
               <div>122388822</div>
             </div>
@@ -32,7 +37,7 @@ const Navbar = () => {
               format="HH:mm:ss"
               interval={1000}
               ticking={true}
-              className="ms-3 text-light d-none d-md-inline"
+              className="ms-3 text-light d-none d-md-inline dark:text-white"
               style={{ width: "60px" }}
               // onChange={(date) => console.log(date)}
             />
@@ -40,13 +45,39 @@ const Navbar = () => {
         </div>
         <div
           id="items"
-          className="col-span-3 flex justify-end gap-2 items-center border border-red-500 me-14"
+          className="col-span-3 flex justify-end gap-2 items-center"
         >
-          <Button variant="contained" className="bg-gray-900 hover:bg-black">
+          <Button
+            variant="contained"
+            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+          >
+            Home
+          </Button>
+          <Button
+            variant="contained"
+            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+          >
             my Order List
           </Button>
-          <Button variant="contained" className="bg-gray-900 hover:bg-black">
+
+          <Button
+            variant="contained"
+            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+          >
             my Finance
+          </Button>
+          <Button
+            variant="outlined"
+            className="border border-black dark:border-white hover:border-black ms-10 me-2"
+            onClick={() => {
+              dispatch(RsetDarkMode(!darkMode));
+            }}
+          >
+            {!darkMode ? (
+              <LightModeIcon className="dark:text-white" />
+            ) : (
+              <Brightness3Icon className="text-black" />
+            )}
           </Button>
         </div>
       </nav>

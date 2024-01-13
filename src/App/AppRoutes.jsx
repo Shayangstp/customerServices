@@ -3,18 +3,17 @@ import { Route, Routes } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MainLayout from "../App/Mainlayout";
-import BasicTable from "../components/List";
+import List from "../components/list/List";
+import Home from "../components/home/Home";
+import MainList from "../components/myOrderList/MainList";
+
 const AppRoutes = () => {
   return (
     <Fragment>
       <MainLayout>
-        <BasicTable />
         <Routes>
-          {/* <Route path="*" element={<ErrorPage />} /> */}
-          {/* <Route
-          path="/"
-          element={tokenIsValid ? <Navigate to="/home" /> : <Login />}
-        /> */}
+          <Route path="/" element={<Home />} />
+          <Route path="/myOrderList" element={<MainList />} />
           {/* <Route path="/deviceList" element={<DeviceList />} /> */}
         </Routes>
       </MainLayout>
