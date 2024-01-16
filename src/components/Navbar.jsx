@@ -7,9 +7,11 @@ import Brightness3Icon from "@mui/icons-material/Brightness3";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Button } from "@mui/material";
 import Clock from "react-live-clock";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const darkMode = useSelector(selectDarkMode);
 
   const currentTime = new Date();
@@ -50,12 +52,18 @@ const Navbar = () => {
           <Button
             variant="contained"
             className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+            onClick={() => {
+              navigate("/");
+            }}
           >
             Home
           </Button>
           <Button
             variant="contained"
             className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+            onClick={() => {
+              navigate("/myOrderList");
+            }}
           >
             my Order List
           </Button>
@@ -63,6 +71,9 @@ const Navbar = () => {
           <Button
             variant="contained"
             className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+            onClick={() => {
+              navigate("/myFinance");
+            }}
           >
             my Finance
           </Button>
