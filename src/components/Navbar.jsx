@@ -8,8 +8,12 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Button } from "@mui/material";
 import Clock from "react-live-clock";
 import { useNavigate } from "react-router-dom";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
+import HomeIcon from "@mui/icons-material/Home";
+import ListIcon from "@mui/icons-material/List";
 
 const Navbar = () => {
+  const [navOpen, setNavOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const darkMode = useSelector(selectDarkMode);
@@ -17,80 +21,173 @@ const Navbar = () => {
   const currentTime = new Date();
   const isAM = currentTime.getHours() < 12;
 
+  const handleNavbar = () => {
+    setNavOpen(!navOpen);
+  };
+
   return (
     <section className="bg-white dark:bg-gray-800">
-      <nav className="grid grid-cols-6 justify-between py-3">
-        <div className="col-span-3 flex items-center">
-          <div id="profile" className="flex items-center ms-8">
-            <div id="profile_pic" className="text-black dark:text-gray-400">
-              <AccountCircleIcon className="text-[70px]" />
+      <nav
+        className={`py-3 ${
+          navOpen ? "h-[90px] transition-all" : "h-[60px] transition-all"
+        }`}
+      >
+        {navOpen ? (
+          <div className="grid grid-cols-6 justify-between">
+            {" "}
+            <div className="col-span-3 flex items-center">
+              <div id="profile" className="flex items-center ms-8">
+                <div
+                  id="profile_pic"
+                  className={`text-black dark:text-gray-400 ${
+                    navOpen
+                      ? "opacity-100 transition-opacity delay-200"
+                      : "opacity-0"
+                  }`}
+                >
+                  <AccountCircleIcon className="text-[70px]" />
+                </div>
+                <div
+                  id="profile_name"
+                  className="text-black dark:text-white ms-3"
+                >
+                  <div className="font-bold">shayan golestanipour</div>
+                  <div>122388822</div>
+                </div>
+              </div>
+              <div
+                id="line"
+                className="border border-gray-300 h-[50%] ms-5 mt-1"
+              ></div>
+              <div id="time" className="d-flex ">
+                <Clock
+                  format="HH:mm:ss"
+                  interval={1000}
+                  ticking={true}
+                  className="ms-3 text-light d-none d-md-inline dark:text-white"
+                  style={{ width: "60px" }}
+                  // onChange={(date) => console.log(date)}
+                />
+              </div>
             </div>
-            <div id="profile_name" className="text-black dark:text-white ms-3">
-              <div className="font-bold">shayan golestanipour</div>
-              <div>122388822</div>
-            </div>
-          </div>
-          <div
-            id="line"
-            className="border border-gray-300 h-[50%] ms-5 mt-1"
-          ></div>
-          <div id="time" className="d-flex ">
-            <Clock
-              format="HH:mm:ss"
-              interval={1000}
-              ticking={true}
-              className="ms-3 text-light d-none d-md-inline dark:text-white"
-              style={{ width: "60px" }}
-              // onChange={(date) => console.log(date)}
-            />
-          </div>
-        </div>
-        <div
-          id="items"
-          className="col-span-3 flex justify-end gap-2 items-center"
-        >
-          <Button
-            variant="contained"
-            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Home
-          </Button>
-          <Button
-            variant="contained"
-            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-            onClick={() => {
-              navigate("/myOrderList");
-            }}
-          >
-            my Order List
-          </Button>
+            <div
+              id="items"
+              className="col-span-3 flex justify-end gap-2 items-center"
+            >
+              <Button
+                variant="contained"
+                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Home
+              </Button>
+              <Button
+                variant="contained"
+                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+                onClick={() => {
+                  navigate("/myOrderList");
+                }}
+              >
+                my Order List
+              </Button>
 
-          <Button
-            variant="contained"
-            className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-            onClick={() => {
-              navigate("/myFinance");
-            }}
-          >
-            my Finance
-          </Button>
-          <Button
-            variant="outlined"
-            className="border border-black dark:border-white hover:border-black ms-10 me-2"
-            onClick={() => {
-              dispatch(RsetDarkMode(!darkMode));
-            }}
-          >
-            {!darkMode ? (
-              <LightModeIcon className="dark:text-white" />
-            ) : (
-              <Brightness3Icon className="text-black" />
-            )}
-          </Button>
-        </div>
+              <Button
+                variant="contained"
+                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+                onClick={() => {
+                  navigate("/myFinance");
+                }}
+              >
+                my Finance
+              </Button>
+              <div
+                className="ms-10 me-2 hover:bg-white hover:dark:bg-gray-800"
+                onClick={() => {
+                  dispatch(RsetDarkMode(!darkMode));
+                }}
+              >
+                {!darkMode ? (
+                  <LightModeIcon
+                    fontSize="small"
+                    className="dark:text-white dark:hover:text-blue-500 cursor-pointer"
+                  />
+                ) : (
+                  <Brightness3Icon
+                    fontSize="small"
+                    className="text-black hover:text-blue-500 cursor-pointer"
+                  />
+                )}
+              </div>
+              <div
+                className={`rotate-[270deg] me-10 text-blue-500 cursor-pointer hover:text-blue-400 mt-1`}
+                onClick={handleNavbar}
+              >
+                <DoubleArrowIcon fontSize="small" />
+              </div>
+            </div>{" "}
+          </div>
+        ) : (
+          <div className="flex justify-between">
+            <div id="profile">
+              <div className="ms-10 mt-1 font-bold text-black dark:text-white">
+                shayan golestanipour
+              </div>
+            </div>
+            <div id="nav-buttons" className="flex items-center">
+              <div id="main-buttons" className="me-14">
+                <Button
+                  title="Home"
+                  className="hover:bg-white hover:dark:bg-gray-800"
+                  onClick={() => {}}
+                >
+                  <HomeIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
+                </Button>
+                <Button
+                  title="List"
+                  className="hover:bg-white hover:dark:bg-gray-800"
+                  onClick={() => {}}
+                >
+                  <ListIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
+                </Button>
+                <Button
+                  title="Finance"
+                  className="hover:bg-white hover:dark:bg-gray-800"
+                  onClick={() => {}}
+                >
+                  <AttachMoneyIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
+                </Button>
+              </div>
+              <div
+                className="hover:bg-white hover:dark:bg-gray-800"
+                onClick={() => {
+                  dispatch(RsetDarkMode(!darkMode));
+                }}
+              >
+                {!darkMode ? (
+                  <LightModeIcon
+                    fontSize="small"
+                    className="dark:text-white dark:hover:text-blue-500 cursor-pointer"
+                  />
+                ) : (
+                  <Brightness3Icon
+                    fontSize="small"
+                    className="text-black hover:text-blue-500 cursor-pointer"
+                  />
+                )}
+              </div>
+              <Button
+                onClick={handleNavbar}
+                className={`${
+                  !navOpen ? "rotate-[90deg]" : "rotate-[90deg]"
+                } mt-1`}
+              >
+                <DoubleArrowIcon fontSize="small" />
+              </Button>
+            </div>
+          </div>
+        )}
       </nav>
     </section>
   );

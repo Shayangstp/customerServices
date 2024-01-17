@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import List from "../list/List";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
@@ -24,6 +24,13 @@ import {
   selectSentOrderModal,
 } from "../../slices/modalsSlices";
 import SentOrderModal from "../modals/SentOrderModal";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const data = [
   {
@@ -62,6 +69,66 @@ const data = [
         discount: "10",
         discountPrice: "260",
         sentProduct: "2000",
+        leftProduct: "1000",
+        salesExpert: "حسین اکبری",
+      },
+      {
+        id: 2,
+        date: "1402/06/01",
+        referenceNO: "52523",
+        productCode: "12T909",
+        productDesc: "شرح کالا",
+        boxes: "4000",
+        fee: "12.22",
+        price: "10000",
+        discount: "10",
+        discountPrice: "1000",
+        sentProduct: "9000",
+        leftProduct: "1000",
+        salesExpert: "حسین اکبری",
+      },
+      {
+        id: 2,
+        date: "1402/06/01",
+        referenceNO: "52523",
+        productCode: "12T909",
+        productDesc: "شرح کالا",
+        boxes: "4000",
+        fee: "12.22",
+        price: "10000",
+        discount: "10",
+        discountPrice: "1000",
+        sentProduct: "9000",
+        leftProduct: "1000",
+        salesExpert: "حسین اکبری",
+      },
+      {
+        id: 2,
+        date: "1402/06/01",
+        referenceNO: "52523",
+        productCode: "12T909",
+        productDesc: "شرح کالا",
+        boxes: "4000",
+        fee: "12.22",
+        price: "10000",
+        discount: "10",
+        discountPrice: "1000",
+        sentProduct: "9000",
+        leftProduct: "1000",
+        salesExpert: "حسین اکبری",
+      },
+      {
+        id: 2,
+        date: "1402/06/01",
+        referenceNO: "52523",
+        productCode: "12T909",
+        productDesc: "شرح کالا",
+        boxes: "4000",
+        fee: "12.22",
+        price: "10000",
+        discount: "10",
+        discountPrice: "1000",
+        sentProduct: "9000",
         leftProduct: "1000",
         salesExpert: "حسین اکبری",
       },
@@ -152,8 +219,23 @@ const data = [
 
 const MainList = () => {
   const dispatch = useDispatch();
+  const [active, setActive] = useState();
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
+  //
+  const swiperRef = useRef(null);
+
+  const slideNext = () => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slideNext();
+    }
+  };
+
+  const slidePrev = () => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slidePrev();
+    }
+  };
   //
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -253,61 +335,7 @@ const MainList = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleRowClick = (record) => {
-    console.log(record);
-    setSelectedName(record.name);
-    setSelectedDetail(record.detail);
-  };
-
-  const columns = [
-    {
-      key: "idx",
-      title: "ردیف",
-      dataIndex: "",
-      render: (text, record, index) => index + 1,
-      width: 50,
-    },
-    {
-      ...getColumnSearchProps("name", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>نام شرکت</span>,
-      dataIndex: "name",
-      key: "name",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
-      sorter: (a, b) => {
-        if (!a.name && !b.name) {
-          return 0;
-        }
-
-        if (!a.name) {
-          return 1;
-        }
-
-        if (!b.name) {
-          return -1;
-        }
-
-        return a.name.localeCompare(b.name);
-      },
-
-      width: 200,
-    },
-  ];
-
   const selectedColumns = [
-    {
-      key: "idx",
-      title: () => selectedName,
-      dataIndex: "",
-      render: (text, record, index) => index + 1,
-      width: 200,
-    },
     {
       ...getColumnSearchProps("date", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تاریخ سفارش</span>,
@@ -704,62 +732,93 @@ const MainList = () => {
     size: "middle",
   };
 
-  console.log(sentOrderModal);
-
   return (
     <div dir="rtl" className="flex flex-col gap-5">
-      <div className="ms-10 mt-5">
-        <h1 className="text-[20px] dark:text-white text-black">
-          {" "}
-          برای مشاهده جزییات سفارشات یکی از موارد داخل لیست شرکت ها را انتخاب
-          کنید
-        </h1>
-      </div>
-      <div id="list" className="flex gap-5">
-        <div
-          id="factoryList"
-          className="bg-white rounded-2xl w-[20%] mt-5 ms-10"
-        >
-          <ConfigProvider locale={faIR}>
-            <Table
-              locale={{
-                emptyText: <Empty description="اطلاعات موجود نیست!" />,
-              }}
-              className="list mainlist"
-              bordered
-              dataSource={data}
-              columns={columns}
-              rowClassName={getRowClassName}
-              pagination={paginationConfig}
-              scroll={{ x: "max-content" }}
-              size="middle"
-              onRow={(record) => ({
-                onClick: () => handleRowClick(record),
-              })}
-            />
-          </ConfigProvider>
+      <div id="list" className="flex flex-col gap-5">
+        <div dir="ltr" className="flex mx-10 mt-10 items-center">
+          <Button
+            variant="outlined"
+            size="small"
+            className=" dark:border-cyan-500 dark:text-gray-300 dark:hover:text-white dark:hover:border-cyan-300 rounded-xl me-2 text-white border-white "
+            onClick={slidePrev}
+          >
+            <span className="text-[13px]">
+              <ArrowCircleLeftOutlinedIcon className="text-[50px] " />
+            </span>
+          </Button>
+          <Swiper
+            spaceBetween={10}
+            slidesPerView={6}
+            // navigation={true}
+            className="swiper-container"
+            // modules={[Navigation]}
+            ref={swiperRef}
+          >
+            {data.map((item, idx) => {
+              return (
+                <SwiperSlide key={idx} virtualIndex={idx} className="">
+                  <Button
+                    onClick={() => {
+                      setActive(idx);
+                      setSelectedDetail(item.detail);
+                    }}
+                    size="large"
+                    variant="contained"
+                    className={`dark:text-black text-[18px] hover:dark:bg-blue-500 text-white hover:dark:text-white hover:text-white w-[200px] py-3 ${
+                      idx === active
+                        ? "dark:bg-blue-500 bg-blue-500 dark:text-gray-100"
+                        : "dark:bg-gray-200 bg-gray-500"
+                    }`}
+                  >
+                    {item.name}
+                  </Button>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+          <Button
+            variant="outlined"
+            size="small"
+            className=" dark:border-cyan-500 dark:text-gray-300 dark:hover:text-white dark:hover:border-cyan-300 rounded-xl me-2 text-white border-white "
+            onClick={slideNext}
+          >
+            <span className="text-[13px]">
+              <ArrowCircleRightOutlinedIcon className="text-[50px]" />
+            </span>
+          </Button>
         </div>
-        <div className="w-[75%] h-ful">
-          <div id="detail_list" className="bg-white rounded-2xl l mt-5 me-2">
-            <ConfigProvider locale={faIR}>
-              <Table
-                locale={{
-                  emptyText: <Empty description="اطلاعات موجود نیست!" />,
-                }}
-                className="list"
-                bordered
-                dataSource={selectedDetail}
-                columns={selectedColumns}
-                rowClassName={getRowClassName}
-                pagination={paginationConfig}
-                scroll={{ x: "max-content" }}
-                size="middle"
-                // onRow={(record) => ({
-                //   onClick: () => handleRowClick(record),
-                // })}
-              />
-            </ConfigProvider>
-          </div>
+        <div className="h-full">
+          {selectedDetail.length > 0 ? (
+            <div
+              id="detail_list"
+              className="bg-white rounded-2xl l mt-16 mx-5 "
+            >
+              <ConfigProvider locale={faIR}>
+                <Table
+                  locale={{
+                    emptyText: <Empty description="اطلاعات موجود نیست!" />,
+                  }}
+                  className="list"
+                  bordered
+                  dataSource={selectedDetail}
+                  columns={selectedColumns}
+                  rowClassName={getRowClassName}
+                  pagination={paginationConfig}
+                  scroll={{ x: "max-content" }}
+                  size="middle"
+                  // onRow={(record) => ({
+                  //   onClick: () => handleRowClick(record),
+                  // })}
+                />
+              </ConfigProvider>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center min-h-[50vh]">
+              <p className="text-[70px] dark:text-white text-black">
+                No Order Available
+              </p>
+            </div>
+          )}
         </div>
       </div>
       {sentOrderModal && <SentOrderModal />}

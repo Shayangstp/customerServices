@@ -6,10 +6,12 @@ import { selectDarkMode } from "../slices/mainSlices";
 const MainLayout = ({ children }) => {
   const darkMode = useSelector(selectDarkMode);
   const htmlClasses = !darkMode ? "dark" : "";
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <div className={htmlClasses}>
       <div className="bg-gray-400 dark:bg-gray-700 min-h-[100vh]">
-        <Navbar />
+        {isLoggedIn && <Navbar />}
         <div className="">{children}</div>
       </div>
     </div>

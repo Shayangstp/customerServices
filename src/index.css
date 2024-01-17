@@ -19,7 +19,7 @@
 /* antd table */
 .list thead.ant-table-thead tr td,
 .list thead.ant-table-thead tr th {
-  background-color: #47576b !important;
+  background-color: rgb(93, 170, 170) !important;
   color: #ffffff !important;
   padding: 12px !important;
   font-size: 18px;
@@ -52,4 +52,19 @@
 }
 .mainlist .ant-table-tbody tr :hover {
   cursor: pointer;
+}
+
+/* fade navbar */
+
+.fade-in {
+  opacity: 100 !important;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.navbar-transition {
+  transition: all 0.3s ease;
 }
