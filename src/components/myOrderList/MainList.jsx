@@ -622,7 +622,8 @@ const MainList = () => {
       key: "sentProduct",
       render: (text, record) => (
         <span
-          style={{ cursor: "pointer", color: "blue" }}
+          className="text-blue-500"
+          style={{ cursor: "pointer" }}
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetSentOrderModal(true));
@@ -794,7 +795,17 @@ const MainList = () => {
               id="detail_list"
               className="bg-white rounded-2xl l mt-20 mx-5 "
             >
-              <ConfigProvider locale={faIR}>
+              <ConfigProvider
+                locale={faIR}
+                theme={{
+                  token: {
+                    // Seed Token
+                    // colorPrimary: "#00b96b",
+                    // Alias Token
+                    colorBgContainer: "#000",
+                  },
+                }}
+              >
                 <Table
                   locale={{
                     emptyText: <Empty description="اطلاعات موجود نیست!" />,
@@ -805,6 +816,14 @@ const MainList = () => {
                   columns={selectedColumns}
                   rowClassName={getRowClassName}
                   pagination={paginationConfig}
+                  onRow={(record, index) => ({
+                    onMouseEnter: (event) => {
+                      event.currentTarget.style.backgroundColor = "#000"; // Replace with your desired hover color
+                    },
+                    onMouseLeave: (event) => {
+                      event.currentTarget.style.backgroundColor = ""; // Reset the background color on mouse leave
+                    },
+                  })}
                   scroll={{ x: "max-content" }}
                   size="middle"
                   // onRow={(record) => ({

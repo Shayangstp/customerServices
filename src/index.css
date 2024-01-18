@@ -29,12 +29,20 @@
   background-color: #222a38;
   color: white;
 }
+.custom-row-0:hover {
+  background-color: #222a38;
+  color: white;
+}
 
 .ant-table-filter-trigger:hover .ant-table-filter-icon {
   color: red;
 }
 
 .custom-row-1 {
+  background-color: #222a38;
+  color: white;
+}
+.custom-row-1:hover {
   background-color: #222a38;
   color: white;
 }
@@ -55,6 +63,11 @@
 
 .list tbody.ant-table-tbody tr td {
   font-size: 15px !important;
+}
+.list tbody.ant-table-tbody tr:hover {
+  font-size: 15px !important;
+  color: white;
+  cursor: pointer;
 }
 .mainlist .ant-table-tbody tr :hover {
   cursor: pointer;
@@ -97,7 +110,11 @@
 .list .ant-pagination-next,
 .list .ant-pagination-jump-prev,
 .list .ant-pagination-jump-next {
-  background-color: rgb(73, 73, 73); /* Change the background color to your desired color */
+  background-color: rgb(
+    73,
+    73,
+    73
+  ); /* Change the background color to your desired color */
   border-color: #d9d9d9; /* Change the border color to your desired color */
   color: #fff; /* Change the text color to your desired color */
 }
