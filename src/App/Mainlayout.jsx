@@ -10,9 +10,9 @@ const MainLayout = ({ children }) => {
 
   return (
     <div className={htmlClasses}>
-      <div className="bg-gray-400 dark:bg-gray-700 min-h-[100vh]">
+      <div className="bg-gray-400 dark:bg-gray-900 min-h-[100vh]">
         {isLoggedIn && <Navbar />}
-        <div className="">{children}</div>
+        <div className="max-w-[1920px] mx-auto">{children}</div>
       </div>
     </div>
   );

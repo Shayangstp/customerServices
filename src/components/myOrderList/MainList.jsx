@@ -309,7 +309,7 @@ const MainList = () => {
       const columnValue = record[dataIndex] ? record[dataIndex].toString() : "";
       return columnValue.toLowerCase().includes(value.toLowerCase());
     },
-    onFilterDropdownVisibleChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => {
           const input = document.querySelector(
@@ -747,7 +747,7 @@ const MainList = () => {
             </span>
           </Button>
           <Swiper
-            spaceBetween={10}
+            spaceBetween={7}
             slidesPerView={6}
             // navigation={true}
             className="swiper-container"
@@ -758,16 +758,17 @@ const MainList = () => {
               return (
                 <SwiperSlide key={idx} virtualIndex={idx} className="">
                   <Button
+                    key={idx}
                     onClick={() => {
                       setActive(idx);
                       setSelectedDetail(item.detail);
                     }}
                     size="large"
-                    variant="contained"
-                    className={`dark:text-black text-[18px] hover:dark:bg-blue-500 text-white hover:dark:text-white hover:text-white w-[200px] py-3 ${
+                    variant="outlined"
+                    className={`dark:text-gray-200 text-[18px] rounded-2xl hover:dark:bg-gray-800 hover:border-gray-400 text-white hover:dark:text-white hover:text-white w-[180px] py-3 ${
                       idx === active
-                        ? "dark:bg-blue-500 bg-blue-500 dark:text-gray-100"
-                        : "dark:bg-gray-200 bg-gray-500"
+                        ? "dark:bg-gray-800 bg-blue-500 dark:text-gray-100 border-blue-500"
+                        : "dark:bg-transparent border-gray-700  bg-gray-500"
                     }`}
                   >
                     {item.name}
@@ -791,7 +792,7 @@ const MainList = () => {
           {selectedDetail.length > 0 ? (
             <div
               id="detail_list"
-              className="bg-white rounded-2xl l mt-16 mx-5 "
+              className="bg-white rounded-2xl l mt-20 mx-5 "
             >
               <ConfigProvider locale={faIR}>
                 <Table

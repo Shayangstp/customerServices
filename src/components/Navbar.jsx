@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
+import { navData } from "../helpers/index";
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
@@ -26,9 +27,9 @@ const Navbar = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-gray-800">
+    <section className="bg-white dark:bg-black">
       <nav
-        className={`py-3 ${
+        className={`py-3 border-b border-gray-700 ${
           navOpen ? "h-[90px] transition-all" : "h-[60px] transition-all"
         }`}
       >
@@ -57,7 +58,7 @@ const Navbar = () => {
               </div>
               <div
                 id="line"
-                className="border border-gray-300 h-[50%] ms-5 mt-1"
+                className="border dark:border-gray-700 h-[50%] ms-5 mt-1"
               ></div>
               <div id="time" className="d-flex ">
                 <Clock
@@ -74,36 +75,22 @@ const Navbar = () => {
               id="items"
               className="col-span-3 flex justify-end gap-2 items-center"
             >
+              {navData.map((item, index) => {
+                return (
+                  <Button
+                    key={index}
+                    variant="contained"
+                    className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+                    onClick={() => {
+                      navigate(item.href);
+                    }}
+                  >
+                    {item.name}
+                  </Button>
+                );
+              })}
               <Button
-                variant="contained"
-                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                Home
-              </Button>
-              <Button
-                variant="contained"
-                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-                onClick={() => {
-                  navigate("/myOrderList");
-                }}
-              >
-                my Order List
-              </Button>
-
-              <Button
-                variant="contained"
-                className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
-                onClick={() => {
-                  navigate("/myFinance");
-                }}
-              >
-                my Finance
-              </Button>
-              <div
-                className="ms-10 me-2 hover:bg-white hover:dark:bg-gray-800"
+                className="ms-10 me-2 hover:bg-white hover:dark:bg-transparent"
                 onClick={() => {
                   dispatch(RsetDarkMode(!darkMode));
                 }}
@@ -119,7 +106,7 @@ const Navbar = () => {
                     className="text-black hover:text-blue-500 cursor-pointer"
                   />
                 )}
-              </div>
+              </Button>
               <div
                 className={`rotate-[270deg] me-10 text-blue-500 cursor-pointer hover:text-blue-400 mt-1`}
                 onClick={handleNavbar}
@@ -137,30 +124,23 @@ const Navbar = () => {
             </div>
             <div id="nav-buttons" className="flex items-center">
               <div id="main-buttons" className="me-14">
-                <Button
-                  title="Home"
-                  className="hover:bg-white hover:dark:bg-gray-800"
-                  onClick={() => {}}
-                >
-                  <HomeIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
-                </Button>
-                <Button
-                  title="List"
-                  className="hover:bg-white hover:dark:bg-gray-800"
-                  onClick={() => {}}
-                >
-                  <ListIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
-                </Button>
-                <Button
-                  title="Finance"
-                  className="hover:bg-white hover:dark:bg-gray-800"
-                  onClick={() => {}}
-                >
-                  <AttachMoneyIcon className="dark:text-white text-black hover:text-blue-500 hover:dark:text-blue-500 transition-all delay-75" />
-                </Button>
+                {navData.map((item, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      title="Home"
+                      className="hover:bg-white hover:dark:bg-gray-800"
+                      onClick={() => {
+                        navigate(item.href);
+                      }}
+                    >
+                      {item.icon}
+                    </Button>
+                  );
+                })}
               </div>
               <div
-                className="hover:bg-white hover:dark:bg-gray-800"
+                className="hover:bg-white hover:dark:bg-black"
                 onClick={() => {
                   dispatch(RsetDarkMode(!darkMode));
                 }}

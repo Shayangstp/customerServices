@@ -19,14 +19,15 @@
 /* antd table */
 .list thead.ant-table-thead tr td,
 .list thead.ant-table-thead tr th {
-  background-color: rgb(93, 170, 170) !important;
+  background-color: #1c283d !important;
   color: #ffffff !important;
   padding: 12px !important;
   font-size: 18px;
 }
 
 .custom-row-0 {
-  background-color: rgb(204, 204, 204);
+  background-color: #222a38;
+  color: white;
 }
 
 .ant-table-filter-trigger:hover .ant-table-filter-icon {
@@ -34,7 +35,12 @@
 }
 
 .custom-row-1 {
-  background-color: rgb(218, 218, 218);
+  background-color: #222a38;
+  color: white;
+}
+
+.list .ant-table-wrapper {
+  background-color: #000; /* Change the background color to your desired color */
 }
 
 .list ul.ant-pagination {
@@ -67,4 +73,44 @@
 
 .navbar-transition {
   transition: all 0.3s ease;
+}
+
+.list .ant-table-column-sorters .ant-table-column-sorter-up,
+.list .ant-table-column-sorters .ant-table-column-sorter-down {
+  color: #b1b7be; /* Change the color to your desired color */
+}
+.list .ant-table-column-sorters .ant-table-column-sorter-up:hover,
+.list .ant-table-column-sorters .ant-table-column-sorter-down:hover {
+  color: #fff; /* Change the color to your desired color */
+}
+
+.list .ant-table-filter-trigger {
+  color: #b1b7be; /* Change the color to your desired color */
+}
+.list .ant-table-filter-trigger:hover {
+  color: #fff; /* Change the color to your desired color */
+}
+
+/* CustomPagination.css */
+.list .ant-pagination-item,
+.list .ant-pagination-prev,
+.list .ant-pagination-next,
+.list .ant-pagination-jump-prev,
+.list .ant-pagination-jump-next {
+  background-color: rgb(73, 73, 73); /* Change the background color to your desired color */
+  border-color: #d9d9d9; /* Change the border color to your desired color */
+  color: #fff; /* Change the text color to your desired color */
+}
+
+.list .ant-pagination-item-active {
+  background-color: transparent; /* Change the background color of the active page to your desired color */
+  border-color: #fff; /* Change the border color of the active page to your desired color */
+  color: #fff; /* Change the text color of the active page to your desired color */
+}
+
+.list .ant-pagination {
+  background-color: #222a38;
+  padding: 20px;
+  margin: 0 !important;
+  color: white;
 }
