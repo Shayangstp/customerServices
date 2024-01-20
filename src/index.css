@@ -4,12 +4,20 @@
 
 @font-face {
   font-family: "iranSans";
-  src: url("../public/fonts/iranSans.eot") format("embedded-opentype"),
-    url("../public/fonts/iranSans.woff") format("woff"),
-    url("../public/fonts/iranSans.ttf") format("truetype");
+  src: url("../public/fonts/iranSans.ttf") format("woff");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../public/fonts/Poppins.ttf") format("woff");
+  font-style: normal;
+  font-display: swap;
+}
+
+.googleSvg {
+  background-image: url("./assets/google.svg");
 }
 
 .MuiTablePagination-actions {
@@ -29,10 +37,6 @@
   background-color: #222a38;
   color: white;
 }
-.custom-row-0:hover {
-  background-color: #222a38;
-  color: white;
-}
 
 .ant-table-filter-trigger:hover .ant-table-filter-icon {
   color: red;
@@ -41,14 +45,6 @@
 .custom-row-1 {
   background-color: #222a38;
   color: white;
-}
-.custom-row-1:hover {
-  background-color: #222a38;
-  color: white;
-}
-
-.list .ant-table-wrapper {
-  background-color: #000; /* Change the background color to your desired color */
 }
 
 .list ul.ant-pagination {
@@ -130,4 +126,18 @@
   padding: 20px;
   margin: 0 !important;
   color: white;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 15px;
+  border-radius: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
 }

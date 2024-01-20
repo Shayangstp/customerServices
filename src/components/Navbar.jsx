@@ -11,13 +11,25 @@ import { useNavigate } from "react-router-dom";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { navData } from "../helpers/index";
+import { RsetIsLoggedIn } from "../slices/authSlices";
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const darkMode = useSelector(selectDarkMode);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      dispatch(RsetIsLoggedIn(true));
+    } else {
+      dispatch(RsetIsLoggedIn(false));
+    }
+  }, [token]);
 
   const currentTime = new Date();
   const isAM = currentTime.getHours() < 12;
@@ -90,7 +102,7 @@ const Navbar = () => {
                 );
               })}
               <Button
-                className="ms-10 me-2 hover:bg-white hover:dark:bg-transparent"
+                className="ms-10 me-2 hover:bg-white hover:dark:bg-transparent mt-1"
                 onClick={() => {
                   dispatch(RsetDarkMode(!darkMode));
                 }}
@@ -107,6 +119,14 @@ const Navbar = () => {
                   />
                 )}
               </Button>
+              <LogoutIcon
+                fontSize="small"
+                className="text-blue-500 cursor-pointer me-1 mt-1"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/login");
+                }}
+              />
               <div
                 className={`rotate-[270deg] me-10 text-blue-500 cursor-pointer hover:text-blue-400 mt-1`}
                 onClick={handleNavbar}
@@ -123,7 +143,7 @@ const Navbar = () => {
               </div>
             </div>
             <div id="nav-buttons" className="flex items-center">
-              <div id="main-buttons" className="me-14">
+              <div id="main-buttons" className="">
                 {navData.map((item, index) => {
                   return (
                     <Button
@@ -139,6 +159,10 @@ const Navbar = () => {
                   );
                 })}
               </div>
+              <div
+                id="line"
+                className="border dark:border-gray-700 h-[50%] me-5 mt-1"
+              ></div>
               <div
                 className="hover:bg-white hover:dark:bg-black"
                 onClick={() => {
@@ -157,6 +181,14 @@ const Navbar = () => {
                   />
                 )}
               </div>
+              <LogoutIcon
+                fontSize="small"
+                className="text-blue-500 cursor-pointer ms-5 mt-1"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/login");
+                }}
+              />
               <Button
                 onClick={handleNavbar}
                 className={`${

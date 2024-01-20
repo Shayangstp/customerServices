@@ -1,12 +1,26 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useSelector } from "react-redux";
 import { selectDarkMode } from "../slices/mainSlices";
+import { useDispatch, useSelector } from "react-redux";
+import { RsetIsLoggedIn, selectIsLoggedIn } from "../slices/authSlices";
 
 const MainLayout = ({ children }) => {
+  const dispatch = useDispatch();
   const darkMode = useSelector(selectDarkMode);
   const htmlClasses = !darkMode ? "dark" : "";
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      dispatch(RsetIsLoggedIn(true));
+    } else {
+      dispatch(RsetIsLoggedIn(false));
+    }
+  }, [token]);
+
+  console.log(isLoggedIn);
 
   return (
     <div className={htmlClasses}>

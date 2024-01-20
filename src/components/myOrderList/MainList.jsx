@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import List from "../list/List";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 //
@@ -264,17 +263,16 @@ const MainList = () => {
         <Space className="d-flex justify-content-between">
           <Button
             variant="contained"
-            className="text-white bg-green-700 text-[14px] hover:bg-green-600"
+            className="text-white bg-green-800 px-10 hover:bg-green-700"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="sm"
-            style={{ width: 90 }}
           >
             جستجو
           </Button>
           <Button
             variant="contained"
-            className="text-white bg-black text-[12px] hover:bg-gray-700"
+            className="text-white bg-red-800  hover:bg-red-700 text-[13px]"
             size="sm"
             onClick={() => {
               clearFilters();
@@ -285,15 +283,6 @@ const MainList = () => {
             style={{ width: 80 }}
           >
             حذف فیلتر
-          </Button>
-          <Button
-            className="text-black bg-red-500 text-[14px] hover:bg-red-400"
-            variant="contained"
-            onClick={() => {
-              close();
-            }}
-          >
-            بستن
           </Button>
         </Space>
       </div>
@@ -369,7 +358,7 @@ const MainList = () => {
     },
     {
       ...getColumnSearchProps("date", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>کد کالا</span>,
+      title: <span style={{ fontSize: "16px" }}>کد سفارش</span>,
       dataIndex: "referenceNO",
       key: "referenceNO",
       //   render: (text, record) => (
@@ -462,7 +451,7 @@ const MainList = () => {
     },
     {
       ...getColumnSearchProps("boxes", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>تعداد کارتن</span>,
+      title: <span style={{ fontSize: "16px" }}>تعداد سفارش</span>,
       dataIndex: "boxes",
       key: "boxes",
       //   render: (text, record) => (
@@ -491,130 +480,130 @@ const MainList = () => {
 
       width: 200,
     },
-    {
-      ...getColumnSearchProps("fee", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>فی</span>,
-      dataIndex: "fee",
-      key: "fee",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
-      sorter: (a, b) => {
-        if (!a.fee && !b.fee) {
-          return 0;
-        }
+    // {
+    //   ...getColumnSearchProps("fee", "جستجو..."),
+    //   title: <span style={{ fontSize: "16px" }}>فی</span>,
+    //   dataIndex: "fee",
+    //   key: "fee",
+    //   //   render: (text, record) => (
+    //   //     <span
+    //   //       style={{ cursor: "pointer" }}
+    //   //       onClick={() => handleRowClick(record)}
+    //   //     >
+    //   //       {text}
+    //   //     </span>
+    //   //   ),
+    //   sorter: (a, b) => {
+    //     if (!a.fee && !b.fee) {
+    //       return 0;
+    //     }
 
-        if (!a.fee) {
-          return 1;
-        }
+    //     if (!a.fee) {
+    //       return 1;
+    //     }
 
-        if (!b.fee) {
-          return -1;
-        }
+    //     if (!b.fee) {
+    //       return -1;
+    //     }
 
-        return a.fee.localeCompare(b.fee);
-      },
+    //     return a.fee.localeCompare(b.fee);
+    //   },
 
-      width: 200,
-    },
-    {
-      ...getColumnSearchProps("price", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>مبلغ</span>,
-      dataIndex: "price",
-      key: "price",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
-      sorter: (a, b) => {
-        if (!a.price && !b.price) {
-          return 0;
-        }
+    //   width: 200,
+    // },
+    // {
+    //   ...getColumnSearchProps("price", "جستجو..."),
+    //   title: <span style={{ fontSize: "16px" }}>مبلغ</span>,
+    //   dataIndex: "price",
+    //   key: "price",
+    //   //   render: (text, record) => (
+    //   //     <span
+    //   //       style={{ cursor: "pointer" }}
+    //   //       onClick={() => handleRowClick(record)}
+    //   //     >
+    //   //       {text}
+    //   //     </span>
+    //   //   ),
+    //   sorter: (a, b) => {
+    //     if (!a.price && !b.price) {
+    //       return 0;
+    //     }
 
-        if (!a.price) {
-          return 1;
-        }
+    //     if (!a.price) {
+    //       return 1;
+    //     }
 
-        if (!b.price) {
-          return -1;
-        }
+    //     if (!b.price) {
+    //       return -1;
+    //     }
 
-        return a.price.localeCompare(b.price);
-      },
+    //     return a.price.localeCompare(b.price);
+    //   },
 
-      width: 200,
-    },
-    {
-      ...getColumnSearchProps("discount", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>درصد تخفیف</span>,
-      dataIndex: "discount",
-      key: "discount",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
-      sorter: (a, b) => {
-        if (!a.discount && !b.discount) {
-          return 0;
-        }
+    //   width: 200,
+    // },
+    // {
+    //   ...getColumnSearchProps("discount", "جستجو..."),
+    //   title: <span style={{ fontSize: "16px" }}>درصد تخفیف</span>,
+    //   dataIndex: "discount",
+    //   key: "discount",
+    //   //   render: (text, record) => (
+    //   //     <span
+    //   //       style={{ cursor: "pointer" }}
+    //   //       onClick={() => handleRowClick(record)}
+    //   //     >
+    //   //       {text}
+    //   //     </span>
+    //   //   ),
+    //   sorter: (a, b) => {
+    //     if (!a.discount && !b.discount) {
+    //       return 0;
+    //     }
 
-        if (!a.discount) {
-          return 1;
-        }
+    //     if (!a.discount) {
+    //       return 1;
+    //     }
 
-        if (!b.discount) {
-          return -1;
-        }
+    //     if (!b.discount) {
+    //       return -1;
+    //     }
 
-        return a.discount.localeCompare(b.discount);
-      },
+    //     return a.discount.localeCompare(b.discount);
+    //   },
 
-      width: 200,
-    },
-    {
-      ...getColumnSearchProps("discountPrice", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>مبلغ تخفیف</span>,
-      dataIndex: "discountPrice",
-      key: "discountPrice",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
-      sorter: (a, b) => {
-        if (!a.discountPrice && !b.discountPrice) {
-          return 0;
-        }
+    //   width: 200,
+    // },
+    // {
+    //   ...getColumnSearchProps("discountPrice", "جستجو..."),
+    //   title: <span style={{ fontSize: "16px" }}>مبلغ تخفیف</span>,
+    //   dataIndex: "discountPrice",
+    //   key: "discountPrice",
+    //   //   render: (text, record) => (
+    //   //     <span
+    //   //       style={{ cursor: "pointer" }}
+    //   //       onClick={() => handleRowClick(record)}
+    //   //     >
+    //   //       {text}
+    //   //     </span>
+    //   //   ),
+    //   sorter: (a, b) => {
+    //     if (!a.discountPrice && !b.discountPrice) {
+    //       return 0;
+    //     }
 
-        if (!a.discountPrice) {
-          return 1;
-        }
+    //     if (!a.discountPrice) {
+    //       return 1;
+    //     }
 
-        if (!b.discountPrice) {
-          return -1;
-        }
+    //     if (!b.discountPrice) {
+    //       return -1;
+    //     }
 
-        return a.discountPrice.localeCompare(b.discountPrice);
-      },
+    //     return a.discountPrice.localeCompare(b.discountPrice);
+    //   },
 
-      width: 200,
-    },
+    //   width: 200,
+    // },
     {
       ...getColumnSearchProps("sentProduct", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تعداد ارسالی</span>,
@@ -793,7 +782,7 @@ const MainList = () => {
           {selectedDetail.length > 0 ? (
             <div
               id="detail_list"
-              className="bg-white rounded-2xl l mt-20 mx-5 "
+              className="bg-white rounded-2xl l mt-24 mx-5 "
             >
               <ConfigProvider
                 locale={faIR}
@@ -802,7 +791,9 @@ const MainList = () => {
                     // Seed Token
                     // colorPrimary: "#00b96b",
                     // Alias Token
-                    colorBgContainer: "#000",
+                    colorBgContainer: "#303030",
+                    colorText: "white",
+                    colorTextPlaceholder: "white",
                   },
                 }}
               >

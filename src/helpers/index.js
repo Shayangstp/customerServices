@@ -5,7 +5,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 export const navData = [
   {
     name: "Home",
-    href: "/",
+    href: "/home",
     icon: (
       <HomeIcon className="dark:text-white text-black transition-all delay-75" />
     ),
@@ -23,5 +23,17 @@ export const navData = [
     icon: (
       <AttachMoneyIcon className="dark:text-white text-black transition-all delay-75" />
     ),
+  },
+];
+
+export const loginSelectButtons = [
+  {
+    name: "Driver",
+  },
+  {
+    name: "Customer",
+  },
+  {
+    name: "Staff",
   },
 ];

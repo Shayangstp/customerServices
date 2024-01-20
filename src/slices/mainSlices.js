@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  loading: false,
   darkMode: false,
+  formErrors: {},
   data: [],
   column: [],
 };
@@ -27,6 +29,12 @@ const mainSlices = createSlice({
   name: "main",
   initialState,
   reducers: {
+    RsetLoading: (state, { payload }) => {
+      return { ...state, lodaing: payload };
+    },
+    RsetFormErrors: (state, { payload }) => {
+      return { ...state, formErrors: payload };
+    },
     RsetDarkMode: (state, { payload }) => {
       return { ...state, darkMode: payload };
     },
@@ -36,8 +44,10 @@ const mainSlices = createSlice({
   },
 });
 
-export const { RsetDarkMode } = mainSlices.actions;
+export const { RsetDarkMode, RsetLoading, RsetFormErrors } = mainSlices.actions;
 
+export const selectLoading = (state) => state.main.loading;
+export const selectFormErrors = (state) => state.main.formErrors;
 export const selectDarkMode = (state) => state.main.darkMode;
 
 export default mainSlices.reducer;
