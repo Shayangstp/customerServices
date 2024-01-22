@@ -12,7 +12,7 @@ const AppRoutes = () => {
     <Fragment>
       <MainLayout>
         <Routes>
-          <Route path="/login" element={<MainAuth />} />
+          <Route path="/" element={<MainAuth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/myOrderList" element={<MainList />} />

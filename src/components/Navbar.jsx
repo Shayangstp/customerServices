@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <section className="bg-white dark:bg-black">
       <nav
-        className={`py-3 border-b border-gray-700 ${
+        className={`py-3 border-b dark:border-gray-700 border-gray-300 ${
           navOpen ? "h-[90px] transition-all" : "h-[60px] transition-all"
         }`}
       >
@@ -138,18 +138,30 @@ const Navbar = () => {
         ) : (
           <div className="flex justify-between">
             <div id="profile">
-              <div className="ms-10 mt-1 font-bold text-black dark:text-white">
-                shayan golestanipour
+              <div className="ms-10 mt-1 font-bold text-black dark:text-white flex">
+                <div
+                  id="profile_pic"
+                  className={`text-black dark:text-gray-400 ${
+                    !navOpen
+                      ? "opacity-100 transition-opacity delay-200"
+                      : "opacity-0"
+                  }`}
+                >
+                  <AccountCircleIcon className="text-[30px]" />
+                </div>
+                <span className="dark:text-white text-black ms-2">
+                  shayan golestanipour
+                </span>
               </div>
             </div>
             <div id="nav-buttons" className="flex items-center">
-              <div id="main-buttons" className="">
+              <div id="main-buttons" className="me-2">
                 {navData.map((item, index) => {
                   return (
                     <Button
                       key={index}
                       title="Home"
-                      className="hover:bg-white hover:dark:bg-gray-800"
+                      className="hover:bg-gray-100 hover:dark:bg-gray-800"
                       onClick={() => {
                         navigate(item.href);
                       }}

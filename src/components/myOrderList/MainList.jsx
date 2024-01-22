@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 //
 import {
   Input,
@@ -30,6 +30,7 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { selectDarkMode } from "../../slices/mainSlices";
 
 const data = [
   {
@@ -221,6 +222,14 @@ const MainList = () => {
   const [active, setActive] = useState();
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
+  const darkMode = useSelector(selectDarkMode);
+  //
+  const theme = createTheme({
+    direction: "rtl",
+    typography: {
+      fontFamily: "iranSans, Arial, sans-serif", // Change the font family as desired
+    },
+  });
   //
   const swiperRef = useRef(null);
 
@@ -263,7 +272,7 @@ const MainList = () => {
         <Space className="d-flex justify-content-between">
           <Button
             variant="contained"
-            className="text-white bg-green-800 px-10 hover:bg-green-700"
+            className="text-white bg-green-800 px-10 hover:bg-green-700 text-[10px]"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="sm"
@@ -272,7 +281,7 @@ const MainList = () => {
           </Button>
           <Button
             variant="contained"
-            className="text-white bg-red-800  hover:bg-red-700 text-[13px]"
+            className="text-white bg-red-800  hover:bg-red-700 text-[10px]"
             size="sm"
             onClick={() => {
               clearFilters();
@@ -704,12 +713,12 @@ const MainList = () => {
     },
   ];
 
-  const getRowClassName = (record, index) => {
-    const colors = ["gray", "white"]; // Define an array of colors
-    const colorIndex = index % colors.length; // Calculate the index of the color
+  // const getRowClassName = (record, index) => {
+  //   const colors = ["gray", "white"]; // Define an array of colors
+  //   const colorIndex = index % colors.length; // Calculate the index of the color
 
-    return `custom-row custom-row-${colorIndex}`; // Apply the custom CSS class with the color index
-  };
+  //   return `antd-custom-row antd-custom-row-${colorIndex}`; // Apply the custom CSS class with the color index
+  // };
 
   const paginationConfig = {
     position: ["bottomCenter"],
@@ -725,112 +734,122 @@ const MainList = () => {
   return (
     <div dir="rtl" className="flex flex-col gap-5">
       <div id="list" className="flex flex-col gap-5">
-        <div dir="ltr" className="flex mx-10 mt-10 items-center">
-          <Button
-            variant="outlined"
-            size="small"
-            className=" dark:border-cyan-500 dark:text-gray-300 dark:hover:text-white dark:hover:border-cyan-300 rounded-xl me-2 text-white border-white "
-            onClick={slidePrev}
-          >
-            <span className="text-[13px]">
-              <ArrowCircleLeftOutlinedIcon className="text-[50px] " />
-            </span>
-          </Button>
-          <Swiper
-            spaceBetween={7}
-            slidesPerView={6}
-            // navigation={true}
-            className="swiper-container"
-            // modules={[Navigation]}
-            ref={swiperRef}
-          >
-            {data.map((item, idx) => {
-              return (
-                <SwiperSlide key={idx} virtualIndex={idx} className="">
-                  <Button
-                    key={idx}
-                    onClick={() => {
-                      setActive(idx);
-                      setSelectedDetail(item.detail);
-                    }}
-                    size="large"
-                    variant="outlined"
-                    className={`dark:text-gray-200 text-[18px] rounded-2xl hover:dark:bg-gray-800 hover:border-gray-400 text-white hover:dark:text-white hover:text-white w-[180px] py-3 ${
-                      idx === active
-                        ? "dark:bg-gray-800 bg-blue-500 dark:text-gray-100 border-blue-500"
-                        : "dark:bg-transparent border-gray-700  bg-gray-500"
-                    }`}
-                  >
-                    {item.name}
-                  </Button>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-          <Button
-            variant="outlined"
-            size="small"
-            className=" dark:border-cyan-500 dark:text-gray-300 dark:hover:text-white dark:hover:border-cyan-300 rounded-xl me-2 text-white border-white "
-            onClick={slideNext}
-          >
-            <span className="text-[13px]">
-              <ArrowCircleRightOutlinedIcon className="text-[50px]" />
-            </span>
-          </Button>
-        </div>
-        <div className="h-full">
-          {selectedDetail.length > 0 ? (
-            <div
-              id="detail_list"
-              className="bg-white rounded-2xl l mt-24 mx-5 "
+        <ThemeProvider theme={theme}>
+          <div dir="ltr" className="flex mx-10 mt-10 items-center">
+            <Button
+              variant="outlined"
+              size="small"
+              className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
+              onClick={slidePrev}
             >
-              <ConfigProvider
-                locale={faIR}
-                theme={{
-                  token: {
-                    // Seed Token
-                    // colorPrimary: "#00b96b",
-                    // Alias Token
-                    colorBgContainer: "#303030",
-                    colorText: "white",
-                    colorTextPlaceholder: "white",
-                  },
-                }}
+              <span className="text-[13px]">
+                <ArrowCircleLeftOutlinedIcon className="text-[50px]" />
+              </span>
+            </Button>
+            <Swiper
+              spaceBetween={7}
+              slidesPerView={7}
+              // navigation={true}
+              className="swiper-container"
+              // modules={[Navigation]}
+              ref={swiperRef}
+              // breakpoints={}
+            >
+              {data.map((item, idx) => {
+                return (
+                  <SwiperSlide key={idx} virtualIndex={idx} className="">
+                    <Button
+                      key={idx}
+                      onClick={() => {
+                        setActive(idx);
+                        setSelectedDetail(item.detail);
+                      }}
+                      size="large"
+                      variant="outlined"
+                      className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                        idx === active
+                          ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                          : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+                      }`}
+                    >
+                      {item.name}
+                    </Button>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+            <Button
+              variant="outlined"
+              size="small"
+              className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
+              onClick={slideNext}
+            >
+              <span className="text-[13px]">
+                <ArrowCircleRightOutlinedIcon className="text-[50px]" />
+              </span>
+            </Button>
+          </div>
+          <div className="h-full">
+            {selectedDetail.length > 0 ? (
+              <div
+                id="detail_list"
+                className="bg-white rounded-2xl l mt-24 mx-5 "
               >
-                <Table
-                  locale={{
-                    emptyText: <Empty description="اطلاعات موجود نیست!" />,
+                <ConfigProvider
+                  locale={faIR}
+                  theme={{
+                    token: {
+                      // Seed Token
+                      // colorPrimary: "#00b96b",
+                      // Alias Token
+                      colorBgContainer: `${!darkMode ? "#303030" : "#fff"}`,
+                      colorText: "white",
+                      colorTextPlaceholder: `${!darkMode ? "white" : "black"}`,
+                      // borderColor: "#000",
+                    },
+                    components: {
+                      Table: {
+                        colorBgContainer: ` ${
+                          !darkMode ? "#222a38" : "#e3e3e3"
+                        }`,
+                        borderColor: "#000",
+                        rowHoverBg: `${!darkMode ? "black" : "#ccc"}`,
+                        colorText: `${!darkMode ? "white" : "black"}`,
+                        headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
+                        headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
+                        headerSortActiveBg: `${!darkMode ? "#000" : "#888a89"}`,
+                        // headerFilterHoverIcon: "#fff",
+                        // headerFilterIcon: "#fff",
+                      },
+                    },
                   }}
-                  className="list"
-                  bordered
-                  dataSource={selectedDetail}
-                  columns={selectedColumns}
-                  rowClassName={getRowClassName}
-                  pagination={paginationConfig}
-                  onRow={(record, index) => ({
-                    onMouseEnter: (event) => {
-                      event.currentTarget.style.backgroundColor = "#000"; // Replace with your desired hover color
-                    },
-                    onMouseLeave: (event) => {
-                      event.currentTarget.style.backgroundColor = ""; // Reset the background color on mouse leave
-                    },
-                  })}
-                  scroll={{ x: "max-content" }}
-                  size="middle"
-                  // onRow={(record) => ({
-                  //   onClick: () => handleRowClick(record),
-                  // })}
-                />
-              </ConfigProvider>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center min-h-[50vh]">
-              <p className="text-[70px] dark:text-white text-black">
-                No Order Available
-              </p>
-            </div>
-          )}
-        </div>
+                >
+                  <Table
+                    locale={{
+                      emptyText: <Empty description="اطلاعات موجود نیست!" />,
+                    }}
+                    className="list"
+                    bordered={false}
+                    dataSource={selectedDetail}
+                    columns={selectedColumns}
+                    pagination={paginationConfig}
+                    scroll={{ x: "max-content" }}
+                    size="middle"
+                    // onRow={(record) => ({
+                    //   onClick: () => handleRowClick(record),
+                    // })}
+                  />
+                </ConfigProvider>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center min-h-[50vh]">
+                <p className="text-[70px] dark:text-white text-black">
+                  No Order Available
+                </p>
+              </div>
+            )}
+          </div>
+        </ThemeProvider>
       </div>
       {sentOrderModal && <SentOrderModal />}
     </div>

@@ -27,24 +27,14 @@
 /* antd table */
 .list thead.ant-table-thead tr td,
 .list thead.ant-table-thead tr th {
-  background-color: #1c283d !important;
-  color: #ffffff !important;
+  /* background-color: #1c283d !important; */
+  /* color: #ffffff !important; */
   padding: 12px !important;
   font-size: 18px;
 }
 
-.custom-row-0 {
-  background-color: #222a38;
-  color: white;
-}
-
 .ant-table-filter-trigger:hover .ant-table-filter-icon {
   color: red;
-}
-
-.custom-row-1 {
-  background-color: #222a38;
-  color: white;
 }
 
 .list ul.ant-pagination {
@@ -60,28 +50,13 @@
 .list tbody.ant-table-tbody tr td {
   font-size: 15px !important;
 }
+
 .list tbody.ant-table-tbody tr:hover {
   font-size: 15px !important;
-  color: white;
   cursor: pointer;
 }
 .mainlist .ant-table-tbody tr :hover {
   cursor: pointer;
-}
-
-/* fade navbar */
-
-.fade-in {
-  opacity: 100 !important;
-}
-
-.fade-out {
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-}
-
-.navbar-transition {
-  transition: all 0.3s ease;
 }
 
 .list .ant-table-column-sorters .ant-table-column-sorter-up,
