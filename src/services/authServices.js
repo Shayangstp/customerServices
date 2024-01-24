@@ -14,3 +14,9 @@ export const login = (user) => {
     { timeout: 30000 }
   );
 };
+
+export const postCustomerSignUp = (values) => {
+  return http.post(`${config.local}/api/postSignUpCustomer`, values, {
+    timeout: 30000,
+  });
+};

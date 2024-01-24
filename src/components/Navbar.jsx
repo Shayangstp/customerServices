@@ -52,7 +52,7 @@ const Navbar = () => {
               <div id="profile" className="flex items-center ms-8">
                 <div
                   id="profile_pic"
-                  className={`text-black dark:text-gray-400 ${
+                  className={`text-gray-400 ${
                     navOpen
                       ? "opacity-100 transition-opacity delay-200"
                       : "opacity-0"

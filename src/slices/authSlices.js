@@ -7,9 +7,10 @@ const initialState = {
   customerLogginPage: true,
   isLoggedIn: false,
   //customer
-  customerUserName: "",
+  customerFullName: "",
   CustomerPassword: "",
   customerPhoneNumber: "",
+  customerCodeMeli: "",
   //driver
   driverPhoneNumber: "",
   driverRegisterCode: "",
@@ -52,14 +53,17 @@ const authSlices = createSlice({
       return { ...state, isLoggedIn: payload };
     },
     //customer
-    RsetCustomerUserName: (state, { payload }) => {
-      return { ...state, customerUserName: payload };
+    RsetCustomerFullName: (state, { payload }) => {
+      return { ...state, customerFullName: payload };
     },
     RsetCustomerPassword: (state, { payload }) => {
       return { ...state, customerPassword: payload };
     },
     RsetCustomerPhoneNumber: (state, { payload }) => {
       return { ...state, customerPhoneNumber: payload };
+    },
+    RsetCustomerCodeMeli: (state, { payload }) => {
+      return { ...state, customerCodeMeli: payload };
     },
     //driver
     RsetDriverPhoneNumber: (state, { payload }) => {
@@ -77,9 +81,10 @@ export const {
   RsetDriverPannel,
   RsetStaffPannel,
   RsetIsLoggedIn,
-  RsetCustomerUserName,
+  RsetCustomerFullName,
   RsetCustomerPassword,
   RsetCustomerPhoneNumber,
+  RsetCustomerCodeMeli,
   RsetDriverPhoneNumber,
   RsetDriverRegisterCode,
 } = authSlices.actions;
@@ -90,10 +95,11 @@ export const selectStaffPannel = (state) => state.auth.staffPannel;
 export const selectCustomerLoginPage = (state) => state.auth.customerLogginPage;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 //customer
-export const selectCustomerUserName = (state) => state.auth.customerUserName;
+export const selectCustomerFullName = (state) => state.auth.customerFullName;
 export const selectCustomerPassword = (state) => state.auth.customerPassword;
 export const selectCustomerPhoneNumber = (state) =>
   state.auth.customerPhoneNumber;
+export const selectCustomerCodeMeli = (state) => state.auth.customerCodeMeli;
 //driver
 export const selectDriverPhoneNumber = (state) => state.auth.driverPhoneNumber;
 export const selectDriverRegisterCode = (state) =>

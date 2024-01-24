@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useDebugValue, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 //
@@ -17,11 +17,6 @@ import {
 import faIR from "antd/lib/locale/fa_IR";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  RsetSentOrderModal,
-  selectSentOrderModal,
-} from "../../slices/modalsSlices";
 import SentOrderModal from "../modals/SentOrderModal";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -30,7 +25,23 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { selectDarkMode } from "../../slices/mainSlices";
+//slices
+import { useDispatch, useSelector } from "react-redux";
+import {
+  RsetSentOrderModal,
+  selectSentOrderModal,
+} from "../../slices/modalsSlices";
+import {
+  RsetCompanyCode,
+  handleCompaniesList,
+  selectDarkMode,
+} from "../../slices/mainSlices";
+import { selectCompaniesList } from "../../slices/mainSlices";
+import {
+  handleCustomerOrderList,
+  handleCustomerOrderPerList,
+  selectCustomerOrdersListPerCompany,
+} from "../../slices/customerSlices";
 
 const data = [
   {
@@ -219,18 +230,36 @@ const data = [
 
 const MainList = () => {
   const dispatch = useDispatch();
+  //
   const [active, setActive] = useState();
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
+  //selects
+
   const darkMode = useSelector(selectDarkMode);
-  //
+  const companiesList = useSelector(selectCompaniesList);
+  const customerOrdersListPerCompany = useSelector(
+    selectCustomerOrdersListPerCompany
+  );
+
+  //handleLists
+
+  useEffect(() => {
+    dispatch(handleCompaniesList());
+    dispatch(handleCustomerOrderList());
+  }, []);
+
+  //mui theme
+
   const theme = createTheme({
     direction: "rtl",
     typography: {
       fontFamily: "iranSans, Arial, sans-serif", // Change the font family as desired
     },
   });
-  //
+
+  //swiper
+
   const swiperRef = useRef(null);
 
   const slideNext = () => {
@@ -244,7 +273,8 @@ const MainList = () => {
       swiperRef.current.swiper.slidePrev();
     }
   };
-  //
+
+  //antd table
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -337,7 +367,7 @@ const MainList = () => {
     {
       ...getColumnSearchProps("date", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تاریخ سفارش</span>,
-      dataIndex: "date",
+      dataIndex: "CreateDate",
       key: "date",
       //   render: (text, record) => (
       //     <span
@@ -366,10 +396,10 @@ const MainList = () => {
       width: 200,
     },
     {
-      ...getColumnSearchProps("date", "جستجو..."),
+      ...getColumnSearchProps("OrderNo", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>کد سفارش</span>,
-      dataIndex: "referenceNO",
-      key: "referenceNO",
+      dataIndex: "OrderNo",
+      key: "OrderNo",
       //   render: (text, record) => (
       //     <span
       //       style={{ cursor: "pointer" }}
@@ -379,28 +409,28 @@ const MainList = () => {
       //     </span>
       //   ),
       sorter: (a, b) => {
-        if (!a.referenceNO && !b.referenceNO) {
+        if (!a.OrderNo && !b.OrderNo) {
           return 0;
         }
 
-        if (!a.referenceNO) {
+        if (!a.OrderNo) {
           return 1;
         }
 
-        if (!b.referenceNO) {
+        if (!b.OrderNo) {
           return -1;
         }
 
-        return a.referenceNO.localeCompare(b.referenceNO);
+        return a.OrderNo.localeCompare(b.OrderNo);
       },
 
       width: 200,
     },
     {
-      ...getColumnSearchProps("productCode", "جستجو..."),
+      ...getColumnSearchProps("ProductCode", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>کد کالا</span>,
-      dataIndex: "productCode",
-      key: "productCode",
+      dataIndex: "ProductCode",
+      key: "ProductCode",
       //   render: (text, record) => (
       //     <span
       //       style={{ cursor: "pointer" }}
@@ -410,28 +440,28 @@ const MainList = () => {
       //     </span>
       //   ),
       sorter: (a, b) => {
-        if (!a.productCode && !b.productCode) {
+        if (!a.ProductCode && !b.ProductCode) {
           return 0;
         }
 
-        if (!a.productCode) {
+        if (!a.ProductCode) {
           return 1;
         }
 
-        if (!b.productCode) {
+        if (!b.ProductCode) {
           return -1;
         }
 
-        return a.productCode.localeCompare(b.productCode);
+        return a.ProductCode.localeCompare(b.ProductCode);
       },
 
       width: 200,
     },
     {
-      ...getColumnSearchProps("productDesc", "جستجو..."),
+      ...getColumnSearchProps("ProductName", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>شرح کالا</span>,
-      dataIndex: "productDesc",
-      key: "productDesc",
+      dataIndex: "ProductName",
+      key: "ProductName",
       //   render: (text, record) => (
       //     <span
       //       style={{ cursor: "pointer" }}
@@ -441,28 +471,28 @@ const MainList = () => {
       //     </span>
       //   ),
       sorter: (a, b) => {
-        if (!a.productDesc && !b.productDesc) {
+        if (!a.ProductName && !b.ProductName) {
           return 0;
         }
 
-        if (!a.productDesc) {
+        if (!a.ProductName) {
           return 1;
         }
 
-        if (!b.productDesc) {
+        if (!b.ProductName) {
           return -1;
         }
 
-        return a.productDesc.localeCompare(b.productDesc);
+        return a.ProductName.localeCompare(b.ProductName);
       },
 
       width: 200,
     },
     {
-      ...getColumnSearchProps("boxes", "جستجو..."),
+      ...getColumnSearchProps("OrderQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تعداد سفارش</span>,
-      dataIndex: "boxes",
-      key: "boxes",
+      dataIndex: "OrderQuantity",
+      key: "OrderQuantity",
       //   render: (text, record) => (
       //     <span
       //       style={{ cursor: "pointer" }}
@@ -472,19 +502,19 @@ const MainList = () => {
       //     </span>
       //   ),
       sorter: (a, b) => {
-        if (!a.boxes && !b.boxes) {
+        if (!a.OrderQuantity && !b.OrderQuantity) {
           return 0;
         }
 
-        if (!a.boxes) {
+        if (!a.OrderQuantity) {
           return 1;
         }
 
-        if (!b.boxes) {
+        if (!b.OrderQuantity) {
           return -1;
         }
 
-        return a.boxes.localeCompare(b.boxes);
+        return a.OrderQuantity.localeCompare(b.OrderQuantity);
       },
 
       width: 200,
@@ -614,10 +644,10 @@ const MainList = () => {
     //   width: 200,
     // },
     {
-      ...getColumnSearchProps("sentProduct", "جستجو..."),
+      ...getColumnSearchProps("SentQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تعداد ارسالی</span>,
-      dataIndex: "sentProduct",
-      key: "sentProduct",
+      dataIndex: "SentQuantity",
+      key: "SentQuantity",
       render: (text, record) => (
         <span
           className="text-blue-500"
@@ -632,93 +662,73 @@ const MainList = () => {
         </span>
       ),
       sorter: (a, b) => {
-        if (!a.sentProduct && !b.sentProduct) {
+        if (!a.SentQuantity && !b.SentQuantity) {
           return 0;
         }
 
-        if (!a.sentProduct) {
+        if (!a.SentQuantity) {
           return 1;
         }
 
-        if (!b.sentProduct) {
+        if (!b.SentQuantity) {
           return -1;
         }
 
-        return a.sentProduct.localeCompare(b.sentProduct);
+        return a.SentQuantity.localeCompare(b.SentQuantity);
       },
 
       width: 200,
     },
     {
-      ...getColumnSearchProps("leftProduct", "جستجو..."),
+      ...getColumnSearchProps("OrderQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>مانده ارسالی</span>,
-      dataIndex: "leftProduct",
-      key: "leftProduct",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
+      dataIndex: "OrderQuantity",
+      key: "OrderQuantity",
+      render: (text, record) => (
+        <span>{record.OrderQuantity - record.SentQuantity}</span>
+      ),
       sorter: (a, b) => {
-        if (!a.leftProduct && !b.leftProduct) {
+        if (!a.OrderQuantity && !b.OrderQuantity) {
           return 0;
         }
 
-        if (!a.leftProduct) {
+        if (!a.OrderQuantity) {
           return 1;
         }
 
-        if (!b.leftProduct) {
+        if (!b.OrderQuantity) {
           return -1;
         }
 
-        return a.leftProduct.localeCompare(b.leftProduct);
+        return a.OrderQuantity.localeCompare(b.OrderQuantity);
       },
 
       width: 200,
     },
     {
-      ...getColumnSearchProps("salesExpert", "جستجو..."),
+      ...getColumnSearchProps("Creator", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>کارشناس فروش</span>,
-      dataIndex: "salesExpert",
-      key: "salesExpert",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
+      dataIndex: "Creator",
+      key: "Creator",
       sorter: (a, b) => {
-        if (!a.salesExpert && !b.salesExpert) {
+        if (!a.Creator && !b.Creator) {
           return 0;
         }
 
-        if (!a.salesExpert) {
+        if (!a.Creator) {
           return 1;
         }
 
-        if (!b.salesExpert) {
+        if (!b.Creator) {
           return -1;
         }
 
-        return a.salesExpert.localeCompare(b.salesExpert);
+        return a.Creator.localeCompare(b.Creator);
       },
 
       width: 200,
     },
   ];
-
-  // const getRowClassName = (record, index) => {
-  //   const colors = ["gray", "white"]; // Define an array of colors
-  //   const colorIndex = index % colors.length; // Calculate the index of the color
-
-  //   return `antd-custom-row antd-custom-row-${colorIndex}`; // Apply the custom CSS class with the color index
-  // };
 
   const paginationConfig = {
     position: ["bottomCenter"],
@@ -731,12 +741,17 @@ const MainList = () => {
     size: "middle",
   };
 
+  //
+
   return (
     <div dir="rtl" className="flex flex-col gap-5">
       <div id="list" className="flex flex-col gap-5">
         <ThemeProvider theme={theme}>
-          <div dir="ltr" className="flex mx-10 mt-10 items-center">
-            <Button
+          <div
+            dir="ltr"
+            className="flex mx-10 mt-10 items-center justify-center"
+          >
+            {/* <Button
               variant="outlined"
               size="small"
               className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
@@ -745,8 +760,8 @@ const MainList = () => {
               <span className="text-[13px]">
                 <ArrowCircleLeftOutlinedIcon className="text-[50px]" />
               </span>
-            </Button>
-            <Swiper
+            </Button> */}
+            {/* <Swiper
               spaceBetween={7}
               slidesPerView={7}
               // navigation={true}
@@ -754,31 +769,35 @@ const MainList = () => {
               // modules={[Navigation]}
               ref={swiperRef}
               // breakpoints={}
-            >
-              {data.map((item, idx) => {
+            > */}
+            <div className="flex gap-5">
+              {companiesList.map((item, idx) => {
                 return (
-                  <SwiperSlide key={idx} virtualIndex={idx} className="">
-                    <Button
-                      key={idx}
-                      onClick={() => {
-                        setActive(idx);
-                        setSelectedDetail(item.detail);
-                      }}
-                      size="large"
-                      variant="outlined"
-                      className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
-                        idx === active
-                          ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
-                          : "dark:bg-transparent dark:border-gray-700 border-gray-400"
-                      }`}
-                    >
-                      {item.name}
-                    </Button>
-                  </SwiperSlide>
+                  // <SwiperSlide key={idx} virtualIndex={idx} className="">
+                  <Button
+                    key={idx}
+                    onClick={() => {
+                      setActive(idx);
+                      // setSelectedDetail(item.detail);
+                      dispatch(RsetCompanyCode(item.companycode));
+                      dispatch(handleCustomerOrderPerList());
+                    }}
+                    size="large"
+                    variant="outlined"
+                    className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                      idx === active
+                        ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                        : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+                    }`}
+                  >
+                    {item.companyname}
+                  </Button>
+                  // </SwiperSlide>
                 );
               })}
-            </Swiper>
-            <Button
+            </div>
+            {/* </Swiper> */}
+            {/* <Button
               variant="outlined"
               size="small"
               className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
@@ -787,10 +806,11 @@ const MainList = () => {
               <span className="text-[13px]">
                 <ArrowCircleRightOutlinedIcon className="text-[50px]" />
               </span>
-            </Button>
+            </Button> */}
           </div>
           <div className="h-full">
-            {selectedDetail.length > 0 ? (
+            {customerOrdersListPerCompany &&
+            customerOrdersListPerCompany.length > 0 ? (
               <div
                 id="detail_list"
                 className="bg-white rounded-2xl l mt-24 mx-5 "
@@ -830,7 +850,7 @@ const MainList = () => {
                     }}
                     className="list"
                     bordered={false}
-                    dataSource={selectedDetail}
+                    dataSource={customerOrdersListPerCompany}
                     columns={selectedColumns}
                     pagination={paginationConfig}
                     scroll={{ x: "max-content" }}

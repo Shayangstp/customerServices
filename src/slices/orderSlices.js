@@ -4,6 +4,7 @@ const initialState = {
   factoryList: [],
   detailList: [],
   selectedFactory: [],
+  
 };
 
 // export const handleCommonUserList = createAsyncThunk(

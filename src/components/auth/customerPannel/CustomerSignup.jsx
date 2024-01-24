@@ -16,6 +16,18 @@ import {
   selectCustomerLoginPage,
 } from "../../../slices/authSlices";
 import { gapi } from "gapi-script";
+//slices
+import {
+  RsetCustomerCodeMeli,
+  selectCustomerCodeMeli,
+  RsetCustomerFullName,
+  selectCustomerFullName,
+  RsetCustomerPhoneNumber,
+  selectCustomerPhoneNumber,
+  RsetCustomerPassword,
+  selectCustomerPassword,
+} from "../../../slices/authSlices";
+import { postCustomerSignUp } from "../../../services/authServices";
 
 //rtl
 const Inputs = styled(TextField)({
@@ -60,7 +72,12 @@ const cacheRtl = createCache({
 
 const CustomerSignup = () => {
   const dispatch = useDispatch();
+  //selcet
   const customerLogginPage = useSelector(selectCustomerLoginPage);
+  const customerCodeMeli = useSelector(selectCustomerCodeMeli);
+  const customerFullName = useSelector(selectCustomerFullName);
+  const customerPhoneNumber = useSelector(selectCustomerPhoneNumber);
+  const customerPassword = useSelector(selectCustomerPassword);
   //sso
   const handleLoginGoogle = async (res) => {
     try {
@@ -91,6 +108,29 @@ const CustomerSignup = () => {
     }
     gapi.load("client:auth2", start);
   }, []);
+
+  //handle signup
+
+  const handleCustomerSignUp = async (e) => {
+    e.preventDefault();
+
+    const values = {
+      codeMeli: customerCodeMeli,
+      fullName: customerFullName,
+      phoneNumber: customerPhoneNumber,
+      password: customerPassword,
+    };
+
+    console.log(values);
+
+    const postCustomerSignUpRes = await postCustomerSignUp(values);
+
+    console.log(postCustomerSignUpRes);
+    if (postCustomerSignUpRes.data.code === 200) {
+      
+    }
+  };
+
   return (
     <div id="login" className="flex flex-col gap-5">
       <GoogleLogin
@@ -117,13 +157,39 @@ const CustomerSignup = () => {
           </Button>
         )}
       />
-      <Inputs dir="rtl" label="کد ملی" id="custom-css-outlined-input" />
-      <Inputs dir="rtl" label="شماره موبایل" id="custom-css-outlined-input" />
+      <Inputs
+        dir="rtl"
+        type="number"
+        label="کد ملی"
+        id="custom-css-outlined-input"
+        onChange={(e) => {
+          dispatch(RsetCustomerCodeMeli(e.target.value));
+        }}
+      />
+      <Inputs
+        dir="rtl"
+        label="نام و نام خانوادگی"
+        id="custom-css-outlined-input"
+        onChange={(e) => {
+          dispatch(RsetCustomerFullName(e.target.value));
+        }}
+      />
+      <Inputs
+        dir="rtl"
+        label="شماره موبایل"
+        id="custom-css-outlined-input"
+        onChange={(e) => {
+          dispatch(RsetCustomerPhoneNumber(e.target.value));
+        }}
+      />
       <Inputs
         label="رمز عبور"
         variant="outlined"
         color="warning"
         type="password"
+        onChange={(e) => {
+          dispatch(RsetCustomerPassword(e.target.value));
+        }}
       />
       <div>
         <p className="text-[12px]">
@@ -142,8 +208,11 @@ const CustomerSignup = () => {
         variant="outlined"
         style={{ borderRadius: "15px" }}
         className="dark:text-white dark:bg-blue-600 dark:hover:bg-blue-500"
+        onClick={(e) => {
+          handleCustomerSignUp(e);
+        }}
       >
-        ورود
+        ثبت نام
       </Button>
     </div>
   );

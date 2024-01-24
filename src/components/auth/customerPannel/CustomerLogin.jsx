@@ -18,9 +18,9 @@ import {
 } from "../../../slices/authSlices";
 import { gapi } from "gapi-script";
 import {
-  RsetCustomerUserName,
+  RsetCustomerFullName,
   RsetCustomerPassword,
-  selectCustomerUserName,
+  selectCustomerFullName,
   selectCustomerPassword,
 } from "../../../slices/authSlices";
 import { useNavigate } from "react-router-dom";
@@ -71,19 +71,19 @@ const CustomerLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customerLogginPage = useSelector(selectCustomerLoginPage);
-  const customerUserName = useSelector(selectCustomerUserName);
+  const customerFullName = useSelector(selectCustomerFullName);
   const customerPassword = useSelector(selectCustomerPassword);
   const formErrors = useSelector(selectFormErrors);
 
   //validation
-  const customerUserNameIsValid = customerUserName !== "";
+  const customerUserNameIsValid = customerFullName !== "";
   const customerPasswordIsValid = customerPassword !== "";
   const formIsValid = customerUserNameIsValid && customerPasswordIsValid;
 
   const validation = () => {
     var errors = {};
     if (!customerUserNameIsValid) {
-      errors.customerUserName = true;
+      errors.customerFullName = true;
     }
     if (!customerPasswordIsValid) {
       errors.customerPassword = true;
@@ -125,21 +125,21 @@ const CustomerLogin = () => {
 
   const handleCustomerLogin = (e) => {
     console.log({
-      customerUserName,
+      customerFullName,
       customerPassword,
     });
 
     if (formIsValid) {
-      localStorage.setItem("token", customerUserName);
+      localStorage.setItem("token", customerFullName);
       navigate("/home");
-      dispatch(RsetCustomerUserName(""));
+      dispatch(RsetCustomerFullName(""));
       dispatch(RsetCustomerPassword(""));
       dispatch(RsetFormErrors({}));
     } else {
       dispatch(
         RsetFormErrors(
           validation({
-            customerUserName,
+            customerFullName,
             customerPassword,
           })
         )
@@ -149,7 +149,7 @@ const CustomerLogin = () => {
 
   return (
     <div className="w-[50%] h-[100%]">
-      <div dir="rtl" className="flex flex-col mt-[30%]">
+      <div dir="rtl" className="flex flex-col mt-[25%]">
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -180,14 +180,14 @@ const CustomerLogin = () => {
                   )}
                 />
                 <Inputs
-                  error={formErrors.customerUserName}
+                  error={formErrors.customerFullName}
                   dir="rtl"
                   label="کد ملی"
                   id="custom-css-outlined-input"
                   onChange={(e) => {
-                    dispatch(RsetCustomerUserName(e.target.value));
+                    dispatch(RsetCustomerFullName(e.target.value));
                   }}
-                  value={customerUserName}
+                  value={customerFullName}
                 />
                 <Inputs
                   error={formErrors.customerPassword}
