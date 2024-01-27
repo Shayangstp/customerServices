@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RsetDarkMode, selectDarkMode } from "../slices/mainSlices";
+import { RsetDarkMode, selectDarkMode } from "../../slices/mainSlices";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
@@ -12,8 +12,9 @@ import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { navData } from "../helpers/index";
-import { RsetIsLoggedIn } from "../slices/authSlices";
+import { navData } from "../../helpers/index";
+import { RsetIsLoggedIn } from "../../slices/authSlices";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
@@ -46,9 +47,12 @@ const Navbar = () => {
         }`}
       >
         {navOpen ? (
-          <div className="grid grid-cols-6 justify-between">
+          <div className="grid grid-cols-6 xl:mt-0 mt-3">
             {" "}
-            <div className="col-span-3 flex items-center">
+            <div className="cursor-pointer ms-5 mt-1">
+              <MenuIcon className="dark:text-white text-black xl:hidden col-span-1 hover:dark:text-blue-500" />
+            </div>
+            <div className="col-span-3 xl:flex hidden items-center ">
               <div id="profile" className="flex items-center ms-8">
                 <div
                   id="profile_pic"
@@ -85,14 +89,14 @@ const Navbar = () => {
             </div>
             <div
               id="items"
-              className="col-span-3 flex justify-end gap-2 items-center"
+              className="xl:col-span-3 col-span-5 flex justify-end gap-2 items-center"
             >
               {navData.map((item, index) => {
                 return (
                   <Button
                     key={index}
                     variant="contained"
-                    className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black"
+                    className="dark:bg-gray-900 dark:hover:bg-black dark:text-white bg-gray-300 hover:bg-gray-200 text-black xl:inline-block hidden"
                     onClick={() => {
                       navigate(item.href);
                     }}
@@ -124,7 +128,7 @@ const Navbar = () => {
                 className="text-blue-500 cursor-pointer me-1 mt-1"
                 onClick={() => {
                   localStorage.removeItem("token");
-                  navigate("/login");
+                  navigate("/");
                 }}
               />
               <div
@@ -198,7 +202,7 @@ const Navbar = () => {
                 className="text-blue-500 cursor-pointer ms-5 mt-1"
                 onClick={() => {
                   localStorage.removeItem("token");
-                  navigate("/login");
+                  navigate("/");
                 }}
               />
               <Button

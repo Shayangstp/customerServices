@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/nav/Navbar";
 import { selectDarkMode } from "../slices/mainSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { RsetIsLoggedIn, selectIsLoggedIn } from "../slices/authSlices";
@@ -19,8 +19,6 @@ const MainLayout = ({ children }) => {
       dispatch(RsetIsLoggedIn(false));
     }
   }, [token]);
-
-  console.log(isLoggedIn);
 
   return (
     <div className={htmlClasses}>

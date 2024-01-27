@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCompanies } from "../services/companiesServices";
 
 const initialState = {
+  user: {},
   loading: false,
   darkMode: false,
   formErrors: {},
@@ -29,6 +30,9 @@ const mainSlices = createSlice({
   name: "main",
   initialState,
   reducers: {
+    RsetUser: (state, { payload }) => {
+      return { ...state, user: payload };
+    },
     RsetLoading: (state, { payload }) => {
       return { ...state, lodaing: payload };
     },
@@ -51,6 +55,7 @@ const mainSlices = createSlice({
 });
 
 export const {
+  RsetUser,
   RsetDarkMode,
   RsetLoading,
   RsetFormErrors,
@@ -58,6 +63,7 @@ export const {
   RsetCompaniesList,
 } = mainSlices.actions;
 
+export const selectUser = (state) => state.main.user;
 export const selectLoading = (state) => state.main.loading;
 export const selectFormErrors = (state) => state.main.formErrors;
 export const selectDarkMode = (state) => state.main.darkMode;

@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
-import { TextField, Button } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import { TextField, Button, IconButton, InputAdornment } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import CssBaseline from "@mui/material/CssBaseline";
-import { StyledEngineProvider } from "@mui/material";
-import { prefixer } from "stylis";
 import GoogleLogin from "@leecheuk/react-google-login";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch, useSelector } from "react-redux";
+import { gapi } from "gapi-script";
+import { successMessage, errorMessage } from "../../../utils/toast";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+//api
+import { postCustomerSignUp } from "../../../services/authServices";
+//slices
+import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
 import {
   RsetCustomerLogginPage,
   selectCustomerLoginPage,
 } from "../../../slices/authSlices";
-import { gapi } from "gapi-script";
-//slices
 import {
   RsetCustomerCodeMeli,
   selectCustomerCodeMeli,
@@ -27,9 +26,15 @@ import {
   RsetCustomerPassword,
   selectCustomerPassword,
 } from "../../../slices/authSlices";
-import { postCustomerSignUp } from "../../../services/authServices";
 
-//rtl
+//inputs with styles
+
+const CustomInput = styled("input")({
+  "&::placeholder": {
+    fontSize: "12px",
+  },
+});
+
 const Inputs = styled(TextField)({
   "& label.Mui-focused": {
     color: "#5a8de0",
@@ -55,8 +60,22 @@ const Inputs = styled(TextField)({
     "&.Mui-focused fieldset": {
       borderColor: "#5a8de0",
     },
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
+      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+        display: "none",
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+      "&::placeholder": {
+        color: "red", // Example: Change placeholder text color to gray
+        fontStyle: "italic", // Example: Apply italic style to placeholder text
+      },
+    },
   },
 });
+
+//rtl
 
 const theme = createTheme({
   direction: "rtl",
@@ -65,12 +84,8 @@ const theme = createTheme({
   },
 });
 
-const cacheRtl = createCache({
-  key: "muirtl",
-  stylisPlugins: [prefixer, rtlPlugin],
-});
-
 const CustomerSignup = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   //selcet
   const customerLogginPage = useSelector(selectCustomerLoginPage);
@@ -78,6 +93,39 @@ const CustomerSignup = () => {
   const customerFullName = useSelector(selectCustomerFullName);
   const customerPhoneNumber = useSelector(selectCustomerPhoneNumber);
   const customerPassword = useSelector(selectCustomerPassword);
+  const formErrors = useSelector(selectFormErrors);
+
+  // validation
+  const customerCodeMeliIsValid = customerCodeMeli.length === 10;
+  const customerFullNameIsValid = customerFullName !== "";
+  const customerPhoneNumberIsValid =
+    customerPhoneNumber !== "" && /^0\d{10}$/.test(customerPhoneNumber);
+  const customerPasswordIsValid =
+    customerPassword && customerPassword.length >= 5;
+
+  const formIsValid =
+    customerCodeMeliIsValid &&
+    customerFullNameIsValid &&
+    customerPhoneNumberIsValid &&
+    customerPasswordIsValid;
+
+  const validation = () => {
+    var errors = {};
+    if (!customerCodeMeliIsValid) {
+      errors.customerCodeMeli = true;
+    }
+    if (!customerFullNameIsValid) {
+      errors.customerFullName = true;
+    }
+    if (!customerPhoneNumberIsValid) {
+      errors.customerPhoneNumber = true;
+    }
+    if (!customerPasswordIsValid) {
+      errors.customerPassword = true;
+    }
+    return errors;
+  };
+
   //sso
   const handleLoginGoogle = async (res) => {
     try {
@@ -114,20 +162,35 @@ const CustomerSignup = () => {
   const handleCustomerSignUp = async (e) => {
     e.preventDefault();
 
-    const values = {
-      codeMeli: customerCodeMeli,
-      fullName: customerFullName,
-      phoneNumber: customerPhoneNumber,
-      password: customerPassword,
-    };
+    if (formIsValid) {
+      const values = {
+        codeMeli: customerCodeMeli,
+        fullName: customerFullName,
+        phoneNumber: customerPhoneNumber,
+        password: customerPassword,
+      };
 
-    console.log(values);
+      console.log(values);
 
-    const postCustomerSignUpRes = await postCustomerSignUp(values);
+      const postCustomerSignUpRes = await postCustomerSignUp(values);
 
-    console.log(postCustomerSignUpRes);
-    if (postCustomerSignUpRes.data.code === 200) {
-      
+      console.log(postCustomerSignUpRes);
+      if (postCustomerSignUpRes.data.code === 201) {
+        successMessage(postCustomerSignUpRes.data.message);
+      } else {
+        errorMessage(postCustomerSignUpRes.data.message);
+      }
+    } else {
+      dispatch(
+        RsetFormErrors(
+          validation({
+            customerCodeMeli,
+            customerFullName,
+            customerPhoneNumber,
+            customerPassword,
+          })
+        )
+      );
     }
   };
 
@@ -157,40 +220,91 @@ const CustomerSignup = () => {
           </Button>
         )}
       />
+
       <Inputs
+        error={formErrors.customerCodeMeli}
         dir="rtl"
         type="number"
         label="کد ملی"
-        id="custom-css-outlined-input"
+        value={customerCodeMeli}
         onChange={(e) => {
-          dispatch(RsetCustomerCodeMeli(e.target.value));
+          //handle the limitation
+          let inputValue = e.target.value;
+          const maxLength = 10;
+          if (inputValue.length > maxLength) {
+            inputValue = inputValue.slice(0, maxLength);
+          }
+          dispatch(RsetCustomerCodeMeli(inputValue));
         }}
       />
       <Inputs
+        error={formErrors.customerFullName}
         dir="rtl"
         label="نام و نام خانوادگی"
-        id="custom-css-outlined-input"
+        value={customerFullName}
         onChange={(e) => {
           dispatch(RsetCustomerFullName(e.target.value));
         }}
       />
       <Inputs
+        error={formErrors.customerPhoneNumber}
         dir="rtl"
+        type="number"
         label="شماره موبایل"
-        id="custom-css-outlined-input"
+        value={customerPhoneNumber}
         onChange={(e) => {
-          dispatch(RsetCustomerPhoneNumber(e.target.value));
+          //handle limitation
+          let inputValue = e.target.value;
+          const maxLength = 11;
+          if (inputValue.length > maxLength) {
+            inputValue = inputValue.slice(0, maxLength);
+          }
+          dispatch(RsetCustomerPhoneNumber(inputValue));
+        }}
+        inputProps={{
+          maxLength: 10,
         }}
       />
       <Inputs
+        error={formErrors.customerPassword}
+        value={customerPassword}
         label="رمز عبور"
         variant="outlined"
+        placeholder="رمز عبور باید بیشتر از 5 کراکتر باشد"
         color="warning"
-        type="password"
+        type={showPassword ? "text" : "password"}
+        InputProps={{
+          inputComponent: CustomInput,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {!showPassword ? (
+                  <VisibilityOff
+                    fontSize="small"
+                    className="dark:text-gray-600 dark:hover:text-gray-400  text-gray-700 hover:text-gray-900"
+                  />
+                ) : (
+                  <Visibility
+                    fontSize="small"
+                    className="dark:text-gray-600 dark:hover:text-gray-400  text-gray-700 hover:text-gray-900"
+                  />
+                )}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
         onChange={(e) => {
           dispatch(RsetCustomerPassword(e.target.value));
         }}
       />
+      {customerPassword && customerPassword.length < 5 && (
+        <p className="text-red-500 text-[10px]">
+          رمز عبور باید بیشتر از 5 کراکتر باشد
+        </p>
+      )}
       <div>
         <p className="text-[12px]">
           <span className="text-gray-400">اکانت دارید؟</span>
@@ -198,6 +312,12 @@ const CustomerSignup = () => {
             className="cursor-pointer dark:text-blue-400 hover:dark:text-blue-300 ms-2"
             onClick={() => {
               dispatch(RsetCustomerLogginPage(true));
+              //reset form
+              dispatch(RsetCustomerCodeMeli(""));
+              dispatch(RsetCustomerFullName(""));
+              dispatch(RsetCustomerPhoneNumber(""));
+              dispatch(RsetCustomerPassword(""));
+              dispatch(RsetFormErrors({}));
             }}
           >
             ورود کنید.

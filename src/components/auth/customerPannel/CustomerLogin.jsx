@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, IconButton, InputAdornment } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import rtlPlugin from "stylis-plugin-rtl";
@@ -12,21 +12,26 @@ import GoogleLogin from "@leecheuk/react-google-login";
 import GoogleIcon from "@mui/icons-material/Google";
 import CustomerSignup from "./CustomerSignup";
 import { useDispatch, useSelector } from "react-redux";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   RsetCustomerLogginPage,
   selectCustomerLoginPage,
 } from "../../../slices/authSlices";
 import { gapi } from "gapi-script";
+import { useNavigate } from "react-router-dom";
+//api
+
+//slices
 import {
-  RsetCustomerFullName,
+  RsetCustomerCodeMeli,
+  selectCustomerCodeMeli,
   RsetCustomerPassword,
-  selectCustomerFullName,
   selectCustomerPassword,
 } from "../../../slices/authSlices";
-import { useNavigate } from "react-router-dom";
 import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
 
-//rtl
+//inputs with styles
+
 const Inputs = styled(TextField)({
   "& label.Mui-focused": {
     color: "#5a8de0",
@@ -68,22 +73,23 @@ const cacheRtl = createCache({
 });
 
 const CustomerLogin = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customerLogginPage = useSelector(selectCustomerLoginPage);
-  const customerFullName = useSelector(selectCustomerFullName);
+  const customerCodeMeli = useSelector(selectCustomerCodeMeli);
   const customerPassword = useSelector(selectCustomerPassword);
   const formErrors = useSelector(selectFormErrors);
 
   //validation
-  const customerUserNameIsValid = customerFullName !== "";
+  const customerCodeMeliIsValid = customerCodeMeli.length === 10;
   const customerPasswordIsValid = customerPassword !== "";
-  const formIsValid = customerUserNameIsValid && customerPasswordIsValid;
+  const formIsValid = customerCodeMeliIsValid && customerPasswordIsValid;
 
   const validation = () => {
     var errors = {};
-    if (!customerUserNameIsValid) {
-      errors.customerFullName = true;
+    if (!customerCodeMeliIsValid) {
+      errors.customerCodeMeli = true;
     }
     if (!customerPasswordIsValid) {
       errors.customerPassword = true;
@@ -125,21 +131,21 @@ const CustomerLogin = () => {
 
   const handleCustomerLogin = (e) => {
     console.log({
-      customerFullName,
+      customerCodeMeli,
       customerPassword,
     });
 
     if (formIsValid) {
-      localStorage.setItem("token", customerFullName);
+      localStorage.setItem("token", customerCodeMeli);
       navigate("/home");
-      dispatch(RsetCustomerFullName(""));
+      dispatch(RsetCustomerCodeMeli(""));
       dispatch(RsetCustomerPassword(""));
       dispatch(RsetFormErrors({}));
     } else {
       dispatch(
         RsetFormErrors(
           validation({
-            customerFullName,
+            customerCodeMeli,
             customerPassword,
           })
         )
@@ -149,7 +155,12 @@ const CustomerLogin = () => {
 
   return (
     <div className="w-[50%] h-[100%]">
-      <div dir="rtl" className="flex flex-col mt-[25%]">
+      <div
+        dir="rtl"
+        className={`flex flex-col ${
+          customerLogginPage ? "mt-[30%]" : "mt-[20%]"
+        }`}
+      >
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -180,25 +191,50 @@ const CustomerLogin = () => {
                   )}
                 />
                 <Inputs
-                  error={formErrors.customerFullName}
+                  error={formErrors.customerCodeMeli}
                   dir="rtl"
                   label="کد ملی"
-                  id="custom-css-outlined-input"
                   onChange={(e) => {
-                    dispatch(RsetCustomerFullName(e.target.value));
+                    let inputValue = e.target.value;
+                    const maxLength = 10;
+                    if (inputValue.length > maxLength) {
+                      inputValue = inputValue.slice(0, maxLength);
+                    }
+                    dispatch(RsetCustomerCodeMeli(inputValue));
                   }}
-                  value={customerFullName}
+                  value={customerCodeMeli}
                 />
                 <Inputs
                   error={formErrors.customerPassword}
                   label="رمز عبور"
                   variant="outlined"
                   color="warning"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {!showPassword ? (
+                            <VisibilityOff
+                              fontSize="small"
+                              className="dark:text-gray-600 dark:hover:text-gray-400  text-gray-700 hover:text-gray-900"
+                            />
+                          ) : (
+                            <Visibility
+                              fontSize="small"
+                              className="dark:text-gray-600 dark:hover:text-gray-400  text-gray-700 hover:text-gray-900"
+                            />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                   onChange={(e) => {
                     dispatch(RsetCustomerPassword(e.target.value));
                   }}
-                  value={customerPassword}
                 />
                 <div>
                   <p className="text-blue-400 hover:text-blue-300 cursor-pointer text-[12px]">

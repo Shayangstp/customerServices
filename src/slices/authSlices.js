@@ -11,6 +11,9 @@ const initialState = {
   CustomerPassword: "",
   customerPhoneNumber: "",
   customerCodeMeli: "",
+  //staff
+  staffCodeMeli: "",
+  staffPassword: "",
   //driver
   driverPhoneNumber: "",
   driverRegisterCode: "",
@@ -65,6 +68,13 @@ const authSlices = createSlice({
     RsetCustomerCodeMeli: (state, { payload }) => {
       return { ...state, customerCodeMeli: payload };
     },
+    //staff
+    RsetStaffCodeMeli: (state, { payload }) => {
+      return { ...state, staffCodeMeli: payload };
+    },
+    RsetStaffPassword: (state, { payload }) => {
+      return { ...state, staffPassword: payload };
+    },
     //driver
     RsetDriverPhoneNumber: (state, { payload }) => {
       return { ...state, driverPhoneNumber: payload };
@@ -85,6 +95,8 @@ export const {
   RsetCustomerPassword,
   RsetCustomerPhoneNumber,
   RsetCustomerCodeMeli,
+  RsetStaffCodeMeli,
+  RsetStaffPassword,
   RsetDriverPhoneNumber,
   RsetDriverRegisterCode,
 } = authSlices.actions;
@@ -100,6 +112,9 @@ export const selectCustomerPassword = (state) => state.auth.customerPassword;
 export const selectCustomerPhoneNumber = (state) =>
   state.auth.customerPhoneNumber;
 export const selectCustomerCodeMeli = (state) => state.auth.customerCodeMeli;
+//staff
+export const selectStaffCodeMeli = (state) => state.auth.staffCodeMeli;
+export const selectStaffPassword = (state) => state.auth.staffPassword;
 //driver
 export const selectDriverPhoneNumber = (state) => state.auth.driverPhoneNumber;
 export const selectDriverRegisterCode = (state) =>

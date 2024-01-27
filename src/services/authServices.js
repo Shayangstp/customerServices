@@ -7,7 +7,7 @@ export const postDriverSMS = (values) => {
   });
 };
 
-export const login = (user) => {
+export const loginStaff = (user) => {
   return http.get(
     `${config.localapi}/user/login`,
     { params: user },

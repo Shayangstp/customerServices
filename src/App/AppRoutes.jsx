@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/nav/Navbar";
 import MainLayout from "../App/Mainlayout";
 import Home from "../components/home/Home";
 import MainList from "../components/myOrderList/MainList";

@@ -10,6 +10,7 @@ import {
   RsetDriverPannel,
   RsetStaffPannel,
 } from "../../slices/authSlices";
+import { RsetFormErrors } from "../../slices/mainSlices";
 
 const LoginSelect = () => {
   const [active, setActive] = useState(1);
@@ -34,16 +35,19 @@ const LoginSelect = () => {
                   dispatch(RsetCustomerPannel(true));
                   dispatch(RsetDriverPannel(false));
                   dispatch(RsetStaffPannel(false));
+                  dispatch(RsetFormErrors({}));
                 }
                 if (item.name === "Driver") {
                   dispatch(RsetCustomerPannel(false));
                   dispatch(RsetDriverPannel(true));
                   dispatch(RsetStaffPannel(false));
+                  dispatch(RsetFormErrors({}));
                 }
                 if (item.name === "Staff") {
                   dispatch(RsetCustomerPannel(false));
                   dispatch(RsetDriverPannel(false));
                   dispatch(RsetStaffPannel(true));
+                  dispatch(RsetFormErrors({}));
                 }
               }}
             >
