@@ -15,12 +15,19 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { navData } from "../../helpers/index";
 import { RsetIsLoggedIn } from "../../slices/authSlices";
 import MenuIcon from "@mui/icons-material/Menu";
+import OffCanvas from "./OffCanvas";
+//slice
+import {
+  RsetShowOffCanvas,
+  selectShowOffCanvas,
+} from "../../slices/mainSlices";
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const darkMode = useSelector(selectDarkMode);
+  const showOffCanvas = useSelector(selectShowOffCanvas);
 
   const token = localStorage.getItem("token");
 
@@ -49,7 +56,12 @@ const Navbar = () => {
         {navOpen ? (
           <div className="grid grid-cols-6 xl:mt-0 mt-3">
             {" "}
-            <div className="cursor-pointer ms-5 mt-1">
+            <div
+              className="cursor-pointer ms-5 mt-1 xl:hidden"
+              onClick={() => {
+                dispatch(RsetShowOffCanvas(!showOffCanvas));
+              }}
+            >
               <MenuIcon className="dark:text-white text-black xl:hidden col-span-1 hover:dark:text-blue-500" />
             </div>
             <div className="col-span-3 xl:flex hidden items-center ">
@@ -123,6 +135,10 @@ const Navbar = () => {
                   />
                 )}
               </Button>
+              <div
+                id="line"
+                className="border dark:border-gray-700 h-[50%] me-5 mt-1"
+              ></div>
               <LogoutIcon
                 fontSize="small"
                 className="text-blue-500 cursor-pointer me-1 mt-1"
@@ -141,7 +157,16 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="flex justify-between">
-            <div id="profile">
+            <div
+              id="menu"
+              className="cursor-pointer ms-5 mt-1 md:hidden"
+              onClick={() => {
+                dispatch(RsetShowOffCanvas(!showOffCanvas));
+              }}
+            >
+              <MenuIcon className="dark:text-white text-black xl:hidden col-span-1 hover:dark:text-blue-500" />
+            </div>
+            <div id="profile" className="hidden md:inline-block">
               <div className="ms-10 mt-1 font-bold text-black dark:text-white flex">
                 <div
                   id="profile_pic"
@@ -164,8 +189,8 @@ const Navbar = () => {
                   return (
                     <Button
                       key={index}
-                      title="Home"
-                      className="hover:bg-gray-100 hover:dark:bg-gray-800"
+                      title={item.title}
+                      className="hover:bg-gray-100 hover:dark:bg-gray-800 dark:text-white text-black transition-all delay-75"
                       onClick={() => {
                         navigate(item.href);
                       }}
@@ -217,6 +242,7 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+      <OffCanvas />
     </section>
   );
 };

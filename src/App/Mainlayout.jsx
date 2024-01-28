@@ -23,7 +23,7 @@ const MainLayout = ({ children }) => {
   return (
     <div className={htmlClasses}>
       <div className="bg-gray-100 dark:bg-gray-900 min-h-[100vh]">
-        {isLoggedIn && <Navbar />}
+        {token && <Navbar />}
         <div className="max-w-[1920px] mx-auto">{children}</div>
       </div>
     </div>

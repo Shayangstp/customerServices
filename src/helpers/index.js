@@ -6,23 +6,20 @@ export const navData = [
   {
     name: "Home",
     href: "/home",
-    icon: (
-      <HomeIcon className="dark:text-white text-black transition-all delay-75" />
-    ),
+    icon: <HomeIcon />,
+    title: "خانه",
   },
   {
     name: "MY order List",
     href: "/myOrderList",
-    icon: (
-      <ListIcon className="dark:text-white text-black transition-all delay-75" />
-    ),
+    icon: <ListIcon />,
+    title: "لیست سفارشات",
   },
   {
     name: "MY Finance",
     href: "/myFinance",
-    icon: (
-      <AttachMoneyIcon className="dark:text-white text-black transition-all delay-75" />
-    ),
+    icon: <AttachMoneyIcon />,
+    title: "وضعیت مالی",
   },
 ];
 

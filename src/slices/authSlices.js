@@ -1,4 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { loginStaff, postCustomerLogin } from "../services/authServices";
+import { RsetFormErrors, RsetUser } from "./mainSlices";
+import { errorMessage, successMessage } from "../utils/toast";
 
 const initialState = {
   customerPannel: true,
@@ -19,22 +22,77 @@ const initialState = {
   driverRegisterCode: "",
 };
 
-// export const handleCommonUserList = createAsyncThunk(
-//     "main/handleCommonUserList",
-//     async (obj, { dispatch, getState }) => {
-//       // const { allGpeses } = getState().main;
-//       const token = localStorage.getItem("token");
+export const parseJwt = (token) => {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+};
 
-//       try {
-//         const getCommonUserRes = await getCommonUser(token);
-//         console.log(getCommonUserRes);
-//         // if()
-//         dispatch(RsetCategoryCommonUserOptions(getCommonUserRes.data.allUser))
-//       } catch (ex) {
-//         console.log(ex);
-//       }
-//     }
-//   );
+export const handleStaffLogin = createAsyncThunk(
+  "main/handleStaffLogin",
+  async (obj, { dispatch, getState }) => {
+    const { staffCodeMeli, staffPassword } = getState().auth;
+    const user = {
+      username: staffCodeMeli,
+      password: staffPassword,
+    };
+    try {
+      const loginStaffRes = await loginStaff(user);
+      console.log(loginStaffRes);
+      if (loginStaffRes.data.code === 415) {
+        const userInfo = parseJwt(loginStaffRes.data.token);
+        dispatch(RsetUser(userInfo));
+        dispatch(RsetIsLoggedIn(true));
+        localStorage.setItem("token", loginStaffRes.data.token);
+        dispatch(RsetStaffCodeMeli(""));
+        dispatch(RsetStaffPassword(""));
+        dispatch(RsetFormErrors(""));
+        successMessage("ورود با موفقیت انجام شد");
+      } else {
+        errorMessage("کد ملی یا رمز عبور اشتباه است!");
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+);
+export const handleCustomerLogin = createAsyncThunk(
+  "main/handleCustomerLogin",
+  async (obj, { dispatch, getState }) => {
+    const { customerCodeMeli, customerPassword } = getState().auth;
+    const user = {
+      codeMeli: customerCodeMeli,
+      password: customerPassword,
+    };
+    try {
+      const postCustomerLoginRes = await postCustomerLogin(user);
+      console.log(postCustomerLoginRes);
+      if (postCustomerLoginRes.data.code === 415) {
+        const userInfo = parseJwt(postCustomerLoginRes.data.token);
+        dispatch(RsetUser(userInfo));
+        localStorage.setItem("token", postCustomerLoginRes.data.token);
+        dispatch(RsetIsLoggedIn(true));
+        dispatch(RsetCustomerCodeMeli(""));
+        dispatch(RsetCustomerPassword(""));
+        dispatch(RsetFormErrors({}));
+        successMessage(postCustomerLoginRes.data.message);
+      } else {
+        errorMessage(postCustomerLoginRes.data.message);
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+);
 
 const authSlices = createSlice({
   name: "auth",

@@ -5,6 +5,7 @@ const initialState = {
   user: {},
   loading: false,
   darkMode: false,
+  showOffCanvas: false,
   formErrors: {},
   companiesList: [],
   companyCode: "",
@@ -42,6 +43,9 @@ const mainSlices = createSlice({
     RsetDarkMode: (state, { payload }) => {
       return { ...state, darkMode: payload };
     },
+    RsetShowOffCanvas: (state, { payload }) => {
+      return { ...state, showOffCanvas: payload };
+    },
     RsetDarkMode: (state, { payload }) => {
       return { ...state, darkMode: payload };
     },
@@ -57,6 +61,7 @@ const mainSlices = createSlice({
 export const {
   RsetUser,
   RsetDarkMode,
+  RsetShowOffCanvas,
   RsetLoading,
   RsetFormErrors,
   RsetCompanyCode,
@@ -67,6 +72,7 @@ export const selectUser = (state) => state.main.user;
 export const selectLoading = (state) => state.main.loading;
 export const selectFormErrors = (state) => state.main.formErrors;
 export const selectDarkMode = (state) => state.main.darkMode;
+export const selectShowOffCanvas = (state) => state.main.showOffCanvas;
 export const selectCompaniesList = (state) => state.main.companiesList;
 export const selectCompanyCode = (state) => state.main.companyCode;
 

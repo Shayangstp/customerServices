@@ -10,14 +10,9 @@ import { prefixer } from "stylis";
 import GoogleLogin from "@leecheuk/react-google-login";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  RsetCustomerLogginPage,
-  selectCustomerLoginPage,
-} from "../../../slices/authSlices";
 import { gapi } from "gapi-script";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
 //api
 import { loginStaff } from "../../../services/authServices";
 //slices
@@ -26,9 +21,16 @@ import {
   selectStaffCodeMeli,
   RsetStaffPassword,
   selectStaffPassword,
+  RsetCustomerLogginPage,
+  handleStaffLogin,
+  selectCustomerLoginPage,
+  selectIsLoggedIn,
 } from "../../../slices/authSlices";
-import { RsetUser, selectUser } from "../../../slices/mainSlices";
-import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
+import {
+  RsetFormErrors,
+  selectFormErrors,
+  selectUser,
+} from "../../../slices/mainSlices";
 
 //inputs style
 const Inputs = styled(TextField)({
@@ -56,6 +58,18 @@ const Inputs = styled(TextField)({
     "&.Mui-focused fieldset": {
       borderColor: "#5a8de0",
     },
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
+      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+        display: "none",
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+      "&::placeholder": {
+        color: "red", // Example: Change placeholder text color to gray
+        fontStyle: "italic", // Example: Apply italic style to placeholder text
+      },
+    },
   },
 });
 
@@ -79,6 +93,8 @@ const StaffLogin = () => {
   const staffCodeMeli = useSelector(selectStaffCodeMeli);
   const staffPassword = useSelector(selectStaffPassword);
   const formErrors = useSelector(selectFormErrors);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const user = useSelector(selectUser);
 
   //validation
   const staffCodeMeliIsValid = staffCodeMeli.length === 10;
@@ -128,24 +144,8 @@ const StaffLogin = () => {
     gapi.load("client:auth2", start);
   }, []);
 
-  //jwt parser
-  const parseJwt = (token) => {
-    var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    var jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  };
-
   //handle staff Login
-  const handleStaffLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (formIsValid) {
@@ -153,24 +153,7 @@ const StaffLogin = () => {
         staffCodeMeli,
         staffPassword,
       });
-      const user = {
-        username: staffCodeMeli,
-        password: staffPassword,
-      };
-
-      const loginStaffRes = await loginStaff(user);
-      console.log(loginStaffRes);
-
-      const userInfo = parseJwt(loginStaffRes.data.token);
-      dispatch(RsetUser(userInfo));
-
-      localStorage.setItem("token", loginStaffRes.data.token);
-
-      navigate("/home");
-
-      dispatch(RsetStaffCodeMeli(""));
-      dispatch(RsetStaffPassword(""));
-      dispatch(RsetFormErrors(""));
+      dispatch(handleStaffLogin());
     } else {
       dispatch(
         RsetFormErrors(
@@ -183,9 +166,9 @@ const StaffLogin = () => {
     }
   };
 
-  const user = useSelector(selectUser);
-
-  console.log(user);
+  if (isLoggedIn === true) {
+    navigate("/home");
+  }
 
   return (
     <div className="w-[50%] h-[100%]">
@@ -223,6 +206,7 @@ const StaffLogin = () => {
                 error={formErrors.staffCodeMeli}
                 dir="rtl"
                 label="کد ملی"
+                type="number"
                 value={staffCodeMeli}
                 id="custom-css-outlined-input"
                 onChange={(e) => {
@@ -278,7 +262,7 @@ const StaffLogin = () => {
                 style={{ borderRadius: "15px" }}
                 className="dark:text-white dark:bg-blue-600 dark:hover:bg-blue-500"
                 onClick={(e) => {
-                  handleStaffLogin(e);
+                  handleLogin(e);
                 }}
               >
                 ورود

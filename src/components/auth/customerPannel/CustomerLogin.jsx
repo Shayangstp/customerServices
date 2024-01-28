@@ -12,9 +12,14 @@ import GoogleLogin from "@leecheuk/react-google-login";
 import GoogleIcon from "@mui/icons-material/Google";
 import CustomerSignup from "./CustomerSignup";
 import { useDispatch, useSelector } from "react-redux";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  ControlCameraOutlined,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   RsetCustomerLogginPage,
+  handleCustomerLogin,
   selectCustomerLoginPage,
 } from "../../../slices/authSlices";
 import { gapi } from "gapi-script";
@@ -27,6 +32,7 @@ import {
   selectCustomerCodeMeli,
   RsetCustomerPassword,
   selectCustomerPassword,
+  selectIsLoggedIn,
 } from "../../../slices/authSlices";
 import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
 
@@ -57,6 +63,18 @@ const Inputs = styled(TextField)({
     "&.Mui-focused fieldset": {
       borderColor: "#5a8de0",
     },
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
+      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+        display: "none",
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+      "&::placeholder": {
+        color: "red", // Example: Change placeholder text color to gray
+        fontStyle: "italic", // Example: Apply italic style to placeholder text
+      },
+    },
   },
 });
 
@@ -80,6 +98,7 @@ const CustomerLogin = () => {
   const customerCodeMeli = useSelector(selectCustomerCodeMeli);
   const customerPassword = useSelector(selectCustomerPassword);
   const formErrors = useSelector(selectFormErrors);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   //validation
   const customerCodeMeliIsValid = customerCodeMeli.length === 10;
@@ -129,18 +148,13 @@ const CustomerLogin = () => {
     gapi.load("client:auth2", start);
   }, []);
 
-  const handleCustomerLogin = (e) => {
+  const handleLogin = (e) => {
     console.log({
       customerCodeMeli,
       customerPassword,
     });
-
     if (formIsValid) {
-      localStorage.setItem("token", customerCodeMeli);
-      navigate("/home");
-      dispatch(RsetCustomerCodeMeli(""));
-      dispatch(RsetCustomerPassword(""));
-      dispatch(RsetFormErrors({}));
+      dispatch(handleCustomerLogin());
     } else {
       dispatch(
         RsetFormErrors(
@@ -152,6 +166,10 @@ const CustomerLogin = () => {
       );
     }
   };
+
+  if (isLoggedIn === true) {
+    navigate("/home");
+  }
 
   return (
     <div className="w-[50%] h-[100%]">
@@ -193,6 +211,7 @@ const CustomerLogin = () => {
                 <Inputs
                   error={formErrors.customerCodeMeli}
                   dir="rtl"
+                  type="number"
                   label="کد ملی"
                   onChange={(e) => {
                     let inputValue = e.target.value;
@@ -259,7 +278,7 @@ const CustomerLogin = () => {
                   style={{ borderRadius: "15px" }}
                   className="dark:text-white dark:bg-blue-600 dark:hover:bg-blue-500"
                   onClick={(e) => {
-                    handleCustomerLogin(e);
+                    handleLogin(e);
                   }}
                 >
                   ورود
