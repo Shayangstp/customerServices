@@ -30,48 +30,8 @@ import {
   RsetFormErrors,
   selectFormErrors,
   selectUser,
+  selectDarkMode,
 } from "../../../slices/mainSlices";
-
-//inputs style
-const Inputs = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#5a8de0",
-  },
-  "& label": {
-    fontSize: "12px",
-    color: "white",
-  },
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "blue",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "gray",
-      borderRadius: "15px",
-    },
-    "&:hover fieldset": {
-      borderColor: "white",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#5a8de0",
-    },
-    "& input[type=number]": {
-      "-moz-appearance": "textfield",
-      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-        display: "none",
-        "-webkit-appearance": "none",
-        margin: 0,
-      },
-      "&::placeholder": {
-        color: "red", // Example: Change placeholder text color to gray
-        fontStyle: "italic", // Example: Apply italic style to placeholder text
-      },
-    },
-  },
-});
 
 const theme = createTheme({
   direction: "rtl",
@@ -95,6 +55,89 @@ const StaffLogin = () => {
   const formErrors = useSelector(selectFormErrors);
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUser);
+  const darkMode = useSelector(selectDarkMode);
+  //inputs with styles
+  const Inputs = styled(TextField)(
+    !darkMode
+      ? {
+          "& label.Mui-focused": {
+            color: "#5a8de0",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "white",
+          },
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "gray", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+      : {
+          "& label.Mui-focused": {
+            color: "blue",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "black",
+          },
+          "& .MuiInputBase-input": {
+            color: "black",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "black",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "black", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+  );
 
   //validation
   const staffCodeMeliIsValid = staffCodeMeli.length === 10;
@@ -171,8 +214,8 @@ const StaffLogin = () => {
   }
 
   return (
-    <div className="w-[50%] h-[100%]">
-      <div dir="rtl" className="flex flex-col mt-[35%]">
+    <div className="md:w-[50%] w-[90%] h-[100%]">
+      <div dir="rtl" className="flex flex-col xl:mt-[35%] mt-10 mb-10 xl:mb-0">
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -193,7 +236,7 @@ const StaffLogin = () => {
                     onClick={renderProps.onClick}
                     disabled={renderProps.disabled}
                     style={{ borderRadius: "15px", padding: "10px" }}
-                    className="border dark:border-gray-600 hover:dark:border-white dark:text-gray-500 hover:dark:text-white dark:hover:bg-gray-800 py-5"
+                    className="border dark:border-gray-600 border-gray-800 hover:dark:border-white hover:border-gray-900 dark:text-gray-500 text-gray-900 hover:dark:text-white hover:text-gray-900 dark:hover:bg-gray-800 hover:bg-gray-800 py-5"
                   >
                     <GoogleIcon />
                     <div className="mt-1 ms-2 dark:font-semibold text-[12px]">
@@ -253,7 +296,7 @@ const StaffLogin = () => {
                 }}
               />
               <div>
-                <p className="text-blue-400 hover:text-blue-300 cursor-pointer text-[12px]">
+                <p className="dark:text-blue-400 text-blue-700 dark:hover:text-blue-300 hover:text-blue-500 cursor-pointer text-[12px]">
                   فراموشی رمزعبور
                 </p>
               </div>

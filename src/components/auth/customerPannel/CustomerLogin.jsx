@@ -34,61 +34,11 @@ import {
   selectCustomerPassword,
   selectIsLoggedIn,
 } from "../../../slices/authSlices";
-import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
-
-//inputs with styles
-
-const Inputs = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#5a8de0",
-  },
-  "& label": {
-    fontSize: "12px",
-    color: "white",
-  },
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "blue",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "gray",
-      borderRadius: "15px",
-    },
-    "&:hover fieldset": {
-      borderColor: "white",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#5a8de0",
-    },
-    "& input[type=number]": {
-      "-moz-appearance": "textfield",
-      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-        display: "none",
-        "-webkit-appearance": "none",
-        margin: 0,
-      },
-      "&::placeholder": {
-        color: "red", // Example: Change placeholder text color to gray
-        fontStyle: "italic", // Example: Apply italic style to placeholder text
-      },
-    },
-  },
-});
-
-const theme = createTheme({
-  direction: "rtl",
-  typography: {
-    fontFamily: "iranSans, Arial, sans-serif", // Change the font family as desired
-  },
-});
-
-const cacheRtl = createCache({
-  key: "muirtl",
-  stylisPlugins: [prefixer, rtlPlugin],
-});
+import {
+  RsetFormErrors,
+  selectFormErrors,
+  selectDarkMode,
+} from "../../../slices/mainSlices";
 
 const CustomerLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -97,8 +47,104 @@ const CustomerLogin = () => {
   const customerLogginPage = useSelector(selectCustomerLoginPage);
   const customerCodeMeli = useSelector(selectCustomerCodeMeli);
   const customerPassword = useSelector(selectCustomerPassword);
+  const darkMode = useSelector(selectDarkMode);
   const formErrors = useSelector(selectFormErrors);
   const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  //inputs with styles
+  const Inputs = styled(TextField)(
+    !darkMode
+      ? {
+          "& label.Mui-focused": {
+            color: "#5a8de0",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "white",
+          },
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "gray", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+      : {
+          "& label.Mui-focused": {
+            color: "blue",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "black",
+          },
+          "& .MuiInputBase-input": {
+            color: "black",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "black",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "black", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+  );
+
+  const theme = createTheme({
+    direction: "rtl",
+    typography: {
+      fontFamily: "iranSans, Arial, sans-serif", // Change the font family as desired
+    },
+  });
+
+  const cacheRtl = createCache({
+    key: "muirtl",
+    stylisPlugins: [prefixer, rtlPlugin],
+  });
 
   //validation
   const customerCodeMeliIsValid = customerCodeMeli.length === 10;
@@ -172,11 +218,11 @@ const CustomerLogin = () => {
   }
 
   return (
-    <div className="w-[50%] h-[100%]">
+    <div className="md:w-[50%] w-[90%] h-[100%]">
       <div
         dir="rtl"
-        className={`flex flex-col ${
-          customerLogginPage ? "mt-[30%]" : "mt-[20%]"
+        className={`flex flex-col mt-10 mb-10 xl:mb-0 ${
+          customerLogginPage ? "xl:mt-[30%]" : "xl:mt-[20%]"
         }`}
       >
         <CacheProvider value={cacheRtl}>
@@ -199,10 +245,10 @@ const CustomerLogin = () => {
                       onClick={renderProps.onClick}
                       disabled={renderProps.disabled}
                       style={{ borderRadius: "15px", padding: "10px" }}
-                      className="border dark:border-gray-600 hover:dark:border-white dark:text-gray-500 hover:dark:text-white dark:hover:bg-gray-800 py-5"
+                      className="border dark:border-gray-600 border-gray-800 hover:dark:border-white hover:border-gray-900 dark:text-gray-500 text-gray-900 hover:dark:text-white hover:text-gray-900 dark:hover:bg-gray-800 hover:bg-gray-800 py-5"
                     >
                       <GoogleIcon />
-                      <div className="mt-1 ms-2 dark:font-semibold text-[12px]">
+                      <div className="mt-1 ms-2 font-semibold text-[12px]">
                         ورود با اکانت گوگل
                       </div>
                     </Button>
@@ -256,15 +302,17 @@ const CustomerLogin = () => {
                   }}
                 />
                 <div>
-                  <p className="text-blue-400 hover:text-blue-300 cursor-pointer text-[12px]">
+                  <p className="dark:text-blue-400 text-blue-700 dark:hover:text-blue-300 hover:text-blue-500 cursor-pointer text-[12px]">
                     فراموشی رمزعبور
                   </p>
                 </div>
                 <div>
                   <p className="text-[12px]">
-                    <span className="text-gray-400">اکانت ندارید؟</span>
+                    <span className="dark:text-gray-400 text-gray-900">
+                      اکانت ندارید؟
+                    </span>
                     <span
-                      className="cursor-pointer dark:text-blue-400 hover:dark:text-blue-300 ms-2"
+                      className="cursor-pointer dark:text-blue-400 text-blue-700 hover:text-blue-500 hover:dark:text-blue-300 ms-2"
                       onClick={() => {
                         dispatch(RsetCustomerLogginPage(false));
                       }}
@@ -276,7 +324,7 @@ const CustomerLogin = () => {
                 <Button
                   variant="outlined"
                   style={{ borderRadius: "15px" }}
-                  className="dark:text-white dark:bg-blue-600 dark:hover:bg-blue-500"
+                  className="dark:text-white dark:bg-blue-600  dark:hover:bg-blue-500"
                   onClick={(e) => {
                     handleLogin(e);
                   }}

@@ -11,7 +11,11 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 //api
 import { postCustomerSignUp } from "../../../services/authServices";
 //slices
-import { RsetFormErrors, selectFormErrors } from "../../../slices/mainSlices";
+import {
+  RsetFormErrors,
+  selectFormErrors,
+  selectDarkMode,
+} from "../../../slices/mainSlices";
 import {
   RsetCustomerLogginPage,
   selectCustomerLoginPage,
@@ -26,54 +30,6 @@ import {
   RsetCustomerPassword,
   selectCustomerPassword,
 } from "../../../slices/authSlices";
-
-//inputs with styles
-
-const CustomInput = styled("input")({
-  "&::placeholder": {
-    fontSize: "12px",
-  },
-});
-
-const Inputs = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#5a8de0",
-  },
-  "& label": {
-    fontSize: "12px",
-    color: "white",
-  },
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "blue",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "gray",
-      borderRadius: "15px",
-    },
-    "&:hover fieldset": {
-      borderColor: "white",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#5a8de0",
-    },
-    "& input[type=number]": {
-      "-moz-appearance": "textfield",
-      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-        display: "none",
-        "-webkit-appearance": "none",
-        margin: 0,
-      },
-      "&::placeholder": {
-        color: "red", // Example: Change placeholder text color to gray
-        fontStyle: "italic", // Example: Apply italic style to placeholder text
-      },
-    },
-  },
-});
 
 //rtl
 
@@ -94,6 +50,95 @@ const CustomerSignup = () => {
   const customerPhoneNumber = useSelector(selectCustomerPhoneNumber);
   const customerPassword = useSelector(selectCustomerPassword);
   const formErrors = useSelector(selectFormErrors);
+  const darkMode = useSelector(selectDarkMode);
+
+  //inputs with styles
+  const CustomInput = styled("input")({
+    "&::placeholder": {
+      fontSize: "12px",
+    },
+  });
+  const Inputs = styled(TextField)(
+    !darkMode
+      ? {
+          "& label.Mui-focused": {
+            color: "#5a8de0",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "white",
+          },
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "gray", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+      : {
+          "& label.Mui-focused": {
+            color: "blue",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "black",
+          },
+          "& .MuiInputBase-input": {
+            color: "black",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "black",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "black", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+  );
 
   // validation
   const customerCodeMeliIsValid = customerCodeMeli.length === 10;
@@ -211,7 +256,7 @@ const CustomerSignup = () => {
             onClick={renderProps.onClick}
             disabled={renderProps.disabled}
             style={{ borderRadius: "15px", padding: "10px" }}
-            className="border dark:border-gray-600 hover:dark:border-white dark:text-gray-500 hover:dark:text-white dark:hover:bg-gray-800 py-5"
+            className="border dark:border-gray-600 border-gray-800 hover:dark:border-white hover:border-gray-900 dark:text-gray-500 text-gray-900 hover:dark:text-white hover:text-gray-900 dark:hover:bg-gray-800 hover:bg-gray-800 py-5"
           >
             <GoogleIcon />
             <div className="mt-1 ms-2 dark:font-semibold text-[12px]">
@@ -307,9 +352,9 @@ const CustomerSignup = () => {
       )}
       <div>
         <p className="text-[12px]">
-          <span className="text-gray-400">اکانت دارید؟</span>
+          <span className="dark:text-gray-400 text-gray-900">اکانت دارید؟</span>
           <span
-            className="cursor-pointer dark:text-blue-400 hover:dark:text-blue-300 ms-2"
+            className="cursor-pointer dark:text-blue-400 text-blue-700 hover:text-blue-500 hover:dark:text-blue-300 ms-2"
             onClick={() => {
               dispatch(RsetCustomerLogginPage(true));
               //reset form

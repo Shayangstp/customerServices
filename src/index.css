@@ -2,6 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
 @font-face {
   font-family: "iranSans";
   src: url("../public/fonts/iranSans.ttf") format("woff");

@@ -8,10 +8,7 @@ import createCache from "@emotion/cache";
 import CssBaseline from "@mui/material/CssBaseline";
 import { prefixer } from "stylis";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  RsetCustomerLogginPage,
-  selectCustomerLoginPage,
-} from "../../../slices/authSlices";
+import { selectDarkMode } from "../../../slices/mainSlices";
 import {
   RsetDriverPhoneNumber,
   RsetDriverRegisterCode,
@@ -21,35 +18,6 @@ import {
 import { postDriverSMS } from "../../../services/authServices";
 
 // 09353835262
-
-//rtl and nput design
-const Inputs = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#5a8de0",
-  },
-  "& label": {
-    fontSize: "12px",
-    color: "white",
-  },
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "blue",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "gray",
-      borderRadius: "15px",
-    },
-    "&:hover fieldset": {
-      borderColor: "white",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#5a8de0",
-    },
-  },
-});
 
 const theme = createTheme({
   direction: "rtl",
@@ -68,13 +36,96 @@ const DriverLogin = () => {
   const dispatch = useDispatch();
   const driverPhoneNumber = useSelector(selectDriverPhoneNumber);
   const driverRegisterCode = useSelector(selectDriverRegisterCode);
+  const darkMode = useSelector(selectDarkMode);
+
+  const Inputs = styled(TextField)(
+    !darkMode
+      ? {
+          "& label.Mui-focused": {
+            color: "#5a8de0",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "white",
+          },
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "gray", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+      : {
+          "& label.Mui-focused": {
+            color: "blue",
+          },
+          "& label": {
+            fontSize: "12px",
+            color: "black",
+          },
+          "& .MuiInputBase-input": {
+            color: "black",
+          },
+          "& .MuiInput-underline:after": {
+            borderBottomColor: "blue",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "gray",
+              borderRadius: "15px",
+            },
+            "&:hover fieldset": {
+              borderColor: "black",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5a8de0",
+            },
+            "& input[type=number]": {
+              "-moz-appearance": "textfield",
+              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+                display: "none",
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "&::placeholder": {
+                color: "black", // Change placeholder text color to gray for dark mode
+                fontStyle: "italic", // Apply italic style to placeholder text
+              },
+            },
+          },
+        }
+  );
 
   const handleDriverLoggin = async () => {
     const values = {
       numbers: String(driverPhoneNumber),
       message: "this is test",
     };
-    
+
     if (!showCode) {
       console.log({ driverPhoneNumber });
       setShowCode(true);
@@ -88,8 +139,8 @@ const DriverLogin = () => {
   };
 
   return (
-    <div className="w-[50%] h-[100%]">
-      <div dir="rtl" className="flex flex-col mt-[65%]">
+    <div className="md:w-[50%] w-[90%] h-[100%]">
+      <div dir="rtl" className="flex flex-col xl:mt-[65%] mt-10 mb-10 xl:mb-0">
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
