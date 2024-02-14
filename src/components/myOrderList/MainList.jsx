@@ -1,7 +1,6 @@
-import React, { useState, useRef, useDebugValue, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useState, useRef, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-//
+//antD
 import {
   Input,
   Space,
@@ -16,8 +15,7 @@ import {
 } from "antd";
 import faIR from "antd/lib/locale/fa_IR";
 import { SearchOutlined } from "@ant-design/icons";
-import { Button } from "@mui/material";
-import SentOrderModal from "../modals/SentOrderModal";
+//swiper
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
@@ -25,6 +23,12 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+//mui
+import { Button } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import BlockIcon from "@mui/icons-material/Block";
+//modals
+import SentOrderModal from "../modals/SentOrderModal";
 //slices
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,6 +38,7 @@ import {
 import {
   RsetCompanyCode,
   handleCompaniesList,
+  selectCompanyCode,
   selectDarkMode,
 } from "../../slices/mainSlices";
 import { selectCompaniesList } from "../../slices/mainSlices";
@@ -42,6 +47,11 @@ import {
   handleCustomerOrderPerList,
   selectCustomerOrdersListPerCompany,
 } from "../../slices/customerSlices";
+import { postCompaniesOrders } from "../../services/companyServices";
+import {
+  selectCompanyOrdersList,
+  RsetCompanyOrdersList,
+} from "../../slices/companySlices";
 
 const data = [
   {
@@ -231,7 +241,7 @@ const data = [
 const MainList = () => {
   const dispatch = useDispatch();
   //
-  const [active, setActive] = useState();
+  const [active, setActive] = useState(-1);
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
   //selects
@@ -241,6 +251,8 @@ const MainList = () => {
   const customerOrdersListPerCompany = useSelector(
     selectCustomerOrdersListPerCompany
   );
+  const companyCode = useSelector(selectCompanyCode);
+  const companyOrdersList = useSelector(selectCompanyOrdersList);
 
   //handleLists
 
@@ -393,7 +405,38 @@ const MainList = () => {
         return a.date.localeCompare(b.date);
       },
 
-      width: 200,
+      width: 50,
+    },
+    {
+      ...getColumnSearchProps("OrderNo", "جستجو..."),
+      title: <span style={{ fontSize: "16px" }}>نام مشتری</span>,
+      dataIndex: "CustomerName",
+      key: "CustomerName",
+      //   render: (text, record) => (
+      //     <span
+      //       style={{ cursor: "pointer" }}
+      //       onClick={() => handleRowClick(record)}
+      //     >
+      //       {text}
+      //     </span>
+      //   ),
+      sorter: (a, b) => {
+        if (!a.CustomerName && !b.CustomerName) {
+          return 0;
+        }
+
+        if (!a.CustomerName) {
+          return 1;
+        }
+
+        if (!b.CustomerName) {
+          return -1;
+        }
+
+        return a.CustomerName.localeCompare(b.CustomerName);
+      },
+
+      width: 50,
     },
     {
       ...getColumnSearchProps("OrderNo", "جستجو..."),
@@ -424,7 +467,7 @@ const MainList = () => {
         return a.OrderNo.localeCompare(b.OrderNo);
       },
 
-      width: 200,
+      width: 50,
     },
     {
       ...getColumnSearchProps("ProductCode", "جستجو..."),
@@ -455,7 +498,7 @@ const MainList = () => {
         return a.ProductCode.localeCompare(b.ProductCode);
       },
 
-      width: 200,
+      width: 50,
     },
     {
       ...getColumnSearchProps("ProductName", "جستجو..."),
@@ -486,10 +529,9 @@ const MainList = () => {
         return a.ProductName.localeCompare(b.ProductName);
       },
 
-      width: 200,
+      width: 50,
     },
     {
-      ...getColumnSearchProps("OrderQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تعداد سفارش</span>,
       dataIndex: "OrderQuantity",
       key: "OrderQuantity",
@@ -502,22 +544,27 @@ const MainList = () => {
       //     </span>
       //   ),
       sorter: (a, b) => {
-        if (!a.OrderQuantity && !b.OrderQuantity) {
+        // Convert OrderQuantity to numbers for comparison
+        const orderQuantityA = parseInt(a.OrderQuantity);
+        const orderQuantityB = parseInt(b.OrderQuantity);
+
+        // Handle cases where OrderQuantity might be undefined or null
+        if (isNaN(orderQuantityA) && isNaN(orderQuantityB)) {
           return 0;
         }
-
-        if (!a.OrderQuantity) {
+        if (isNaN(orderQuantityA)) {
           return 1;
         }
-
-        if (!b.OrderQuantity) {
+        if (isNaN(orderQuantityB)) {
           return -1;
         }
 
-        return a.OrderQuantity.localeCompare(b.OrderQuantity);
+        // Compare OrderQuantity numerically
+        return orderQuantityA - orderQuantityB;
       },
+      ...getColumnSearchProps("OrderQuantity", "جستجو..."),
 
-      width: 200,
+      width: 50,
     },
     // {
     //   ...getColumnSearchProps("fee", "جستجو..."),
@@ -548,7 +595,7 @@ const MainList = () => {
     //     return a.fee.localeCompare(b.fee);
     //   },
 
-    //   width: 200,
+    //   width: 50,
     // },
     // {
     //   ...getColumnSearchProps("price", "جستجو..."),
@@ -579,7 +626,7 @@ const MainList = () => {
     //     return a.price.localeCompare(b.price);
     //   },
 
-    //   width: 200,
+    //   width: 50,
     // },
     // {
     //   ...getColumnSearchProps("discount", "جستجو..."),
@@ -610,7 +657,7 @@ const MainList = () => {
     //     return a.discount.localeCompare(b.discount);
     //   },
 
-    //   width: 200,
+    //   width: 50,
     // },
     // {
     //   ...getColumnSearchProps("discountPrice", "جستجو..."),
@@ -641,7 +688,7 @@ const MainList = () => {
     //     return a.discountPrice.localeCompare(b.discountPrice);
     //   },
 
-    //   width: 200,
+    //   width: 50,
     // },
     {
       ...getColumnSearchProps("SentQuantity", "جستجو..."),
@@ -662,48 +709,56 @@ const MainList = () => {
         </span>
       ),
       sorter: (a, b) => {
-        if (!a.SentQuantity && !b.SentQuantity) {
+        // Convert OrderQuantity to numbers for comparison
+        const orderQuantityA = parseInt(a.OrderQuantity);
+        const orderQuantityB = parseInt(b.OrderQuantity);
+
+        // Handle cases where OrderQuantity might be undefined or null
+        if (isNaN(orderQuantityA) && isNaN(orderQuantityB)) {
           return 0;
         }
-
-        if (!a.SentQuantity) {
+        if (isNaN(orderQuantityA)) {
           return 1;
         }
-
-        if (!b.SentQuantity) {
+        if (isNaN(orderQuantityB)) {
           return -1;
         }
 
-        return a.SentQuantity.localeCompare(b.SentQuantity);
+        // Compare OrderQuantity numerically
+        return orderQuantityA - orderQuantityB;
       },
 
-      width: 200,
+      width: 50,
     },
     {
       ...getColumnSearchProps("OrderQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>مانده ارسالی</span>,
-      dataIndex: "OrderQuantity",
-      key: "OrderQuantity",
+      dataIndex: "remainOrders",
+      key: "remainOrders",
       render: (text, record) => (
         <span>{record.OrderQuantity - record.SentQuantity}</span>
       ),
       sorter: (a, b) => {
-        if (!a.OrderQuantity && !b.OrderQuantity) {
+        // Calculate remaining quantity
+        const remainingA = parseInt(a.OrderQuantity) - parseInt(a.SentQuantity);
+        const remainingB = parseInt(b.OrderQuantity) - parseInt(b.SentQuantity);
+
+        // Handle cases where remaining quantity might be undefined or null
+        if (isNaN(remainingA) && isNaN(remainingB)) {
           return 0;
         }
-
-        if (!a.OrderQuantity) {
+        if (isNaN(remainingA)) {
           return 1;
         }
-
-        if (!b.OrderQuantity) {
+        if (isNaN(remainingB)) {
           return -1;
         }
 
-        return a.OrderQuantity.localeCompare(b.OrderQuantity);
+        // Compare remaining quantity numerically
+        return remainingA - remainingB;
       },
 
-      width: 200,
+      width: 50,
     },
     {
       ...getColumnSearchProps("Creator", "جستجو..."),
@@ -726,7 +781,14 @@ const MainList = () => {
         return a.Creator.localeCompare(b.Creator);
       },
 
-      width: 200,
+      width: 50,
+    },
+    {
+      title: <span style={{ fontSize: "16px" }}>عملیات</span>,
+      dataIndex: "opration",
+      key: "opration",
+      render: (_, record) => <span>{operation(record)}</span>,
+      width: 50,
     },
   ];
 
@@ -741,7 +803,57 @@ const MainList = () => {
     size: "middle",
   };
 
-  //
+  //handle opration
+  const operation = (request) => {
+    return (
+      <div className="flex justify-center gap-2">
+        <div
+          id="action-done"
+          title="action"
+          className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
+          active
+          onClick={() => {}}
+          size="small"
+        >
+          <CheckIcon title="action" className="text-white" />
+        </div>
+        <div
+          id="reject"
+          title="block"
+          className="bg-red-700 hover:bg-red-600 p-2 rounded-xl text-center"
+          active
+          onClick={() => {}}
+          size="small"
+        >
+          <BlockIcon title="action" className="text-white" />
+        </div>
+      </div>
+    );
+  };
+
+  //handle companies order lists
+  const handleCompaniesOrderList = async () => {
+    const values = {
+      companyCode: companyCode,
+      userRole: "",
+    };
+
+    const postCompaniesOrdersRes = await postCompaniesOrders(values);
+    console.log(postCompaniesOrdersRes);
+    if (postCompaniesOrdersRes.data.code === 200) {
+      dispatch(
+        RsetCompanyOrdersList(postCompaniesOrdersRes.data.companyOrders)
+      );
+    } else {
+      console.log("error on postCompaniesOrdersRes API");
+    }
+  };
+
+  console.log(companyOrdersList);
+
+  useEffect(() => {
+    handleCompaniesOrderList();
+  }, [companyCode]);
 
   return (
     <div dir="rtl" className="flex flex-col gap-5">
@@ -774,27 +886,48 @@ const MainList = () => {
               {companiesList.map((item, idx) => {
                 return (
                   // <SwiperSlide key={idx} virtualIndex={idx} className="">
-                  <Button
-                    key={idx}
-                    onClick={() => {
-                      setActive(idx);
-                      // setSelectedDetail(item.detail);
-                      dispatch(RsetCompanyCode(item.companycode));
-                      dispatch(handleCustomerOrderPerList());
-                    }}
-                    size="large"
-                    variant="outlined"
-                    className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
-                      idx === active
-                        ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
-                        : "dark:bg-transparent dark:border-gray-700 border-gray-400"
-                    }`}
-                  >
-                    {item.companyname}
-                  </Button>
+                  <div>
+                    <Button
+                      key={idx}
+                      onClick={(e) => {
+                        setActive(idx);
+                        // setSelectedDetail(item.detail);
+                        dispatch(RsetCompanyCode(String(item.companycode)));
+                        //customerCode is fake
+                        // dispatch(handleCustomerOrderPerList());
+                        // handleCompaniesOrderList(e);
+                      }}
+                      size="large"
+                      variant="outlined"
+                      className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                        idx === active
+                          ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                          : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+                      }`}
+                    >
+                      {item.companyname}
+                    </Button>
+                  </div>
                   // </SwiperSlide>
                 );
               })}
+              <Button
+                onClick={(e) => {
+                  dispatch(RsetCompanyCode(""));
+                  // handleCompaniesOrderList(e);
+                  setActive(-1);
+                }}
+                size="large"
+                variant="outlined"
+                className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                  -1 === active
+                    ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                    : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+                }`}
+              >
+                {/* {item.companyname} */}
+                همه شرکت ها
+              </Button>
             </div>
             {/* </Swiper> */}
             {/* <Button
@@ -809,8 +942,7 @@ const MainList = () => {
             </Button> */}
           </div>
           <div className="h-full">
-            {customerOrdersListPerCompany &&
-            customerOrdersListPerCompany.length > 0 ? (
+            {companyOrdersList && companyOrdersList.length > 0 ? (
               <div
                 id="detail_list"
                 className="bg-white rounded-2xl l mt-24 mx-5 "
@@ -833,7 +965,7 @@ const MainList = () => {
                           !darkMode ? "#222a38" : "#e3e3e3"
                         }`,
                         borderColor: "#000",
-                        rowHoverBg: `${!darkMode ? "black" : "#ccc"}`,
+                        rowHoverBg: `${!darkMode ? "#3b4157" : "#ccc"}`,
                         colorText: `${!darkMode ? "white" : "black"}`,
                         headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
                         headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
@@ -849,8 +981,9 @@ const MainList = () => {
                       emptyText: <Empty description="اطلاعات موجود نیست!" />,
                     }}
                     className="list"
-                    bordered={false}
-                    dataSource={customerOrdersListPerCompany}
+                    bordered={true}
+                    // dataSource={customerOrdersListPerCompany}
+                    dataSource={companyOrdersList}
                     columns={selectedColumns}
                     pagination={paginationConfig}
                     scroll={{ x: "max-content" }}

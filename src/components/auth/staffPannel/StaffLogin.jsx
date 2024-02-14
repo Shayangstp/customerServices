@@ -32,6 +32,7 @@ import {
   selectUser,
   selectDarkMode,
 } from "../../../slices/mainSlices";
+import { darkInputs, lightInputs } from "../../../common/Input";
 
 const theme = createTheme({
   direction: "rtl",
@@ -57,87 +58,7 @@ const StaffLogin = () => {
   const user = useSelector(selectUser);
   const darkMode = useSelector(selectDarkMode);
   //inputs with styles
-  const Inputs = styled(TextField)(
-    !darkMode
-      ? {
-          "& label.Mui-focused": {
-            color: "#5a8de0",
-          },
-          "& label": {
-            fontSize: "12px",
-            color: "white",
-          },
-          "& .MuiInputBase-input": {
-            color: "white",
-          },
-          "& .MuiInput-underline:after": {
-            borderBottomColor: "blue",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "gray",
-              borderRadius: "15px",
-            },
-            "&:hover fieldset": {
-              borderColor: "white",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#5a8de0",
-            },
-            "& input[type=number]": {
-              "-moz-appearance": "textfield",
-              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-                display: "none",
-                "-webkit-appearance": "none",
-                margin: 0,
-              },
-              "&::placeholder": {
-                color: "gray", // Change placeholder text color to gray for dark mode
-                fontStyle: "italic", // Apply italic style to placeholder text
-              },
-            },
-          },
-        }
-      : {
-          "& label.Mui-focused": {
-            color: "blue",
-          },
-          "& label": {
-            fontSize: "12px",
-            color: "black",
-          },
-          "& .MuiInputBase-input": {
-            color: "black",
-          },
-          "& .MuiInput-underline:after": {
-            borderBottomColor: "blue",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "gray",
-              borderRadius: "15px",
-            },
-            "&:hover fieldset": {
-              borderColor: "black",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#5a8de0",
-            },
-            "& input[type=number]": {
-              "-moz-appearance": "textfield",
-              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-                display: "none",
-                "-webkit-appearance": "none",
-                margin: 0,
-              },
-              "&::placeholder": {
-                color: "black", // Change placeholder text color to gray for dark mode
-                fontStyle: "italic", // Apply italic style to placeholder text
-              },
-            },
-          },
-        }
-  );
+  let Inputs = !darkMode ? darkInputs : lightInputs;
 
   //validation
   const staffCodeMeliIsValid = staffCodeMeli.length === 10;

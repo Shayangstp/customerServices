@@ -16,6 +16,7 @@ import {
   selectDriverRegisterCode,
 } from "../../../slices/authSlices";
 import { postDriverSMS } from "../../../services/authServices";
+import { darkInputs, lightInputs } from "../../../common/Input";
 
 // 09353835262
 
@@ -38,87 +39,8 @@ const DriverLogin = () => {
   const driverRegisterCode = useSelector(selectDriverRegisterCode);
   const darkMode = useSelector(selectDarkMode);
 
-  const Inputs = styled(TextField)(
-    !darkMode
-      ? {
-          "& label.Mui-focused": {
-            color: "#5a8de0",
-          },
-          "& label": {
-            fontSize: "12px",
-            color: "white",
-          },
-          "& .MuiInputBase-input": {
-            color: "white",
-          },
-          "& .MuiInput-underline:after": {
-            borderBottomColor: "blue",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "gray",
-              borderRadius: "15px",
-            },
-            "&:hover fieldset": {
-              borderColor: "white",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#5a8de0",
-            },
-            "& input[type=number]": {
-              "-moz-appearance": "textfield",
-              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-                display: "none",
-                "-webkit-appearance": "none",
-                margin: 0,
-              },
-              "&::placeholder": {
-                color: "gray", // Change placeholder text color to gray for dark mode
-                fontStyle: "italic", // Apply italic style to placeholder text
-              },
-            },
-          },
-        }
-      : {
-          "& label.Mui-focused": {
-            color: "blue",
-          },
-          "& label": {
-            fontSize: "12px",
-            color: "black",
-          },
-          "& .MuiInputBase-input": {
-            color: "black",
-          },
-          "& .MuiInput-underline:after": {
-            borderBottomColor: "blue",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "gray",
-              borderRadius: "15px",
-            },
-            "&:hover fieldset": {
-              borderColor: "black",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#5a8de0",
-            },
-            "& input[type=number]": {
-              "-moz-appearance": "textfield",
-              "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-                display: "none",
-                "-webkit-appearance": "none",
-                margin: 0,
-              },
-              "&::placeholder": {
-                color: "black", // Change placeholder text color to gray for dark mode
-                fontStyle: "italic", // Apply italic style to placeholder text
-              },
-            },
-          },
-        }
-  );
+  //inputs with styles
+  let Inputs = !darkMode ? darkInputs : lightInputs;
 
   const handleDriverLoggin = async () => {
     const values = {
@@ -148,6 +70,7 @@ const DriverLogin = () => {
               {!showCode ? (
                 <Inputs
                   dir="rtl"
+                  type="number"
                   value={driverPhoneNumber}
                   label="شماره موبایل خود را وارد کنید"
                   id="custom-css-outlined-input"
@@ -158,6 +81,7 @@ const DriverLogin = () => {
               ) : (
                 <Inputs
                   dir="rtl"
+                  type="number"
                   value={driverRegisterCode}
                   label="کد ارسالی را وارد کنید"
                   id="custom-css-outlined-input"

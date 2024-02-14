@@ -13,6 +13,7 @@ import {
   RsetCustomerPannel,
   RsetDriverPannel,
   RsetStaffPannel,
+  RsetCustomerCodeMeli,
 } from "../../slices/authSlices";
 import { RsetFormErrors } from "../../slices/mainSlices";
 
@@ -20,6 +21,10 @@ const LoginSelect = () => {
   const dispatch = useDispatch();
   const [active, setActive] = useState(1);
   const darkMode = useSelector(selectDarkMode);
+
+  const handleInputsReset = () => {
+    dispatch(RsetCustomerCodeMeli(""));
+  };
 
   return (
     <div>
@@ -61,18 +66,21 @@ const LoginSelect = () => {
                     dispatch(RsetDriverPannel(false));
                     dispatch(RsetStaffPannel(false));
                     dispatch(RsetFormErrors({}));
+                    handleInputsReset();
                   }
                   if (item.name === "Driver") {
                     dispatch(RsetCustomerPannel(false));
                     dispatch(RsetDriverPannel(true));
                     dispatch(RsetStaffPannel(false));
                     dispatch(RsetFormErrors({}));
+                    handleInputsReset();
                   }
                   if (item.name === "Staff") {
                     dispatch(RsetCustomerPannel(false));
                     dispatch(RsetDriverPannel(false));
                     dispatch(RsetStaffPannel(true));
                     dispatch(RsetFormErrors({}));
+                    handleInputsReset();
                   }
                 }}
               >

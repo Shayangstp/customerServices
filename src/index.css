@@ -2,6 +2,13 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #888 !important; /* Use the text color of the input */
+  transition: background-color 5000s ease-in-out 0s; /* Ensure the transition lasts a long time */
+}
 
 @font-face {
   font-family: "iranSans";
@@ -10,6 +17,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Poppins";
   src: url("../public/fonts/Poppins.ttf") format("woff");
