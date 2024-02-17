@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { loginStaff, postCustomerLogin } from "../services/authServices";
+import {
+  getUserIp,
+  loginStaff,
+  postCustomerLogin,
+} from "../services/authServices";
 import { RsetFormErrors, RsetUser } from "./mainSlices";
 import { errorMessage, successMessage } from "../utils/toast";
 
@@ -9,6 +13,7 @@ const initialState = {
   staffPannel: false,
   customerLogginPage: true,
   isLoggedIn: false,
+  userIp: "",
   //customer
   customerFullName: "",
   CustomerPassword: "",
@@ -37,8 +42,25 @@ export const parseJwt = (token) => {
   return JSON.parse(jsonPayload);
 };
 
+export const handleUserIp = createAsyncThunk(
+  "auth/handleUserIp",
+  async (obj, { dispatch, getState }) => {
+    try {
+      const getUserIpRes = await getUserIp();
+      console.log(getUserIpRes);
+      if (getUserIpRes.data.code === 200) {
+        dispatch(RsetUserIp(getUserIpRes.data.ip));
+      } else {
+        errorMessage("خطا!");
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+);
+
 export const handleStaffLogin = createAsyncThunk(
-  "main/handleStaffLogin",
+  "auth/handleStaffLogin",
   async (obj, { dispatch, getState }) => {
     const { staffCodeMeli, staffPassword } = getState().auth;
     const user = {
@@ -65,8 +87,9 @@ export const handleStaffLogin = createAsyncThunk(
     }
   }
 );
+
 export const handleCustomerLogin = createAsyncThunk(
-  "main/handleCustomerLogin",
+  "auth/handleCustomerLogin",
   async (obj, { dispatch, getState }) => {
     const { customerCodeMeli, customerPassword } = getState().auth;
     const user = {
@@ -113,6 +136,9 @@ const authSlices = createSlice({
     RsetIsLoggedIn: (state, { payload }) => {
       return { ...state, isLoggedIn: payload };
     },
+    RsetUserIp: (state, { payload }) => {
+      return { ...state, userIp: payload };
+    },
     //customer
     RsetCustomerFullName: (state, { payload }) => {
       return { ...state, customerFullName: payload };
@@ -149,6 +175,7 @@ export const {
   RsetDriverPannel,
   RsetStaffPannel,
   RsetIsLoggedIn,
+  RsetUserIp,
   RsetCustomerFullName,
   RsetCustomerPassword,
   RsetCustomerPhoneNumber,
@@ -164,6 +191,7 @@ export const selectDriverPannel = (state) => state.auth.driverPannel;
 export const selectStaffPannel = (state) => state.auth.staffPannel;
 export const selectCustomerLoginPage = (state) => state.auth.customerLogginPage;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
+export const selectUserIp = (state) => state.auth.userIp;
 //customer
 export const selectCustomerFullName = (state) => state.auth.customerFullName;
 export const selectCustomerPassword = (state) => state.auth.customerPassword;

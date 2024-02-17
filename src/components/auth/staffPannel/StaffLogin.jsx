@@ -32,7 +32,7 @@ import {
   selectUser,
   selectDarkMode,
 } from "../../../slices/mainSlices";
-import { darkInputs, lightInputs } from "../../../common/Input";
+import { darkInputs, lightInputs } from "../../common/Input";
 
 const theme = createTheme({
   direction: "rtl",

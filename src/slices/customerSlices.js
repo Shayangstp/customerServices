@@ -34,7 +34,7 @@ export const handleCustomerOrderList = createAsyncThunk(
 export const handleCustomerOrderPerList = createAsyncThunk(
   "main/handleCustomerOrderPerList",
   async (obj, { dispatch, getState }) => {
-    const companyCode = getState().main.companyCode;
+    const companyCode = getState().company.companyCode;
     const values = {
       customerCode: 40114,
       companyCode: companyCode,

@@ -8,7 +8,10 @@ const initialState = {
   showOffCanvas: false,
   formErrors: {},
   companiesList: [],
-  companyCode: "",
+  //modals
+  sentOrderModal: false,
+  customerDetailModal: false,
+  productDetailModal: false,
 };
 
 export const handleCompaniesList = createAsyncThunk(
@@ -35,7 +38,7 @@ const mainSlices = createSlice({
       return { ...state, user: payload };
     },
     RsetLoading: (state, { payload }) => {
-      return { ...state, lodaing: payload };
+      return { ...state, loading: payload };
     },
     RsetFormErrors: (state, { payload }) => {
       return { ...state, formErrors: payload };
@@ -52,8 +55,15 @@ const mainSlices = createSlice({
     RsetCompaniesList: (state, { payload }) => {
       return { ...state, companiesList: payload };
     },
-    RsetCompanyCode: (state, { payload }) => {
-      return { ...state, companyCode: payload };
+    //modal
+    RsetSentOrderModal: (state, { payload }) => {
+      return { ...state, sentOrderModal: payload };
+    },
+    RsetCustomerDetailModal: (state, { payload }) => {
+      return { ...state, customerDetailModal: payload };
+    },
+    RsetProductDetailModal: (state, { payload }) => {
+      return { ...state, productDetailModal: payload };
     },
   },
 });
@@ -64,8 +74,11 @@ export const {
   RsetShowOffCanvas,
   RsetLoading,
   RsetFormErrors,
-  RsetCompanyCode,
   RsetCompaniesList,
+  //modal
+  RsetSentOrderModal,
+  RsetCustomerDetailModal,
+  RsetProductDetailModal,
 } = mainSlices.actions;
 
 export const selectUser = (state) => state.main.user;
@@ -74,6 +87,11 @@ export const selectFormErrors = (state) => state.main.formErrors;
 export const selectDarkMode = (state) => state.main.darkMode;
 export const selectShowOffCanvas = (state) => state.main.showOffCanvas;
 export const selectCompaniesList = (state) => state.main.companiesList;
-export const selectCompanyCode = (state) => state.main.companyCode;
+//modal
+export const selectSentOrderModal = (state) => state.main.sentOrderModal;
+export const selectCustomerDetailModal = (state) =>
+  state.main.customerDetailModal;
+export const selectProductDetailModal = (state) =>
+  state.main.productDetailModal;
 
 export default mainSlices.reducer;

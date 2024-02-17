@@ -39,7 +39,7 @@ import {
   selectFormErrors,
   selectDarkMode,
 } from "../../../slices/mainSlices";
-import { darkInputs, lightInputs } from "../../../common/Input";
+import { darkInputs, lightInputs } from "../../common/Input";
 
 const CustomerLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -251,6 +251,7 @@ const CustomerLogin = () => {
                   style={{ borderRadius: "15px" }}
                   className="dark:text-white dark:bg-blue-600  dark:hover:bg-blue-500"
                   onClick={(e) => {
+                    console.log("hi");
                     handleLogin(e);
                   }}
                 >

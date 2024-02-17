@@ -4,16 +4,16 @@ import { Modal, Button, ConfigProvider } from "antd";
 import fa_IR from "antd/lib/locale/fa_IR";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  RsetSentOrderModal,
-  selectSentOrderModal,
-} from "../../slices/modalsSlices";
+  selectProductDetailModal,
+  RsetProductDetailModal,
+} from "../../../slices/mainSlices";
 
-const SentOrderModal = () => {
+const ProductDetailModal = () => {
   const dispatch = useDispatch();
-  const sentOrderModal = useSelector(selectSentOrderModal);
+  const ProductDetailModal = useSelector(selectProductDetailModal);
 
   const handleModalCancel = () => {
-    dispatch(RsetSentOrderModal(false));
+    dispatch(RsetProductDetailModal(false));
   };
 
   const modalStyles = {
@@ -38,11 +38,12 @@ const SentOrderModal = () => {
     },
   };
 
+  console.log(ProductDetailModal);
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
-        title="جزییات سفارشات ارسالی"
-        open={sentOrderModal}
+        title={`مشخصات کالا`}
+        open={ProductDetailModal}
         styles={modalStyles}
         closable={false}
         onOk={handleModalCancel}
@@ -50,26 +51,28 @@ const SentOrderModal = () => {
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             <Button
-              style={{ background: "red", color: "white" }}
-              onClick={() => handleModalCancel()}
+              style={{ background: "#9c3535", color: "white" }}
+              onClick={() => {
+                handleModalCancel();
+              }}
             >
               لفو
             </Button>
             <Button
-              style={{ background: "blue", color: "white" }}
-              onClick={() => handleModalCancel()}
+              style={{ background: "#3d783b", color: "white" }}
+              onClick={() => {
+                handleModalCancel();
+              }}
             >
               تایید
             </Button>
           </>
         )}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p className="font-bold">detail...</p>
       </Modal>
     </ConfigProvider>
   );
 };
 
-export default SentOrderModal;
+export default ProductDetailModal;

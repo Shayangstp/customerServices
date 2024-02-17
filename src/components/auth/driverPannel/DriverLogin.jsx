@@ -16,7 +16,7 @@ import {
   selectDriverRegisterCode,
 } from "../../../slices/authSlices";
 import { postDriverSMS } from "../../../services/authServices";
-import { darkInputs, lightInputs } from "../../../common/Input";
+import { darkInputs, lightInputs } from "../../common/Input";
 
 // 09353835262
 

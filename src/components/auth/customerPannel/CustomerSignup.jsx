@@ -30,7 +30,7 @@ import {
   RsetCustomerPassword,
   selectCustomerPassword,
 } from "../../../slices/authSlices";
-import { darkInputs, lightInputs } from "../../../common/Input";
+import { darkInputs, lightInputs } from "../../common/Input";
 
 //rtl
 const CustomInput = styled("input")({

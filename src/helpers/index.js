@@ -11,7 +11,7 @@ export const navData = [
   },
   {
     name: "MY order List",
-    href: "/myOrderList",
+    href: "/companyOrdersList",
     icon: <ListIcon />,
     title: "لیست سفارشات",
   },

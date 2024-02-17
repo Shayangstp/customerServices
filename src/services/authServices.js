@@ -25,3 +25,9 @@ export const postCustomerLogin = (values) => {
     timeout: 30000,
   });
 };
+
+export const getUserIp = (values) => {
+  return http.get(`${config.local}/api/ip`, {
+    timeout: 30000,
+  });
+};

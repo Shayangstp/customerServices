@@ -1,8 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useDebugValue, useEffect, useState } from "react";
 import Navbar from "../components/nav/Navbar";
 import { selectDarkMode } from "../slices/mainSlices";
 import { useDispatch, useSelector } from "react-redux";
-import { RsetIsLoggedIn, selectIsLoggedIn } from "../slices/authSlices";
+import {
+  RsetIsLoggedIn,
+  selectIsLoggedIn,
+  selectUserIp,
+  RsetUserIp,
+  handleUserIp,
+} from "../slices/authSlices";
 
 const MainLayout = ({ children }) => {
   const dispatch = useDispatch();
@@ -11,6 +17,10 @@ const MainLayout = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    dispatch(handleUserIp());
+  });
 
   useEffect(() => {
     if (token) {

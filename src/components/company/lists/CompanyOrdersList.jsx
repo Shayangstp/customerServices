@@ -28,22 +28,26 @@ import { Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import BlockIcon from "@mui/icons-material/Block";
 //modals
-import SentOrderModal from "../company/modals/SentOrderModal";
+import SentOrderModal from "../modals/SentOrderModal";
 //slices
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectCompaniesList,
+  selectLoading,
   handleCompaniesList,
   selectDarkMode,
   RsetSentOrderModal,
   selectSentOrderModal,
-} from "../../slices/mainSlices";
-import { selectCompaniesList, selectLoading } from "../../slices/mainSlices";
+  RsetCustomerDetailModal,
+  selectCustomerDetailModal,
+  selectProductDetailModal,
+  RsetProductDetailModal,
+} from "../../../slices/mainSlices";
 import {
   handleCustomerOrderList,
   handleCustomerOrderPerList,
   selectCustomerOrdersListPerCompany,
-} from "../../slices/customerSlices";
-import { postCompaniesOrders } from "../../services/companyServices";
+} from "../../../slices/customerSlices";
 import {
   selectCompanyOrdersList,
   RsetCompanyOrdersList,
@@ -57,196 +61,13 @@ import {
   handleCompaniesOrdersList,
   RsetCompanyCode,
   selectCompanyCode,
-} from "../../slices/companySlices";
-import CompanyAcceptModal from "../company/modals/CompanyAcceptModal";
-import Loading from "../common/Loading";
+} from "../../../slices/companySlices";
+import CompanyAcceptModal from "../modals/CompanyAcceptModal";
+import Loading from "../../common/Loading";
+import CustomerDetailModal from "../modals/CustomerDetailModal";
+import ProductDetailModal from "../modals/ProductDetailModal";
 
-const data = [
-  {
-    name: "بلور کاوه",
-    detail: [
-      {
-        id: 1,
-        date: "1402/10/01",
-        referenceNO: "12234",
-        productCode: "12B23",
-        productDesc: "شرح کالا",
-        boxes: "2300",
-        fee: "12.22",
-        price: "1000",
-        discount: "20",
-        discountPrice: "200",
-        sentProduct: "1100",
-        leftProduct: "1200",
-        salesExpert: "میلاد حسینی",
-      },
-    ],
-    id: 1,
-  },
-  {
-    name: "کاوه فلوت",
-    detail: [
-      {
-        id: 1,
-        date: "1402/07/01",
-        referenceNO: "88288",
-        productCode: "12A90",
-        productDesc: "شرح کالا",
-        boxes: "3000",
-        fee: "12.22",
-        price: "2600",
-        discount: "10",
-        discountPrice: "260",
-        sentProduct: "2000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-      {
-        id: 2,
-        date: "1402/06/01",
-        referenceNO: "52523",
-        productCode: "12T909",
-        productDesc: "شرح کالا",
-        boxes: "4000",
-        fee: "12.22",
-        price: "10000",
-        discount: "10",
-        discountPrice: "1000",
-        sentProduct: "9000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-      {
-        id: 2,
-        date: "1402/06/01",
-        referenceNO: "52523",
-        productCode: "12T909",
-        productDesc: "شرح کالا",
-        boxes: "4000",
-        fee: "12.22",
-        price: "10000",
-        discount: "10",
-        discountPrice: "1000",
-        sentProduct: "9000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-      {
-        id: 2,
-        date: "1402/06/01",
-        referenceNO: "52523",
-        productCode: "12T909",
-        productDesc: "شرح کالا",
-        boxes: "4000",
-        fee: "12.22",
-        price: "10000",
-        discount: "10",
-        discountPrice: "1000",
-        sentProduct: "9000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-      {
-        id: 2,
-        date: "1402/06/01",
-        referenceNO: "52523",
-        productCode: "12T909",
-        productDesc: "شرح کالا",
-        boxes: "4000",
-        fee: "12.22",
-        price: "10000",
-        discount: "10",
-        discountPrice: "1000",
-        sentProduct: "9000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-      {
-        id: 2,
-        date: "1402/06/01",
-        referenceNO: "52523",
-        productCode: "12T909",
-        productDesc: "شرح کالا",
-        boxes: "4000",
-        fee: "12.22",
-        price: "10000",
-        discount: "10",
-        discountPrice: "1000",
-        sentProduct: "9000",
-        leftProduct: "1000",
-        salesExpert: "حسین اکبری",
-      },
-    ],
-    id: 2,
-  },
-  {
-    name: "بلور ساچی",
-    detail: [],
-    id: 3,
-  },
-  {
-    name: "آسا فلوت",
-    detail: [],
-    id: 4,
-  },
-  {
-    name: "فلوت دماوند",
-    detail: [],
-    id: 5,
-  },
-  {
-    name: "بلور شیشه تابان",
-    detail: [],
-    id: 6,
-  },
-  {
-    name: "پروژه سرامیک فردا",
-    detail: [],
-    id: 7,
-  },
-  {
-    name: "کاویان جار ساچی",
-    detail: [],
-    id: 8,
-  },
-  {
-    name: "ایران فلوت",
-    detail: [],
-    id: 9,
-  },
-  {
-    name: "کاوه سلیس",
-    detail: [],
-    id: 10,
-  },
-  {
-    name: "ساچی",
-    detail: [],
-    id: 11,
-  },
-  {
-    name: "ساوه جام",
-    detail: [],
-    id: 12,
-  },
-  {
-    name: "ترابر سهند ایرانیان",
-    detail: [],
-    id: 13,
-  },
-  {
-    name: "ابهر سلیس",
-    detail: [],
-    id: 14,
-  },
-  {
-    name: "شیشه ساچی نور",
-    detail: [],
-    id: 15,
-  },
-];
-
-const MainList = () => {
+const CompanyOrdersList = () => {
   const dispatch = useDispatch();
   //
   const [active, setActive] = useState(-1);
@@ -265,6 +86,8 @@ const MainList = () => {
   const companyOrderListReloader = useSelector(selectCompanyOrderListReloader);
   const companyAcceptModal = useSelector(selectCompanyAcceptModal);
   const loading = useSelector(selectLoading);
+  const customerDetailModal = useSelector(selectCustomerDetailModal);
+  const productDetailModal = useSelector(selectProductDetailModal);
 
   //handleLists
 
@@ -436,14 +259,19 @@ const MainList = () => {
       title: <span style={{ fontSize: "16px" }}>نام مشتری</span>,
       dataIndex: "CustomerName",
       key: "CustomerName",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
+      render: (text, record) => (
+        <span
+          className="dark:text-blue-300 hover:dark:text-blue-400 text-blue-500 hover:text-blue-700"
+          style={{ cursor: "pointer" }}
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(RsetCustomerDetailModal(true));
+            console.log("hi");
+          }}
+        >
+          {text}
+        </span>
+      ),
       sorter: (a, b) => {
         if (!a.CustomerName && !b.CustomerName) {
           return 0;
@@ -498,14 +326,19 @@ const MainList = () => {
       title: <span style={{ fontSize: "16px" }}>کد کالا</span>,
       dataIndex: "ProductCode",
       key: "ProductCode",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
+      render: (text, record) => (
+        <span
+          className="dark:text-blue-300 hover:dark:text-blue-400 text-blue-500 hover:text-blue-700"
+          style={{ cursor: "pointer" }}
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(RsetProductDetailModal(true));
+            console.log("hi");
+          }}
+        >
+          {text}
+        </span>
+      ),
       sorter: (a, b) => {
         if (!a.ProductCode && !b.ProductCode) {
           return 0;
@@ -721,7 +554,7 @@ const MainList = () => {
       key: "SentQuantity",
       render: (text, record) => (
         <span
-          className="text-blue-500"
+          className="dark:text-blue-300 hover:dark:text-blue-400 text-blue-500 hover:text-blue-700"
           style={{ cursor: "pointer" }}
           onClick={(e) => {
             e.preventDefault();
@@ -1035,8 +868,10 @@ const MainList = () => {
       </div>
       {sentOrderModal && <SentOrderModal />}
       {companyAcceptModal && <CompanyAcceptModal />}
+      {customerDetailModal && <CustomerDetailModal />}
+      {productDetailModal && <ProductDetailModal />}
     </div>
   );
 };
 
-export default MainList;
+export default CompanyOrdersList;
