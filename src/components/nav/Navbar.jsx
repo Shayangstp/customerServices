@@ -126,7 +126,7 @@ const Navbar = () => {
                 );
               })}
               <Button
-                className="ms-10 me-2 hover:bg-white hover:dark:bg-transparent mt-1"
+                className="ms-10 me-2 hover:bg-white hover:dark:bg-transparent my-1"
                 onClick={() => {
                   dispatch(RsetDarkMode(!darkMode));
                 }}
@@ -186,7 +186,7 @@ const Navbar = () => {
                 >
                   <AccountCircleIcon className="text-[30px]" />
                 </div>
-                <span className="dark:text-white text-black ms-2">
+                <span className="dark:text-white text-black ms-2 text-[12px] my-auto">
                   {user.fullName}
                 </span>
               </div>
@@ -213,7 +213,7 @@ const Navbar = () => {
                 className="border dark:border-gray-700 h-[50%] me-5 mt-1"
               ></div>
               <div
-                className="hover:bg-white hover:dark:bg-black"
+                className="hover:bg-white hover:dark:bg-black mt-2"
                 onClick={() => {
                   dispatch(RsetDarkMode(!darkMode));
                 }}

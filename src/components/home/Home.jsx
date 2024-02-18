@@ -8,6 +8,8 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import ListIcon from "@mui/icons-material/List";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import Calender from "../common/Calender";
+import { BasicPie, BasicLineChart } from "../common/chart";
 
 const dashBoardButtons = [
   {
@@ -52,8 +54,8 @@ const Home = () => {
   console.log(user);
 
   return (
-    <div className="min-h-[80vh] flex flex-col gap-10 justify-center items-center">
-      <h1 className="lg:text-[50px] text-[30px] font-bold dark:text-white text-black">
+    <div className="min-h-[80vh] flex flex-col gap-10 justify-center items-center bg-transparent">
+      <h1 className="lg:text-[50px] text-[30px] font-bold dark:text-gray-200 text-black mt-5">
         {user.fullName} عزیز خوش آمدید
       </h1>
       <div id="buttons" className="flex gap-3">
@@ -71,6 +73,16 @@ const Home = () => {
             </Button>
           );
         })}
+      </div>
+      <div className="flex gap-2 shadow-lg">
+        <Calender />
+        <div
+          dir="rtl"
+          className="border border-gray-500 rounded-2xl text-white flex flex-col justify-center items-center"
+        >
+          <BasicPie />
+          <BasicLineChart />
+        </div>
       </div>
     </div>
   );

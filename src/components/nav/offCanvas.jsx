@@ -84,15 +84,20 @@ const OffCanvas = () => {
                 !darkMode ? "hover:bg-gray-700" : "hover :bg-gray-500"
               }`}
             >
+              <ListItemText
+                className={`text-start ${
+                  !darkMode ? "text-white" : "text-black"
+                }`}
+              >
+                {item.name}
+              </ListItemText>
               <ListItemIcon
-                className={`${!darkMode ? "text-white" : "text-black"}`}
+                className={`flex justify-center ${
+                  !darkMode ? "text-white" : "text-black"
+                }`}
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText
-                primary={item.name}
-                className={`${!darkMode ? "text-white" : "text-black"}`}
-              />
             </ListItemButton>
           </ListItem>
         ))}

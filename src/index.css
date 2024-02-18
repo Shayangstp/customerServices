@@ -25,6 +25,10 @@ input:-webkit-autofill:active {
   font-display: swap;
 }
 
+body {
+  font-family: "iranSans";
+}
+
 .googleSvg {
   background-image: url("./assets/google.svg");
 }
@@ -124,4 +128,59 @@ input:-webkit-autofill:active {
 
 ::-webkit-scrollbar-thumb {
   background: #888;
+}
+
+/* calender */
+.react-calendar-datetime-picker .header {
+  background-color: #026694 !important; /* Set your desired header color */
+  color: #ffffff; /* Set text color for better contrast */
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.react-calendar-datetime-picker .calender-modal.is-calender {
+  background-color: transparent;
+  padding: 10px;
+  border: 1px solid gray;
+  color: #fff;
+  border-radius: 20px;
+}
+
+.react-calendar-datetime-picker .daysList {
+  color: #fff;
+}
+
+.react-calendar-datetime-picker .is-rtl.daysList .daysList-day {
+  color: #8f8f8f;
+}
+
+.react-calendar-datetime-picker .dtWrapper {
+  border-radius: 20px;
+}
+
+.react-calendar-datetime-picker .daysList .is-today {
+  box-shadow: inset 0 0 0 2px #026694 !important;
+}
+
+.react-calendar-datetime-picker .daysList .is-selected-day {
+  background-color: #026694 !important;
+  color: #fff !important;
+}
+
+/* charts */
+
+.css-1tr866s-MuiChartsAxis-root .MuiChartsAxis-line {
+  stroke: #fff;
+}
+
+.css-1tr866s-MuiChartsAxis-root tspan {
+  background-color: #fff !important;
+  stroke: #fff;
+  lighting-color: #fff;
+}
+
+.css-1mxzueh-MuiResponsiveChart tspan {
+  stroke: #fff;
+  color: #fff;
+  background: #fff;
 }
