@@ -47,35 +47,37 @@ const LoginSelect = () => {
         )}
       </div>
       <div className="flex flex-col justify-center items-center xl:mt-[50%]">
-        <h1 className="dark:text-white text-[40px]">Welcome</h1>
-        <p className="dark:text-white">select your login page</p>
+        <h1 className="dark:text-white text-[40px]">خوش آمدید</h1>
+        <p className="dark:text-white text-[13px] mt-4">
+          پنل ورود مورد نظر خود را انتخاب کنید
+        </p>
         <div id="btns" className="xl:mt-10 mt-5">
           {loginSelectButtons.map((item, idx) => {
             return (
               <Button
                 variant="outlined"
-                className={`dark:text-gray-200 hover:bg-blue-200 hover:dark:bg-transparent border-gray-500 hover:border-blue-300 hover:dark:border-blue-500 text-black md:text-[13px] text-[10px] mb-4 xl:mb-0  rounded-2xl ms-2 ${
+                className={`dark:text-gray-200 hover:bg-blue-200 hover:dark:bg-transparent border-gray-500 hover:border-blue-300 hover:dark:border-blue-500 text-black md:text-[16px] text-[13px] mb-4 xl:mb-0  rounded-2xl ms-2 px-4 ${
                   idx === active
                     ? "dark:bg-gray-700 bg-blue-300 dark:border-blue-500 hover:dark:bg-gray-700 hover:bg-blue-300 border-gray-600"
                     : "bg-transparent"
                 }`}
                 onClick={() => {
                   setActive(idx);
-                  if (item.name === "Customer") {
+                  if (item.no === 2) {
                     dispatch(RsetCustomerPannel(true));
                     dispatch(RsetDriverPannel(false));
                     dispatch(RsetStaffPannel(false));
                     dispatch(RsetFormErrors({}));
                     handleInputsReset();
                   }
-                  if (item.name === "Driver") {
+                  if (item.no === 1) {
                     dispatch(RsetCustomerPannel(false));
                     dispatch(RsetDriverPannel(true));
                     dispatch(RsetStaffPannel(false));
                     dispatch(RsetFormErrors({}));
                     handleInputsReset();
                   }
-                  if (item.name === "Staff") {
+                  if (item.no === 3) {
                     dispatch(RsetCustomerPannel(false));
                     dispatch(RsetDriverPannel(false));
                     dispatch(RsetStaffPannel(true));

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 //antD
 import {
   Input,
@@ -283,15 +282,6 @@ const MainList = () => {
     dispatch(RsetCompanyOrderListReloader(false));
     dispatch(handleCompaniesOrdersList());
   }, [companyCode, companyOrderListReloader]);
-
-  //mui theme
-
-  const theme = createTheme({
-    direction: "rtl",
-    typography: {
-      fontFamily: "iranSans, Arial, sans-serif", // Change the font family as desired
-    },
-  });
 
   //swiper
 
@@ -889,12 +879,8 @@ const MainList = () => {
   return (
     <div dir="rtl" className="flex flex-col gap-5">
       <div id="list" className="flex flex-col gap-5">
-        <ThemeProvider theme={theme}>
-          <div
-            dir="ltr"
-            className="flex mx-10 mt-10 items-center justify-center"
-          >
-            {/* <Button
+        <div dir="ltr" className="flex mx-10 mt-10 items-center justify-center">
+          {/* <Button
               variant="outlined"
               size="small"
               className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
@@ -904,7 +890,7 @@ const MainList = () => {
                 <ArrowCircleLeftOutlinedIcon className="text-[50px]" />
               </span>
             </Button> */}
-            {/* <Swiper
+          {/* <Swiper
               spaceBetween={7}
               slidesPerView={7}
               // navigation={true}
@@ -913,55 +899,55 @@ const MainList = () => {
               ref={swiperRef}
               // breakpoints={}
             > */}
-            <div className="flex gap-5">
-              {companiesList.map((item, idx) => {
-                return (
-                  // <SwiperSlide key={idx} virtualIndex={idx} className="">
-                  <div>
-                    <Button
-                      key={idx}
-                      onClick={(e) => {
-                        setActive(idx);
-                        // setSelectedDetail(item.detail);
-                        dispatch(RsetCompanyCode(String(item.companycode)));
-                        //customerCode is fake
-                        // dispatch(handleCustomerOrderPerList());
-                        // handleCompaniesOrderList(e);
-                      }}
-                      size="large"
-                      variant="outlined"
-                      className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
-                        idx === active
-                          ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
-                          : "dark:bg-transparent dark:border-gray-700 border-gray-400"
-                      }`}
-                    >
-                      {item.companyname}
-                    </Button>
-                  </div>
-                  // </SwiperSlide>
-                );
-              })}
-              <Button
-                onClick={(e) => {
-                  dispatch(RsetCompanyCode(""));
-                  // handleCompaniesOrderList(e);
-                  setActive(-1);
-                }}
-                size="large"
-                variant="outlined"
-                className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
-                  -1 === active
-                    ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
-                    : "dark:bg-transparent dark:border-gray-700 border-gray-400"
-                }`}
-              >
-                {/* {item.companyname} */}
-                همه شرکت ها
-              </Button>
-            </div>
-            {/* </Swiper> */}
-            {/* <Button
+          <div className="flex gap-5">
+            {companiesList.map((item, idx) => {
+              return (
+                // <SwiperSlide key={idx} virtualIndex={idx} className="">
+                <div>
+                  <Button
+                    key={idx}
+                    onClick={(e) => {
+                      setActive(idx);
+                      // setSelectedDetail(item.detail);
+                      dispatch(RsetCompanyCode(String(item.companycode)));
+                      //customerCode is fake
+                      // dispatch(handleCustomerOrderPerList());
+                      // handleCompaniesOrderList(e);
+                    }}
+                    size="large"
+                    variant="outlined"
+                    className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                      idx === active
+                        ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                        : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+                    }`}
+                  >
+                    {item.companyname}
+                  </Button>
+                </div>
+                // </SwiperSlide>
+              );
+            })}
+            <Button
+              onClick={(e) => {
+                dispatch(RsetCompanyCode(""));
+                // handleCompaniesOrderList(e);
+                setActive(-1);
+              }}
+              size="large"
+              variant="outlined"
+              className={`dark:text-gray-200 text-black text-[13px] rounded-2xl hover:dark:bg-gray-800 hover:bg-gray-300 hover:border-gray-400 hover:dark:text-white w-[180px] py-3 ${
+                -1 === active
+                  ? "dark:bg-gray-800  bg-blue-300 dark:text-gray-100 border-blue-500"
+                  : "dark:bg-transparent dark:border-gray-700 border-gray-400"
+              }`}
+            >
+              {/* {item.companyname} */}
+              همه شرکت ها
+            </Button>
+          </div>
+          {/* </Swiper> */}
+          {/* <Button
               variant="outlined"
               size="small"
               className=" dark:border-blue-500 border-gray-400 dark:text-gray-300  dark:hover:text-white dark:hover:border-blue-300 rounded-xl me-2 text-black"
@@ -971,67 +957,64 @@ const MainList = () => {
                 <ArrowCircleRightOutlinedIcon className="text-[50px]" />
               </span>
             </Button> */}
-          </div>
-          <div className="h-full">
-            {loading === false ? (
-              <div
-                id="detail_list"
-                className="bg-white rounded-2xl l mt-24 mx-5 "
+        </div>
+        <div className="h-full">
+          {loading === false ? (
+            <div
+              id="detail_list"
+              className="bg-white rounded-2xl l mt-24 mx-5 "
+            >
+              <ConfigProvider
+                locale={faIR}
+                theme={{
+                  token: {
+                    // Seed Token
+                    // colorPrimary: "#00b96b",
+                    // Alias Token
+                    colorBgContainer: `${!darkMode ? "#303030" : "#fff"}`,
+                    colorText: "white",
+                    colorTextPlaceholder: `${!darkMode ? "white" : "black"}`,
+                    // borderColor: "#000",
+                  },
+                  components: {
+                    Table: {
+                      colorBgContainer: ` ${!darkMode ? "#222a38" : "#e3e3e3"}`,
+                      borderColor: "#000",
+                      rowHoverBg: `${!darkMode ? "#3b4157" : "#ccc"}`,
+                      colorText: `${!darkMode ? "white" : "black"}`,
+                      headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
+                      headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
+                      headerSortActiveBg: `${!darkMode ? "#000" : "#888a89"}`,
+                      // headerFilterHoverIcon: "#fff",
+                      // headerFilterIcon: "#fff",
+                    },
+                  },
+                }}
               >
-                <ConfigProvider
-                  locale={faIR}
-                  theme={{
-                    token: {
-                      // Seed Token
-                      // colorPrimary: "#00b96b",
-                      // Alias Token
-                      colorBgContainer: `${!darkMode ? "#303030" : "#fff"}`,
-                      colorText: "white",
-                      colorTextPlaceholder: `${!darkMode ? "white" : "black"}`,
-                      // borderColor: "#000",
-                    },
-                    components: {
-                      Table: {
-                        colorBgContainer: ` ${
-                          !darkMode ? "#222a38" : "#e3e3e3"
-                        }`,
-                        borderColor: "#000",
-                        rowHoverBg: `${!darkMode ? "#3b4157" : "#ccc"}`,
-                        colorText: `${!darkMode ? "white" : "black"}`,
-                        headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
-                        headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
-                        headerSortActiveBg: `${!darkMode ? "#000" : "#888a89"}`,
-                        // headerFilterHoverIcon: "#fff",
-                        // headerFilterIcon: "#fff",
-                      },
-                    },
+                <Table
+                  locale={{
+                    emptyText: <Empty description="اطلاعات موجود نیست!" />,
                   }}
-                >
-                  <Table
-                    locale={{
-                      emptyText: <Empty description="اطلاعات موجود نیست!" />,
-                    }}
-                    className="list"
-                    bordered={true}
-                    // dataSource={customerOrdersListPerCompany}
-                    dataSource={companyOrdersList}
-                    columns={selectedColumns}
-                    pagination={paginationConfig}
-                    scroll={{ x: "max-content" }}
-                    size="middle"
-                    // onRow={(record) => ({
-                    //   onClick: () => handleRowClick(record),
-                    // })}
-                  />
-                </ConfigProvider>
-              </div>
-            ) : (
-              <div className="flex justify-center mt-24">
-                <Loading width={"100px"} height={"100px"} />
-              </div>
-            )}
-          </div>
-        </ThemeProvider>
+                  className="list"
+                  bordered={true}
+                  // dataSource={customerOrdersListPerCompany}
+                  dataSource={companyOrdersList}
+                  columns={selectedColumns}
+                  pagination={paginationConfig}
+                  scroll={{ x: "max-content" }}
+                  size="middle"
+                  // onRow={(record) => ({
+                  //   onClick: () => handleRowClick(record),
+                  // })}
+                />
+              </ConfigProvider>
+            </div>
+          ) : (
+            <div className="flex justify-center mt-24">
+              <Loading width={"100px"} height={"100px"} />
+            </div>
+          )}
+        </div>
       </div>
       {sentOrderModal && <SentOrderModal />}
       {companyAcceptModal && <CompanyAcceptModal />}

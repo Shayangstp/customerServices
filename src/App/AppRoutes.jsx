@@ -7,6 +7,7 @@ import Home from "../components/home/Home";
 import MainList from "../components/myOrderList/MainList";
 import MainAuth from "../components/auth/MainAuth";
 import CompanyOrdersList from "../components/company/lists/CompanyOrdersList";
+import CustomerOrdersList from "../components/customer/lists/CustomerOrdersList";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
           <Route path="/dashboard" element={<Home />} />
           <Route path="/myOrderList" element={<MainList />} />
           <Route path="/companyOrdersList" element={<CompanyOrdersList />} />
+          <Route path="/customerOrdersList" element={<CustomerOrdersList />} />
           {/* <Route path="/deviceList" element={<DeviceList />} /> */}
         </Routes>
       </MainLayout>

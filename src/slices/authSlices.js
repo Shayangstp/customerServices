@@ -47,7 +47,6 @@ export const handleUserIp = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     try {
       const getUserIpRes = await getUserIp();
-      console.log(getUserIpRes);
       if (getUserIpRes.data.code === 200) {
         dispatch(RsetUserIp(getUserIpRes.data.ip));
       } else {
@@ -82,6 +81,19 @@ export const handleStaffLogin = createAsyncThunk(
       } else {
         errorMessage("کد ملی یا رمز عبور اشتباه است!");
       }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+);
+
+export const handleUserData = createAsyncThunk(
+  "auth/handleUserData",
+  async (event, { dispatch, getState }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const userData = parseJwt(token);
+      dispatch(RsetUser(userData));
     } catch (ex) {
       console.log(ex);
     }

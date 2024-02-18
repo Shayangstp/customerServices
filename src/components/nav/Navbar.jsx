@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RsetDarkMode, selectDarkMode } from "../../slices/mainSlices";
+
+//mui
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Button } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
+import MenuIcon from "@mui/icons-material/Menu";
+//
 import Clock from "react-live-clock";
 import { useNavigate } from "react-router-dom";
-import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
-import HomeIcon from "@mui/icons-material/Home";
-import ListIcon from "@mui/icons-material/List";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { navData } from "../../helpers/index";
-import { RsetIsLoggedIn } from "../../slices/authSlices";
-import MenuIcon from "@mui/icons-material/Menu";
+import { RsetIsLoggedIn, handleUserData } from "../../slices/authSlices";
 import OffCanvas from "./OffCanvas";
 //slice
 import {
   RsetShowOffCanvas,
   selectShowOffCanvas,
+} from "../../slices/mainSlices";
+import {
+  RsetDarkMode,
+  selectDarkMode,
+  selectUser,
 } from "../../slices/mainSlices";
 
 const Navbar = () => {
@@ -28,12 +34,14 @@ const Navbar = () => {
   const navigate = useNavigate();
   const darkMode = useSelector(selectDarkMode);
   const showOffCanvas = useSelector(selectShowOffCanvas);
+  const user = useSelector(selectUser);
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (token) {
       dispatch(RsetIsLoggedIn(true));
+      dispatch(handleUserData());
     } else {
       dispatch(RsetIsLoggedIn(false));
     }
@@ -80,7 +88,7 @@ const Navbar = () => {
                   id="profile_name"
                   className="text-black dark:text-white ms-3"
                 >
-                  <div className="font-bold">shayan golestanipour</div>
+                  <div className="font-bold">{user.fullName}</div>
                   <div>122388822</div>
                 </div>
               </div>
@@ -179,7 +187,7 @@ const Navbar = () => {
                   <AccountCircleIcon className="text-[30px]" />
                 </div>
                 <span className="dark:text-white text-black ms-2">
-                  shayan golestanipour
+                  {user.fullName}
                 </span>
               </div>
             </div>

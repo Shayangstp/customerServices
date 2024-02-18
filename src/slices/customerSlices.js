@@ -3,6 +3,7 @@ import {
   postCustomerOrders,
   postCustomerOrdersPerCompany,
 } from "../services/customersServices";
+import { RsetLoading } from "./mainSlices";
 
 const initialState = {
   customerOrdersList: [],
@@ -31,14 +32,17 @@ export const handleCustomerOrderList = createAsyncThunk(
   }
 );
 
-export const handleCustomerOrderPerList = createAsyncThunk(
-  "main/handleCustomerOrderPerList",
+//this do the above function too
+export const handleCustomerOrderPerCompany = createAsyncThunk(
+  "main/handleCustomerOrderPerCompany",
   async (obj, { dispatch, getState }) => {
+    dispatch(RsetLoading(true));
     const companyCode = getState().company.companyCode;
     const values = {
       customerCode: 40114,
-      companyCode: companyCode,
+      companyCode: String(companyCode),
     };
+    console.log(values);
     try {
       const postCustomerOrdersPerCompanyRes =
         await postCustomerOrdersPerCompany(values);
@@ -49,6 +53,7 @@ export const handleCustomerOrderPerList = createAsyncThunk(
             postCustomerOrdersPerCompanyRes.data.customerOrdersPerCompany
           )
         );
+        dispatch(RsetLoading(false));
       } else {
         console.log("error on postCustomerOrdersPerCompanyRes API");
       }

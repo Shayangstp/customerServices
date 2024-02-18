@@ -255,7 +255,7 @@ const CompanyOrdersList = () => {
       width: 50,
     },
     {
-      ...getColumnSearchProps("OrderNo", "جستجو..."),
+      ...getColumnSearchProps("CustomerName", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>نام مشتری</span>,
       dataIndex: "CustomerName",
       key: "CustomerName",

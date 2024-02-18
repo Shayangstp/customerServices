@@ -4,19 +4,19 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 export const navData = [
   {
-    name: "Home",
+    name: "داشبورد",
     href: "/home",
     icon: <HomeIcon />,
     title: "خانه",
   },
   {
-    name: "MY order List",
+    name: "لیست سفارشات",
     href: "/companyOrdersList",
     icon: <ListIcon />,
     title: "لیست سفارشات",
   },
   {
-    name: "MY Finance",
+    name: "وضعیت مالی",
     href: "/myFinance",
     icon: <AttachMoneyIcon />,
     title: "وضعیت مالی",
@@ -25,12 +25,15 @@ export const navData = [
 
 export const loginSelectButtons = [
   {
-    name: "Driver",
+    name: "راننده",
+    no: 1,
   },
   {
-    name: "Customer",
+    name: "مشتری",
+    no: 2,
   },
   {
-    name: "Staff",
+    name: "کارکنان",
+    no: 3,
   },
 ];
