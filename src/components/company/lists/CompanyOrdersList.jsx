@@ -93,6 +93,7 @@ const CompanyOrdersList = () => {
 
   //customer list
   useEffect(() => {
+    dispatch(RsetCompanyCode(""));
     dispatch(handleCustomerOrderList());
   }, []);
 
@@ -222,10 +223,10 @@ const CompanyOrdersList = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const selectedColumns = [
+  let selectedColumns = [
     {
       ...getColumnSearchProps("date", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>تاریخ سفارش</span>,
+      title: <span style={{ fontSize: "14px" }}>تاریخ ثبت سفارش</span>,
       dataIndex: "CreateDate",
       key: "date",
       //   render: (text, record) => (
@@ -265,8 +266,8 @@ const CompanyOrdersList = () => {
           style={{ cursor: "pointer" }}
           onClick={(e) => {
             e.preventDefault();
+            dispatch(RsetCurrentOrder(record));
             dispatch(RsetCustomerDetailModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -291,8 +292,31 @@ const CompanyOrdersList = () => {
       width: 50,
     },
     {
+      ...getColumnSearchProps("CompanyName", "جستجو..."),
+      title: <span style={{ fontSize: "16px" }}>کارخانه</span>,
+      dataIndex: "CompanyName",
+      key: "CompanyName",
+      sorter: (a, b) => {
+        if (!a.CompanyName && !b.CompanyName) {
+          return 0;
+        }
+
+        if (!a.CompanyName) {
+          return 1;
+        }
+
+        if (!b.CompanyName) {
+          return -1;
+        }
+
+        return a.CompanyName.localeCompare(b.CompanyName);
+      },
+
+      width: 50,
+    },
+    {
       ...getColumnSearchProps("OrderNo", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>کد سفارش</span>,
+      title: <span style={{ fontSize: "16px" }}>شماره حواله</span>,
       dataIndex: "OrderNo",
       key: "OrderNo",
       //   render: (text, record) => (
@@ -323,7 +347,7 @@ const CompanyOrdersList = () => {
     },
     {
       ...getColumnSearchProps("ProductCode", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>کد کالا</span>,
+      title: <span style={{ fontSize: "16px" }}>کد محصول</span>,
       dataIndex: "ProductCode",
       key: "ProductCode",
       render: (text, record) => (
@@ -333,7 +357,6 @@ const CompanyOrdersList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetProductDetailModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -359,7 +382,7 @@ const CompanyOrdersList = () => {
     },
     {
       ...getColumnSearchProps("ProductName", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>شرح کالا</span>,
+      title: <span style={{ fontSize: "16px" }}>شرح محصول</span>,
       dataIndex: "ProductName",
       key: "ProductName",
       //   render: (text, record) => (
@@ -549,7 +572,7 @@ const CompanyOrdersList = () => {
     // },
     {
       ...getColumnSearchProps("SentQuantity", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>تعداد ارسالی</span>,
+      title: <span style={{ fontSize: "16px" }}>تعداد سفارش ارسالی</span>,
       dataIndex: "SentQuantity",
       key: "SentQuantity",
       render: (text, record) => (
@@ -559,7 +582,6 @@ const CompanyOrdersList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetSentOrderModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -589,7 +611,7 @@ const CompanyOrdersList = () => {
     },
     {
       ...getColumnSearchProps("OrderQuantity", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>مانده ارسالی</span>,
+      title: <span style={{ fontSize: "16px" }}>مانده سفارش</span>,
       dataIndex: "remainOrders",
       key: "remainOrders",
       render: (text, record) => (
@@ -642,7 +664,7 @@ const CompanyOrdersList = () => {
     },
     {
       ...getColumnSearchProps("statusFa", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>وضعیت</span>,
+      title: <span style={{ fontSize: "16px" }}>آخرین وضعیت</span>,
       dataIndex: "statusFa",
       key: "statusFa",
       sorter: (a, b) => {
@@ -672,6 +694,13 @@ const CompanyOrdersList = () => {
     },
   ];
 
+  //handle the company column
+  if (companyCode !== "") {
+    selectedColumns = selectedColumns.filter(
+      (column) => column.key !== "CompanyName"
+    );
+  }
+
   const paginationConfig = {
     position: ["bottomCenter"],
     // showTotal: (total) => (
@@ -683,15 +712,14 @@ const CompanyOrdersList = () => {
     size: "middle",
   };
 
-  console.log(loading);
 
   //handle opration
   const operation = (request) => {
     return (
       <div className="flex justify-center gap-2">
         <div
-          id="action-done"
-          title="action"
+          id="action"
+          title="تغییر وضعیت"
           className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
           active
           onClick={() => {
@@ -707,7 +735,7 @@ const CompanyOrdersList = () => {
         </div>
         <div
           id="reject"
-          title="block"
+          title="ابطال"
           className="bg-red-700 hover:bg-red-600 p-2 rounded-xl text-center"
           active
           onClick={() => {}}
@@ -809,7 +837,7 @@ const CompanyOrdersList = () => {
             {loading === false ? (
               <div
                 id="detail_list"
-                className="bg-white rounded-2xl l mt-24 mx-5 "
+                className="bg-white rounded-2xl l mt-10 mb-10 mx-5 "
               >
                 <ConfigProvider
                   locale={faIR}

@@ -33,7 +33,7 @@ export const loginSelectButtons = [
     no: 2,
   },
   {
-    name: "کارکنان",
+    name: "کارشناس",
     no: 3,
   },
 ];

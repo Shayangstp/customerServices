@@ -135,11 +135,8 @@ const CustomerSignup = () => {
         password: customerPassword,
       };
 
-      console.log(values);
-
       const postCustomerSignUpRes = await postCustomerSignUp(values);
 
-      console.log(postCustomerSignUpRes);
       if (postCustomerSignUpRes.data.code === 201) {
         successMessage(postCustomerSignUpRes.data.message);
       } else {

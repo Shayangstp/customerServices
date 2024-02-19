@@ -716,7 +716,6 @@ const MainList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetSentOrderModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -840,7 +839,6 @@ const MainList = () => {
     size: "middle",
   };
 
-  console.log(loading);
 
   //handle opration
   const operation = (request) => {

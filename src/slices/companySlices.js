@@ -22,7 +22,6 @@ export const handleCompaniesOrdersList = createAsyncThunk(
       userRole: "",
     };
 
-    console.log(values);
     try {
       const postCompaniesOrdersRes = await postCompaniesOrders(values);
       console.log(postCompaniesOrdersRes);
@@ -48,7 +47,6 @@ export const handleCompanyOrderActions = createAsyncThunk(
     try {
       let values = {};
 
-      console.log(currentOrder);
       if (currentOrder.latestActionCode === 1) {
         values = {
           companyCode: currentOrder.CompanyCode,
@@ -111,7 +109,6 @@ export const handleCompanyOrderActions = createAsyncThunk(
         };
       }
 
-      console.log(values);
       const postActionsOrderRes = await postActionsOrder(values);
       console.log(postActionsOrderRes);
     } catch (ex) {

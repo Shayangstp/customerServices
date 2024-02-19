@@ -49,10 +49,8 @@ const DriverLogin = () => {
     };
 
     if (!showCode) {
-      console.log({ driverPhoneNumber });
       setShowCode(true);
       const postDriverSMSRes = await postDriverSMS(values);
-      console.log(postDriverSMSRes);
     } else {
       console.log({
         driverRegisterCode,

@@ -180,7 +180,7 @@ const CustomerLogin = () => {
                   error={formErrors.customerCodeMeli}
                   dir="rtl"
                   type="number"
-                  label="کد ملی"
+                  label="کد/ شناسه ملی"
                   onChange={(e) => {
                     let inputValue = e.target.value;
                     const maxLength = 10;
@@ -251,7 +251,6 @@ const CustomerLogin = () => {
                   style={{ borderRadius: "15px" }}
                   className="dark:text-white dark:bg-blue-600  dark:hover:bg-blue-500"
                   onClick={(e) => {
-                    console.log("hi");
                     handleLogin(e);
                   }}
                 >

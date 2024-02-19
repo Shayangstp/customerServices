@@ -86,6 +86,7 @@ const CustomerOrdersList = () => {
 
   //companies list buttons
   useEffect(() => {
+    dispatch(RsetCompanyCode(""));
     dispatch(handleCompaniesList());
   }, []);
 
@@ -198,7 +199,7 @@ const CustomerOrdersList = () => {
   const selectedColumns = [
     {
       ...getColumnSearchProps("date", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>تاریخ سفارش</span>,
+      title: <span style={{ fontSize: "14px" }}>تاریخ ثبت سفارش</span>,
       dataIndex: "CreateDate",
       key: "date",
       //   render: (text, record) => (
@@ -239,7 +240,6 @@ const CustomerOrdersList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetCustomerDetailModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -265,7 +265,7 @@ const CustomerOrdersList = () => {
     },
     {
       ...getColumnSearchProps("OrderNo", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>کد سفارش</span>,
+      title: <span style={{ fontSize: "16px" }}>شماره حواله</span>,
       dataIndex: "OrderNo",
       key: "OrderNo",
       //   render: (text, record) => (
@@ -296,7 +296,7 @@ const CustomerOrdersList = () => {
     },
     {
       ...getColumnSearchProps("ProductCode", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>کد کالا</span>,
+      title: <span style={{ fontSize: "16px" }}>کد محصول</span>,
       dataIndex: "ProductCode",
       key: "ProductCode",
       render: (text, record) => (
@@ -306,7 +306,6 @@ const CustomerOrdersList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetProductDetailModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -332,7 +331,7 @@ const CustomerOrdersList = () => {
     },
     {
       ...getColumnSearchProps("ProductName", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>شرح کالا</span>,
+      title: <span style={{ fontSize: "16px" }}>شرح محصول</span>,
       dataIndex: "ProductName",
       key: "ProductName",
       //   render: (text, record) => (
@@ -522,7 +521,7 @@ const CustomerOrdersList = () => {
     // },
     {
       ...getColumnSearchProps("SentQuantity", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>تعداد ارسالی</span>,
+      title: <span style={{ fontSize: "16px" }}>تعداد سفارش ارسالی</span>,
       dataIndex: "SentQuantity",
       key: "SentQuantity",
       render: (text, record) => (
@@ -532,7 +531,6 @@ const CustomerOrdersList = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(RsetSentOrderModal(true));
-            console.log("hi");
           }}
         >
           {text}
@@ -562,7 +560,7 @@ const CustomerOrdersList = () => {
     },
     {
       ...getColumnSearchProps("OrderQuantity", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>مانده ارسالی</span>,
+      title: <span style={{ fontSize: "16px" }}>مانده سفارش</span>,
       dataIndex: "remainOrders",
       key: "remainOrders",
       render: (text, record) => (
@@ -615,7 +613,7 @@ const CustomerOrdersList = () => {
     },
     {
       ...getColumnSearchProps("statusFa", "جستجو..."),
-      title: <span style={{ fontSize: "16px" }}>وضعیت</span>,
+      title: <span style={{ fontSize: "16px" }}>آخرین وضعیت</span>,
       dataIndex: "statusFa",
       key: "statusFa",
       sorter: (a, b) => {
@@ -656,7 +654,6 @@ const CustomerOrdersList = () => {
     size: "middle",
   };
 
-  console.log(loading);
 
   //handleFactors
   const handleFactors = () => {

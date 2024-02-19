@@ -68,7 +68,6 @@ export const handleStaffLogin = createAsyncThunk(
     };
     try {
       const loginStaffRes = await loginStaff(user);
-      console.log(loginStaffRes);
       if (loginStaffRes.data.code === 415) {
         const userInfo = parseJwt(loginStaffRes.data.token);
         dispatch(RsetUser(userInfo));
@@ -110,7 +109,6 @@ export const handleCustomerLogin = createAsyncThunk(
     };
     try {
       const postCustomerLoginRes = await postCustomerLogin(user);
-      console.log(postCustomerLoginRes);
       if (postCustomerLoginRes.data.code === 415) {
         const userInfo = parseJwt(postCustomerLoginRes.data.token);
         dispatch(RsetUser(userInfo));

@@ -7,11 +7,12 @@ import {
   selectCustomerDetailModal,
   RsetCustomerDetailModal,
 } from "../../../slices/mainSlices";
+import { selectCurrentOrder } from "../../../slices/companySlices";
 
 const CustomerDetailModal = () => {
   const dispatch = useDispatch();
   const customerDetailModal = useSelector(selectCustomerDetailModal);
-
+  const currentOrder = useSelector(selectCurrentOrder);
   const handleModalCancel = () => {
     dispatch(RsetCustomerDetailModal(false));
   };
@@ -38,7 +39,6 @@ const CustomerDetailModal = () => {
     },
   };
 
-  console.log(customerDetailModal);
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
@@ -51,14 +51,6 @@ const CustomerDetailModal = () => {
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             <Button
-              style={{ background: "#9c3535", color: "white" }}
-              onClick={() => {
-                handleModalCancel();
-              }}
-            >
-              لفو
-            </Button>
-            <Button
               style={{ background: "#3d783b", color: "white" }}
               onClick={() => {
                 handleModalCancel();
@@ -66,10 +58,21 @@ const CustomerDetailModal = () => {
             >
               تایید
             </Button>
+            <Button
+              style={{ background: "#9c3535", color: "white" }}
+              onClick={() => {
+                handleModalCancel();
+              }}
+            >
+              لفو
+            </Button>
           </>
         )}
       >
-        <p className="font-bold">detail...</p>
+        <div>
+          <div>مشتری : {currentOrder.CustomerName}</div>
+          <div>کد مشتری : {currentOrder.CustomerCode}</div>
+        </div>
       </Modal>
     </ConfigProvider>
   );

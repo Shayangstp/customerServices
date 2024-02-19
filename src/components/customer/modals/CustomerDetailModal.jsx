@@ -38,7 +38,6 @@ const CustomerDetailModal = () => {
     },
   };
 
-  console.log(customerDetailModal);
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal

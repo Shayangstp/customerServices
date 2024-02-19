@@ -38,7 +38,6 @@ const ProductDetailModal = () => {
     },
   };
 
-  console.log(ProductDetailModal);
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
@@ -51,20 +50,20 @@ const ProductDetailModal = () => {
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             <Button
-              style={{ background: "#9c3535", color: "white" }}
-              onClick={() => {
-                handleModalCancel();
-              }}
-            >
-              لفو
-            </Button>
-            <Button
               style={{ background: "#3d783b", color: "white" }}
               onClick={() => {
                 handleModalCancel();
               }}
             >
               تایید
+            </Button>
+            <Button
+              style={{ background: "#9c3535", color: "white" }}
+              onClick={() => {
+                handleModalCancel();
+              }}
+            >
+              لفو
             </Button>
           </>
         )}

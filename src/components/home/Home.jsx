@@ -10,6 +10,7 @@ import ListIcon from "@mui/icons-material/List";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import Calender from "../common/Calender";
 import { BasicPie, BasicLineChart } from "../common/chart";
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
 const dashBoardButtons = [
   {
@@ -18,7 +19,7 @@ const dashBoardButtons = [
     icon: <AccountBalanceWalletIcon />,
   },
   {
-    title: "ریز حساب من",
+    title: "عملکرد حساب من",
     href: "finance",
     icon: <RequestQuoteIcon />,
   },
@@ -26,6 +27,11 @@ const dashBoardButtons = [
     title: "وضعیت چک ها",
     href: "checkStatus",
     icon: <ReceiptIcon />,
+  },
+  {
+    title: "وضعیت واریزی ها",
+    href: "depositsStatus",
+    icon: <LibraryAddIcon />,
   },
   {
     title: "لیست سفارشات من",
@@ -51,7 +57,6 @@ const Home = () => {
   }, [token]);
   //end of fake auth
 
-  console.log(user);
 
   return (
     <div className="min-h-[80vh] flex flex-col gap-10 justify-center items-center bg-transparent">

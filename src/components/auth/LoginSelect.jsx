@@ -56,7 +56,7 @@ const LoginSelect = () => {
             return (
               <Button
                 variant="outlined"
-                className={`dark:text-gray-200 hover:bg-blue-200 hover:dark:bg-transparent border-gray-500 hover:border-blue-300 hover:dark:border-blue-500 text-black md:text-[16px] text-[13px] mb-4 xl:mb-0  rounded-2xl ms-2 px-4 ${
+                className={`dark:text-gray-200 hover:bg-blue-200 hover:dark:bg-transparent border-gray-500 hover:border-blue-300 hover:dark:border-blue-500 text-black md:text-[13px] text-[10px] mb-4 xl:mb-0  rounded-2xl ms-2 px-10 ${
                   idx === active
                     ? "dark:bg-gray-700 bg-blue-300 dark:border-blue-500 hover:dark:bg-gray-700 hover:bg-blue-300 border-gray-600"
                     : "bg-transparent"
