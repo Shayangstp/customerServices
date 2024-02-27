@@ -66,6 +66,7 @@ import CompanyAcceptModal from "../modals/CompanyAcceptModal";
 import Loading from "../../common/Loading";
 import CustomerDetailModal from "../modals/CustomerDetailModal";
 import ProductDetailModal from "../modals/ProductDetailModal";
+import { actionsBtn } from "../../../helpers/index";
 
 const CompanyOrdersList = () => {
   const dispatch = useDispatch();
@@ -690,7 +691,7 @@ const CompanyOrdersList = () => {
       dataIndex: "opration",
       key: "opration",
       render: (_, record) => <span>{operation(record)}</span>,
-      width: 50,
+      width: 150,
     },
   ];
 
@@ -712,9 +713,11 @@ const CompanyOrdersList = () => {
     size: "middle",
   };
 
-
   //handle opration
   const operation = (request) => {
+    console.log(request.latestActionCode);
+    const loadingStatus =
+      actionsBtn.findIndex((item) => item.no === request.latestActionCode) + 1;
     return (
       <div className="flex justify-center gap-2">
         <div
@@ -731,17 +734,7 @@ const CompanyOrdersList = () => {
           }}
           size="small"
         >
-          <CheckIcon title="action" className="text-white" />
-        </div>
-        <div
-          id="reject"
-          title="ابطال"
-          className="bg-red-700 hover:bg-red-600 p-2 rounded-xl text-center"
-          active
-          onClick={() => {}}
-          size="small"
-        >
-          <BlockIcon title="action" className="text-white" />
+          {actionsBtn[loadingStatus].faName}
         </div>
       </div>
     );

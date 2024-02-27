@@ -17,11 +17,14 @@ export const handleCompaniesOrdersList = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     dispatch(RsetLoading(true));
     const companyCode = getState().company.companyCode;
+    const user = getState().main.user;
+
     const values = {
       companyCode: companyCode,
-      userRole: "",
+      userID: user.UserId,
     };
 
+    console.log(values);
     try {
       const postCompaniesOrdersRes = await postCompaniesOrders(values);
       console.log(postCompaniesOrdersRes);
@@ -56,6 +59,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 2,
           comments: "تایید چیدمان بار",
+          toPerson: "3",
         };
       } else if (currentOrder.latestActionCode === 2) {
         values = {
@@ -66,6 +70,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 3,
           comments: "تایید آماده بارگیری",
+          toPerson: "4",
         };
       } else if (currentOrder.latestActionCode === 3) {
         values = {
@@ -76,6 +81,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 4,
           comments: "تایید رسیدن ماشین",
+          toPerson: "5",
         };
       } else if (currentOrder.latestActionCode === 4) {
         values = {
@@ -86,6 +92,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 5,
           comments: "تایید درحال بارگیری",
+          toPerson: "6",
         };
       } else if (currentOrder.latestActionCode === 5) {
         values = {
@@ -96,6 +103,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 6,
           comments: "تایید ترخیص شده",
+          toPerson: "7",
         };
       } else if (currentOrder.latestActionCode === 6) {
         values = {
@@ -106,6 +114,7 @@ export const handleCompanyOrderActions = createAsyncThunk(
           ipAddress: userIp,
           actionCode: 7,
           comments: "تایید تحویل شده",
+          toPerson: "8",
         };
       }
 

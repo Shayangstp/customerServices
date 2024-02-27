@@ -110,10 +110,12 @@ body {
 }
 
 .list .ant-pagination {
-  background-color: #222a38;
+  background-color: #4c5a6e;
   padding: 20px;
   margin: 0 !important;
   color: white;
+  border-bottom-right-radius: 13px;
+  border-bottom-left-radius: 13px;
 }
 
 ::-webkit-scrollbar {

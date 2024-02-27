@@ -149,7 +149,15 @@ const CustomerLogin = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             {customerLogginPage ? (
-              <div id="login" className="flex flex-col gap-5">
+              <div
+                id="login"
+                className="flex flex-col gap-5"
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13 || e.which === 13) {
+                    handleLogin(e);
+                  }
+                }}
+              >
                 <GoogleLogin
                   clientId={
                     "439984794014-hbtnkhdm5hjmgs0ekffbroo8cs5af8in.apps.googleusercontent.com"

@@ -63,16 +63,20 @@ export const handleStaffLogin = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     const { staffCodeMeli, staffPassword } = getState().auth;
     const user = {
-      username: staffCodeMeli,
+      codeMeli: staffCodeMeli,
       password: staffPassword,
     };
+    console.log(user);
     try {
-      const loginStaffRes = await loginStaff(user);
+      // const loginStaffRes = await loginStaff(user);
+      const expirationTime = Date.now() + 4 * 60 * 60 * 1000;
+      const loginStaffRes = await postCustomerLogin(user);
       if (loginStaffRes.data.code === 415) {
         const userInfo = parseJwt(loginStaffRes.data.token);
         dispatch(RsetUser(userInfo));
         dispatch(RsetIsLoggedIn(true));
         localStorage.setItem("token", loginStaffRes.data.token);
+        localStorage.setItem("tokenExpiration", expirationTime);
         dispatch(RsetStaffCodeMeli(""));
         dispatch(RsetStaffPassword(""));
         dispatch(RsetFormErrors(""));
@@ -108,11 +112,13 @@ export const handleCustomerLogin = createAsyncThunk(
       password: customerPassword,
     };
     try {
+      const expirationTime = Date.now() + 4 * 60 * 60 * 1000;
       const postCustomerLoginRes = await postCustomerLogin(user);
       if (postCustomerLoginRes.data.code === 415) {
         const userInfo = parseJwt(postCustomerLoginRes.data.token);
         dispatch(RsetUser(userInfo));
         localStorage.setItem("token", postCustomerLoginRes.data.token);
+        localStorage.setItem("tokenExpiration", expirationTime);
         dispatch(RsetIsLoggedIn(true));
         dispatch(RsetCustomerCodeMeli(""));
         dispatch(RsetCustomerPassword(""));

@@ -18,7 +18,6 @@ export const handleCustomerOrderList = createAsyncThunk(
     };
     try {
       const postCustomerOrdersRes = await postCustomerOrders(values);
-      console.log(postCustomerOrdersRes);
       if (postCustomerOrdersRes.data.code === 200) {
         dispatch(
           RsetCustomerOrdersList(postCustomerOrdersRes.data.customerOrders)

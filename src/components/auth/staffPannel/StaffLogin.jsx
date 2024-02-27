@@ -141,7 +141,15 @@ const StaffLogin = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
 
-            <div id="login" className="flex flex-col gap-5">
+            <div
+              id="login"
+              className="flex flex-col gap-5"
+              onKeyDown={(e) => {
+                if (e.keyCode === 13 || e.which === 13) {
+                  handleLogin(e);
+                }
+              }}
+            >
               <GoogleLogin
                 clientId={
                   "439984794014-hbtnkhdm5hjmgs0ekffbroo8cs5af8in.apps.googleusercontent.com"
@@ -227,6 +235,9 @@ const StaffLogin = () => {
                 className="dark:text-white dark:bg-blue-600 dark:hover:bg-blue-500"
                 onClick={(e) => {
                   handleLogin(e);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleLogin(e);
                 }}
               >
                 ورود

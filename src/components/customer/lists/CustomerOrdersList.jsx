@@ -643,6 +643,8 @@ const CustomerOrdersList = () => {
     },
   ];
 
+
+
   const paginationConfig = {
     position: ["bottomCenter"],
     // showTotal: (total) => (
@@ -652,8 +654,8 @@ const CustomerOrdersList = () => {
     showSizeChanger: false,
     pageSizeOptions: [],
     size: "middle",
+    className: 'custom-pagination-style'
   };
-
 
   //handleFactors
   const handleFactors = () => {
@@ -817,7 +819,11 @@ const CustomerOrdersList = () => {
                   bordered={true}
                   dataSource={customerOrdersListPerCompany}
                   columns={selectedColumns}
-                  pagination={paginationConfig}
+                  // pagination={paginationConfig}
+                  pagination={{
+                    ...paginationConfig,
+                    className: darkMode ? 'custom-pagination-style' : ''
+                  }}
                   scroll={{ x: "max-content" }}
                   size="middle"
                   // onRow={(record) => ({

@@ -37,3 +37,45 @@ export const loginSelectButtons = [
     no: 3,
   },
 ];
+
+export const actionsBtn = [
+  {
+    no: 1,
+    faName: "ثبت سفارش",
+    enName: "RegisterOrder",
+  },
+  {
+    no: 2,
+    faName: " چیدمان بارانجام شد",
+    enName: "ArrangeOrder",
+  },
+  {
+    //send car modal
+    //car detail modal for customer action
+    no: 3,
+    faName: "بار آماده بارگیری است",
+    enName: "ArrangeOrder",
+  },
+  {
+    no: 4,
+    faName: "ماشین رسید",
+    enName: "CarArrived",
+  },
+  {
+    no: 5,
+    faName: "ماشین در حال بارگیری است",
+    enName: "Loading",
+  },
+  {
+    //end of company work
+    no: 6,
+    faName: "بار ترخیص شد",
+    enName: "discharged",
+  },
+  {
+    //customer action
+    no: 7,
+    faName: " کالا از نظر تعداد و ظاهر تکمیل تحویل اینجانب شد",
+    enName: "discharged",
+  },
+];
