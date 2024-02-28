@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { getCompanies, postActionsOrder } from "../services/companiesServices";
-import { postCompaniesOrders } from "../services/companyServices";
+import { postCompaniesOrders } from "../services/companiesServices";
 import { RsetLoading } from "./mainSlices";
 
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   currentOrder: {},
   companyOrderListReloader: false,
   companyCode: "",
+  companySendCarDate: null,
   //modals
   companyAcceptModal: false,
 };
@@ -139,12 +140,15 @@ const companySlices = createSlice({
     RsetCompanyOrderListReloader: (state, { payload }) => {
       return { ...state, companyOrderListReloader: payload };
     },
+    RsetCompanyCode: (state, { payload }) => {
+      return { ...state, companyCode: payload };
+    },
+    RsetCompanySendCarDate: (state, { payload }) => {
+      return { ...state, companySendCarDate: payload };
+    },
     //accept modal
     RsetCompanyAcceptModal: (state, { payload }) => {
       return { ...state, companyAcceptModal: payload };
-    },
-    RsetCompanyCode: (state, { payload }) => {
-      return { ...state, companyCode: payload };
     },
   },
 });
@@ -154,8 +158,10 @@ export const {
   RsetCurrentOrder,
   RsetCompanyOrderListReloader,
   RsetCompanyCode,
+  RsetCompanySendCarDate,
   //modal
   RsetCompanyAcceptModal,
+  RsetCompanyOrderLastAction,
 } = companySlices.actions;
 
 export const selectCompanyOrdersList = (state) =>
@@ -164,6 +170,9 @@ export const selectCurrentOrder = (state) => state.company.currentOrder;
 export const selectCompanyOrderListReloader = (state) =>
   state.company.companyOrderListReloader;
 export const selectCompanyCode = (state) => state.company.companyCode;
+export const selectCompanySendCarDate = (state) =>
+  state.company.companySendCarDate;
+
 //modal
 export const selectCompanyAcceptModal = (state) =>
   state.company.companyAcceptModal;

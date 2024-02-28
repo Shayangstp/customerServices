@@ -35,6 +35,8 @@ import {
   selectDarkMode,
   RsetSentOrderModal,
   selectSentOrderModal,
+  RsetCurrentOrder,
+  selectCurrentOrder,
 } from "../../slices/mainSlices";
 import { selectCompaniesList, selectLoading } from "../../slices/mainSlices";
 import {
@@ -42,12 +44,10 @@ import {
   handleCustomerOrderPerList,
   selectCustomerOrdersListPerCompany,
 } from "../../slices/customerSlices";
-import { postCompaniesOrders } from "../../services/companyServices";
+import { postCompaniesOrders } from "../../services/companiesServices";
 import {
   selectCompanyOrdersList,
   RsetCompanyOrdersList,
-  RsetCurrentOrder,
-  selectCurrentOrder,
   handleCompanyOrderActions,
   selectCompanyOrderListReloader,
   RsetCompanyOrderListReloader,
@@ -838,7 +838,6 @@ const MainList = () => {
     pageSizeOptions: [],
     size: "middle",
   };
-
 
   //handle opration
   const operation = (request) => {

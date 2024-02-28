@@ -42,6 +42,9 @@ import {
   selectCustomerDetailModal,
   selectProductDetailModal,
   RsetProductDetailModal,
+  selectUser,
+  RsetCurrentOrder,
+  selectCurrentOrder,
 } from "../../../slices/mainSlices";
 import {
   handleCustomerOrderList,
@@ -51,8 +54,6 @@ import {
 import {
   selectCompanyOrdersList,
   RsetCompanyOrdersList,
-  RsetCurrentOrder,
-  selectCurrentOrder,
   handleCompanyOrderActions,
   selectCompanyOrderListReloader,
   RsetCompanyOrderListReloader,
@@ -61,12 +62,14 @@ import {
   handleCompaniesOrdersList,
   RsetCompanyCode,
   selectCompanyCode,
+  RsetCompanyOrderLastAction,
 } from "../../../slices/companySlices";
 import CompanyAcceptModal from "../modals/CompanyAcceptModal";
 import Loading from "../../common/Loading";
 import CustomerDetailModal from "../modals/CustomerDetailModal";
 import ProductDetailModal from "../modals/ProductDetailModal";
 import { actionsBtn } from "../../../helpers/index";
+import moment from "jalali-moment";
 
 const CompanyOrdersList = () => {
   const dispatch = useDispatch();
@@ -75,7 +78,7 @@ const CompanyOrdersList = () => {
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
   //selects
-
+  const user = useSelector(selectUser);
   const darkMode = useSelector(selectDarkMode);
   const companiesList = useSelector(selectCompaniesList);
   const customerOrdersListPerCompany = useSelector(
@@ -223,6 +226,8 @@ const CompanyOrdersList = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
+  console.log(user.UserId === "3");
 
   let selectedColumns = [
     {
@@ -447,130 +452,7 @@ const CompanyOrdersList = () => {
 
       width: 50,
     },
-    // {
-    //   ...getColumnSearchProps("fee", "جستجو..."),
-    //   title: <span style={{ fontSize: "16px" }}>فی</span>,
-    //   dataIndex: "fee",
-    //   key: "fee",
-    //   //   render: (text, record) => (
-    //   //     <span
-    //   //       style={{ cursor: "pointer" }}
-    //   //       onClick={() => handleRowClick(record)}
-    //   //     >
-    //   //       {text}
-    //   //     </span>
-    //   //   ),
-    //   sorter: (a, b) => {
-    //     if (!a.fee && !b.fee) {
-    //       return 0;
-    //     }
 
-    //     if (!a.fee) {
-    //       return 1;
-    //     }
-
-    //     if (!b.fee) {
-    //       return -1;
-    //     }
-
-    //     return a.fee.localeCompare(b.fee);
-    //   },
-
-    //   width: 50,
-    // },
-    // {
-    //   ...getColumnSearchProps("price", "جستجو..."),
-    //   title: <span style={{ fontSize: "16px" }}>مبلغ</span>,
-    //   dataIndex: "price",
-    //   key: "price",
-    //   //   render: (text, record) => (
-    //   //     <span
-    //   //       style={{ cursor: "pointer" }}
-    //   //       onClick={() => handleRowClick(record)}
-    //   //     >
-    //   //       {text}
-    //   //     </span>
-    //   //   ),
-    //   sorter: (a, b) => {
-    //     if (!a.price && !b.price) {
-    //       return 0;
-    //     }
-
-    //     if (!a.price) {
-    //       return 1;
-    //     }
-
-    //     if (!b.price) {
-    //       return -1;
-    //     }
-
-    //     return a.price.localeCompare(b.price);
-    //   },
-
-    //   width: 50,
-    // },
-    // {
-    //   ...getColumnSearchProps("discount", "جستجو..."),
-    //   title: <span style={{ fontSize: "16px" }}>درصد تخفیف</span>,
-    //   dataIndex: "discount",
-    //   key: "discount",
-    //   //   render: (text, record) => (
-    //   //     <span
-    //   //       style={{ cursor: "pointer" }}
-    //   //       onClick={() => handleRowClick(record)}
-    //   //     >
-    //   //       {text}
-    //   //     </span>
-    //   //   ),
-    //   sorter: (a, b) => {
-    //     if (!a.discount && !b.discount) {
-    //       return 0;
-    //     }
-
-    //     if (!a.discount) {
-    //       return 1;
-    //     }
-
-    //     if (!b.discount) {
-    //       return -1;
-    //     }
-
-    //     return a.discount.localeCompare(b.discount);
-    //   },
-
-    //   width: 50,
-    // },
-    // {
-    //   ...getColumnSearchProps("discountPrice", "جستجو..."),
-    //   title: <span style={{ fontSize: "16px" }}>مبلغ تخفیف</span>,
-    //   dataIndex: "discountPrice",
-    //   key: "discountPrice",
-    //   //   render: (text, record) => (
-    //   //     <span
-    //   //       style={{ cursor: "pointer" }}
-    //   //       onClick={() => handleRowClick(record)}
-    //   //     >
-    //   //       {text}
-    //   //     </span>
-    //   //   ),
-    //   sorter: (a, b) => {
-    //     if (!a.discountPrice && !b.discountPrice) {
-    //       return 0;
-    //     }
-
-    //     if (!a.discountPrice) {
-    //       return 1;
-    //     }
-
-    //     if (!b.discountPrice) {
-    //       return -1;
-    //     }
-
-    //     return a.discountPrice.localeCompare(b.discountPrice);
-    //   },
-
-    //   width: 50,
-    // },
     {
       ...getColumnSearchProps("SentQuantity", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>تعداد سفارش ارسالی</span>,
@@ -687,6 +569,35 @@ const CompanyOrdersList = () => {
       width: 50,
     },
     {
+      ...(user.UserId === "4" || user.UserId === "5" || user.UserId === "6"
+        ? {
+            title: <span style={{ fontSize: "16px" }}>زمان ارسال ماشین</span>,
+            dataIndex: "sendCarDate",
+            key: "sendCarDate",
+            sorter: (a, b) => {
+              if (!a.sendCarDate && !b.sendCarDate) {
+                return 0;
+              }
+
+              if (!a.sendCarDate) {
+                return 1;
+              }
+
+              if (!b.sendCarDate) {
+                return -1;
+              }
+
+              return a.sendCarDate.localeCompare(b.sendCarDate);
+            },
+            render: (_, record) =>
+              user.UserId === "4" ? (
+                <span>{handleSendCarDate(record)}</span>
+              ) : null,
+            width: 50,
+          }
+        : null),
+    },
+    {
       title: <span style={{ fontSize: "16px" }}>عملیات</span>,
       dataIndex: "opration",
       key: "opration",
@@ -694,6 +605,11 @@ const CompanyOrdersList = () => {
       width: 150,
     },
   ];
+
+  //handle the table when conditionaly wants to render
+  selectedColumns = selectedColumns.filter(
+    (column) => Object.keys(column).length > 0
+  );
 
   //handle the company column
   if (companyCode !== "") {
@@ -713,9 +629,24 @@ const CompanyOrdersList = () => {
     size: "middle",
   };
 
+  // handleSendCarDate
+  const handleSendCarDate = (record) => {
+    if (record.sendCarDate === null) {
+      return <span>هنوز زمانی مشخص نشده است</span>;
+    } else {
+      return (
+        <p>
+          {moment
+            .utc(record.sendCarDate, "YYYY/MM/DD")
+            .locale("fa")
+            .format("jYYYY/jMM/jDD")}
+        </p>
+      );
+    }
+  };
+
   //handle opration
   const operation = (request) => {
-    console.log(request.latestActionCode);
     const loadingStatus =
       actionsBtn.findIndex((item) => item.no === request.latestActionCode) + 1;
     return (
@@ -723,7 +654,7 @@ const CompanyOrdersList = () => {
         <div
           id="action"
           title="تغییر وضعیت"
-          className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
+          className="bg-blue-700 hover:bg-blue-900 py-2 px-4 rounded-xl text-center"
           active
           onClick={() => {
             dispatch(RsetCurrentOrder(request));

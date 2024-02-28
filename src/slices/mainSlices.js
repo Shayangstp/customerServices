@@ -8,6 +8,7 @@ const initialState = {
   showOffCanvas: false,
   formErrors: {},
   companiesList: [],
+  currentOrder: {},
   //modals
   sentOrderModal: false,
   customerDetailModal: false,
@@ -55,6 +56,9 @@ const mainSlices = createSlice({
     RsetCompaniesList: (state, { payload }) => {
       return { ...state, companiesList: payload };
     },
+    RsetCurrentOrder: (state, { payload }) => {
+      return { ...state, currentOrder: payload };
+    },
     //modal
     RsetSentOrderModal: (state, { payload }) => {
       return { ...state, sentOrderModal: payload };
@@ -75,6 +79,7 @@ export const {
   RsetLoading,
   RsetFormErrors,
   RsetCompaniesList,
+  RsetCurrentOrder,
   //modal
   RsetSentOrderModal,
   RsetCustomerDetailModal,
@@ -87,6 +92,7 @@ export const selectFormErrors = (state) => state.main.formErrors;
 export const selectDarkMode = (state) => state.main.darkMode;
 export const selectShowOffCanvas = (state) => state.main.showOffCanvas;
 export const selectCompaniesList = (state) => state.main.companiesList;
+export const selectCurrentOrder = (state) => state.main.currentOrder;
 //modal
 export const selectSentOrderModal = (state) => state.main.sentOrderModal;
 export const selectCustomerDetailModal = (state) =>

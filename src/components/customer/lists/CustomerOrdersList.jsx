@@ -43,21 +43,26 @@ import {
   selectCustomerDetailModal,
   selectProductDetailModal,
   RsetProductDetailModal,
+  RsetCurrentOrder,
 } from "../../../slices/mainSlices";
 import {
   handleCustomerOrderList,
   handleCustomerOrderPerCompany,
   selectCustomerOrdersListPerCompany,
   selectCustomerOrdersList,
+  selectCustomerCarDetailModal,
+  RsetCustomerCarDetailModal,
 } from "../../../slices/customerSlices";
+
 import {
   RsetCompanyCode,
   selectCompanyCode,
 } from "../../../slices/companySlices";
-import CompanyAcceptModal from "../modals/CompanyAcceptModal";
 import Loading from "../../common/Loading";
 import CustomerDetailModal from "../modals/CustomerDetailModal";
 import ProductDetailModal from "../modals/ProductDetailModal";
+import moment from "jalali-moment";
+import CustomerCarDetailModal from "../modals/CustomerCarDetailModal";
 
 const CustomerOrdersList = () => {
   const dispatch = useDispatch();
@@ -76,6 +81,7 @@ const CustomerOrdersList = () => {
   const loading = useSelector(selectLoading);
   const customerDetailModal = useSelector(selectCustomerDetailModal);
   const productDetailModal = useSelector(selectProductDetailModal);
+  const customerCarDetailModal = useSelector(selectCustomerCarDetailModal);
 
   //handleLists
 
@@ -635,15 +641,20 @@ const CustomerOrdersList = () => {
       width: 50,
     },
     {
-      title: <span style={{ fontSize: "16px" }}>فاکتور</span>,
+      title: <span style={{ fontSize: "16px" }}>مشخصات ماشین ارسالی</span>,
       dataIndex: "opration",
       key: "opration",
+      render: (_, record) => <span>{operation(record)}</span>,
+      width: 150,
+    },
+    {
+      title: <span style={{ fontSize: "16px" }}>فاکتور</span>,
+      dataIndex: "factors",
+      key: "factors",
       render: (_, record) => <span>{handleFactors(record)}</span>,
       width: 50,
     },
   ];
-
-
 
   const paginationConfig = {
     position: ["bottomCenter"],
@@ -654,7 +665,16 @@ const CustomerOrdersList = () => {
     showSizeChanger: false,
     pageSizeOptions: [],
     size: "middle",
-    className: 'custom-pagination-style'
+    className: "custom-pagination-style",
+  };
+
+  // handleSendCarDate
+  const handleSendCarDate = (record) => {
+    if (record.sendCarDate === null || record.sendCarDate === undefined) {
+      return <span>هنوز زمانی مشخص نشده است</span>;
+    } else {
+      return <p>{record.sendCarDate}</p>;
+    }
   };
 
   //handleFactors
@@ -667,33 +687,45 @@ const CustomerOrdersList = () => {
   };
 
   //handle opration
-  const operation = (request) => {
-    return (
-      <div className="flex justify-center gap-2">
+  const operation = (record) => {
+    if (record.sendCarDate !== null) {
+      return (
         <div
           id="action-done"
-          title="action"
+          title="مشخصات ماشین"
           className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
+          active
+          onClick={() => {
+            dispatch(RsetCurrentOrder(record));
+            dispatch(RsetCustomerCarDetailModal(true));
+          }}
+          size="small"
+        >
+          <span>لطفا مشخصات ماشین خود را وارد کنید</span>{" "}
+          <span>
+            زمان ارسال :{" "}
+            {moment
+              .utc(record.sendCarDate, "YYYY/MM/DD")
+              .locale("fa")
+              .format("jYYYY/jMM/jDD")}
+          </span>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          id="action-done"
+          className="bg-gray-900 p-2 rounded-xl text-center"
           active
           onClick={() => {
             // dispatch(RsetCurrentOrder(request));
           }}
           size="small"
         >
-          <CheckIcon title="action" className="text-white" />
+          هنوز زمان ارسال ماشین مشخص نشده است
         </div>
-        <div
-          id="reject"
-          title="block"
-          className="bg-red-700 hover:bg-red-600 p-2 rounded-xl text-center"
-          active
-          onClick={() => {}}
-          size="small"
-        >
-          <BlockIcon title="action" className="text-white" />
-        </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (
@@ -822,7 +854,7 @@ const CustomerOrdersList = () => {
                   // pagination={paginationConfig}
                   pagination={{
                     ...paginationConfig,
-                    className: darkMode ? 'custom-pagination-style' : ''
+                    className: darkMode ? "custom-pagination-style" : "",
                   }}
                   scroll={{ x: "max-content" }}
                   size="middle"
@@ -842,6 +874,7 @@ const CustomerOrdersList = () => {
       {sentOrderModal && <SentOrderModal />}
       {customerDetailModal && <CustomerDetailModal />}
       {productDetailModal && <ProductDetailModal />}
+      {customerCarDetailModal && <CustomerCarDetailModal />}
     </div>
   );
 };

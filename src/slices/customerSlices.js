@@ -8,6 +8,11 @@ import { RsetLoading } from "./mainSlices";
 const initialState = {
   customerOrdersList: [],
   customerOdersListPerCompany: [],
+  customerCarPalte: "",
+  customerCarModel: "",
+  customerCarDriverName: "",
+  //modal
+  customerCarDetailModal: false,
 };
 
 export const handleCustomerOrderList = createAsyncThunk(
@@ -72,15 +77,43 @@ const customerSlices = createSlice({
     RsetCustomerOrdersListPerCompany: (state, { payload }) => {
       return { ...state, customerOrdersListPerCompany: payload };
     },
+    RsetCustomerCarPlate: (state, { payload }) => {
+      return { ...state, customerCarPlate: payload };
+    },
+    RsetCustomerCarModel: (state, { payload }) => {
+      return { ...state, customerCarModel: payload };
+    },
+    RsetCustomerCarDriverName: (state, { payload }) => {
+      return { ...state, customerCarDriverName: payload };
+    },
+    //modals
+    RsetCustomerCarDetailModal: (state, { payload }) => {
+      return { ...state, customerCarDetailModal: payload };
+    },
   },
 });
 
-export const { RsetCustomerOrdersList, RsetCustomerOrdersListPerCompany } =
-  customerSlices.actions;
+export const {
+  RsetCustomerOrdersList,
+  RsetCustomerOrdersListPerCompany,
+  RsetCustomerCarDetailModal,
+  RsetCustomerCarPlate,
+  RsetCustomerCarModel,
+  RsetCustomerCarDriverName,
+} = customerSlices.actions;
 
 export const selectCustomerOrdersList = (state) =>
   state.customer.customerOrdersList;
 export const selectCustomerOrdersListPerCompany = (state) =>
   state.customer.customerOrdersListPerCompany;
+export const selectCustomerCarPlate = (state) =>
+  state.customer.customerCarPlate;
+export const selectCustomerCarModel = (state) =>
+  state.customer.customerCarModel;
+export const selectCustomerCarDriverName = (state) =>
+  state.customer.customerCarDriverName;
+//modal
+export const selectCustomerCarDetailModal = (state) =>
+  state.customer.customerCarDetailModal;
 
 export default customerSlices.reducer;

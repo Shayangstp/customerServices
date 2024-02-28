@@ -9,3 +9,14 @@ export const postActionsOrder = (values) => {
     timeout: 30000,
   });
 };
+
+export const postCompaniesOrders = (values) => {
+  return http.post(`${config.local}/api/postCompaniesOrders`, values, {
+    timeout: 30000,
+  });
+};
+export const postSendCarDate = (values) => {
+  return http.post(`${config.local}/api/postSendCarDate`, values, {
+    timeout: 30000,
+  });
+};

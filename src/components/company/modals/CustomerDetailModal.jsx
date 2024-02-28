@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectCustomerDetailModal,
   RsetCustomerDetailModal,
+  selectCurrentOrder,
 } from "../../../slices/mainSlices";
-import { selectCurrentOrder } from "../../../slices/companySlices";
 
 const CustomerDetailModal = () => {
   const dispatch = useDispatch();

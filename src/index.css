@@ -29,6 +29,11 @@ body {
   font-family: "iranSans";
 }
 
+.required-field::after {
+  content: "*";
+  color: red;
+}
+
 .googleSvg {
   background-image: url("./assets/google.svg");
 }
@@ -153,7 +158,7 @@ body {
 }
 
 .react-calendar-datetime-picker .is-rtl.daysList .daysList-day {
-  color: #8f8f8f;
+  color: #6b6b6b;
 }
 
 .react-calendar-datetime-picker .dtWrapper {
@@ -169,7 +174,18 @@ body {
   color: #fff !important;
 }
 
+/* input calender */
+
+.react-calendar-datetime-picker .input-picker .input-picker--input {
+  padding: 20px !important;
+  text-align: start !important;
+}
+
 /* charts */
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 5px !important;
+}
 
 .css-1tr866s-MuiChartsAxis-root .MuiChartsAxis-line {
   stroke: #fff;
