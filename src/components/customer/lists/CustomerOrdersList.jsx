@@ -44,6 +44,8 @@ import {
   selectProductDetailModal,
   RsetProductDetailModal,
   RsetCurrentOrder,
+  RsetLatestActionCode,
+  selectlatestActionCode,
 } from "../../../slices/mainSlices";
 import {
   handleCustomerOrderList,
@@ -637,7 +639,7 @@ const CustomerOrdersList = () => {
 
         return a.statusFa.localeCompare(b.statusFa);
       },
-
+      render: (_, record) => <span>{handleStatus(record)}</span>,
       width: 50,
     },
     {
@@ -645,7 +647,7 @@ const CustomerOrdersList = () => {
       dataIndex: "opration",
       key: "opration",
       render: (_, record) => <span>{operation(record)}</span>,
-      width: 150,
+      width: 200,
     },
     {
       title: <span style={{ fontSize: "16px" }}>فاکتور</span>,
@@ -690,25 +692,64 @@ const CustomerOrdersList = () => {
   const operation = (record) => {
     if (record.sendCarDate !== null) {
       return (
-        <div
-          id="action-done"
-          title="مشخصات ماشین"
-          className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
-          active
-          onClick={() => {
-            dispatch(RsetCurrentOrder(record));
-            dispatch(RsetCustomerCarDetailModal(true));
-          }}
-          size="small"
-        >
-          <span>لطفا مشخصات ماشین خود را وارد کنید</span>{" "}
-          <span>
-            زمان ارسال :{" "}
-            {moment
-              .utc(record.sendCarDate, "YYYY/MM/DD")
-              .locale("fa")
-              .format("jYYYY/jMM/jDD")}
-          </span>
+        <div>
+          {record.carDetail === null ? (
+            <div
+              id="action-done"
+              title="مشخصات ماشین را وارد کنید"
+              className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
+              active
+              onClick={() => {
+                dispatch(RsetCurrentOrder(record));
+                dispatch(RsetCustomerCarDetailModal(true));
+              }}
+              size="small"
+            >
+              <span>لطفا مشخصات ماشین خود را وارد کنید</span>{" "}
+              <span>
+                زمان ارسال :{" "}
+                {moment
+                  .utc(record.sendCarDate, "YYYY/MM/DD")
+                  .locale("fa")
+                  .format("jYYYY/jMM/jDD")}
+              </span>
+            </div>
+          ) : (
+            <div
+              id="action-done"
+              title="مشخصات ماشین"
+              className="bg-blue-700 hover:bg-blue-600 p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
+              active
+              onClick={() => {
+                dispatch(RsetCurrentOrder(record));
+                dispatch(RsetCustomerCarDetailModal(true));
+              }}
+              size="small"
+            >
+              <div id="sendCarDate" className="flex">
+                <label className="text-[12px]">زمان ارسال ماشین : </label>
+                <p className="ms-2 text-[12px]">
+                  {" "}
+                  {moment
+                    .utc(record.sendCarDate, "YYYY/MM/DD")
+                    .locale("fa")
+                    .format("jYYYY/jMM/jDD")}
+                </p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>نام راننده : </p>
+                <p className="ms-2">{record.carDetail.driverName}</p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>پلاک : </p>
+                <p className="ms-2">{record.carDetail.plate}</p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>مدل : </p>
+                <p className="ms-2">{record.carDetail.model}</p>
+              </div>
+            </div>
+          )}
         </div>
       );
     } else {
@@ -725,6 +766,29 @@ const CustomerOrdersList = () => {
           هنوز زمان ارسال ماشین مشخص نشده است
         </div>
       );
+    }
+  };
+
+  //handle status
+  const handleStatus = (record) => {
+    if (record.latestActionCode === 6) {
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="text-center">
+            <p>{record.statusFa}</p>
+          </div>
+          <div
+            id="action-done"
+            className="bg-green-700 hover:bg-green-600  p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
+            active
+            size="small"
+          >
+            <p>تحویل شد</p>
+          </div>
+        </div>
+      );
+    } else {
+      return <div>{record.statusFa}</div>;
     }
   };
 

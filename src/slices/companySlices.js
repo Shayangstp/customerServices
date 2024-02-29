@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { getCompanies, postActionsOrder } from "../services/companiesServices";
 import { postCompaniesOrders } from "../services/companiesServices";
 import { RsetLoading } from "./mainSlices";
+import { errorMessage, successMessage } from "../utils/toast";
 
 const initialState = {
   companyOrdersList: [],
@@ -46,7 +47,7 @@ export const handleCompaniesOrdersList = createAsyncThunk(
 export const handleCompanyOrderActions = createAsyncThunk(
   "company/handleCompanyOrderActions",
   async (obj, { dispatch, getState }) => {
-    const currentOrder = getState().company.currentOrder;
+    const currentOrder = getState().main.currentOrder;
     const userIp = getState().auth.userIp;
     try {
       let values = {};
@@ -119,8 +120,14 @@ export const handleCompanyOrderActions = createAsyncThunk(
         };
       }
 
+      console.log(values);
       const postActionsOrderRes = await postActionsOrder(values);
       console.log(postActionsOrderRes);
+      if (postActionsOrderRes.data.code === 200) {
+        successMessage("عملیات با موفقیت انجام شد");
+      } else {
+        errorMessage("خطا");
+      }
     } catch (ex) {
       console.log(ex);
     }

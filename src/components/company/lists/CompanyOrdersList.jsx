@@ -325,28 +325,23 @@ const CompanyOrdersList = () => {
       title: <span style={{ fontSize: "16px" }}>شماره حواله</span>,
       dataIndex: "OrderNo",
       key: "OrderNo",
-      //   render: (text, record) => (
-      //     <span
-      //       style={{ cursor: "pointer" }}
-      //       onClick={() => handleRowClick(record)}
-      //     >
-      //       {text}
-      //     </span>
-      //   ),
       sorter: (a, b) => {
-        if (!a.OrderNo && !b.OrderNo) {
+        const orderNoA = parseInt(a.OrderNo);
+        const orderNoB = parseInt(b.OrderNo);
+
+        // Handle cases where OrderQuantity might be undefined or null
+        if (isNaN(orderNoA) && isNaN(orderNoB)) {
           return 0;
         }
-
-        if (!a.OrderNo) {
+        if (isNaN(orderNoA)) {
           return 1;
         }
-
-        if (!b.OrderNo) {
+        if (isNaN(orderNoB)) {
           return -1;
         }
 
-        return a.OrderNo.localeCompare(b.OrderNo);
+        // Compare OrderQuantity numerically
+        return orderNoA - orderNoB;
       },
 
       width: 50,
@@ -589,11 +584,8 @@ const CompanyOrdersList = () => {
 
               return a.sendCarDate.localeCompare(b.sendCarDate);
             },
-            render: (_, record) =>
-              user.UserId === "4" ? (
-                <span>{handleSendCarDate(record)}</span>
-              ) : null,
-            width: 50,
+            render: (_, record) => <span>{handleSendCarDate(record)}</span>,
+            width: 150,
           }
         : null),
     },
@@ -606,6 +598,7 @@ const CompanyOrdersList = () => {
     },
   ];
 
+  console.log(selectedColumns);
   //handle the table when conditionaly wants to render
   selectedColumns = selectedColumns.filter(
     (column) => Object.keys(column).length > 0
@@ -635,12 +628,52 @@ const CompanyOrdersList = () => {
       return <span>هنوز زمانی مشخص نشده است</span>;
     } else {
       return (
-        <p>
-          {moment
-            .utc(record.sendCarDate, "YYYY/MM/DD")
-            .locale("fa")
-            .format("jYYYY/jMM/jDD")}
-        </p>
+        <div>
+          {record.carDetail === null ? (
+            <div
+              id="action-done"
+              title="مشخصات ماشین را وارد کنید"
+              className="bg-gray-900 p-2 rounded-xl text-center"
+              active
+            >
+              {moment
+                .utc(record.sendCarDate, "YYYY/MM/DD")
+                .locale("fa")
+                .format("jYYYY/jMM/jDD")}{" "}
+              <span className="text-[10px]">مشخصات ماشین تعیین نشده است</span>
+            </div>
+          ) : (
+            <div
+              id="action-done"
+              title="مشخصات ماشین"
+              className="bg-green-700 p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
+              active
+              size="small"
+            >
+              <div id="sendCarDate" className="flex">
+                <p className="ms-2 text-[12px]">
+                  {" "}
+                  {moment
+                    .utc(record.sendCarDate, "YYYY/MM/DD")
+                    .locale("fa")
+                    .format("jYYYY/jMM/jDD")}
+                </p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>نام راننده : </p>
+                <p className="ms-2">{record.carDetail.driverName}</p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>پلاک : </p>
+                <p className="ms-2">{record.carDetail.plate}</p>
+              </div>
+              <div id="driverName" className="flex">
+                <p>مدل : </p>
+                <p className="ms-2">{record.carDetail.model}</p>
+              </div>
+            </div>
+          )}
+        </div>
       );
     }
   };

@@ -13,6 +13,7 @@ const initialState = {
   customerCarDriverName: "",
   //modal
   customerCarDetailModal: false,
+  customerOrderDeliveredModal: false,
 };
 
 export const handleCustomerOrderList = createAsyncThunk(
@@ -90,6 +91,9 @@ const customerSlices = createSlice({
     RsetCustomerCarDetailModal: (state, { payload }) => {
       return { ...state, customerCarDetailModal: payload };
     },
+    RsetCustomerOrderDeliveredModal: (state, { payload }) => {
+      return { ...state, customerOrderDeliveredModal: payload };
+    },
   },
 });
 
@@ -100,6 +104,7 @@ export const {
   RsetCustomerCarPlate,
   RsetCustomerCarModel,
   RsetCustomerCarDriverName,
+  RsetCustomerOrderDeliveredModal,
 } = customerSlices.actions;
 
 export const selectCustomerOrdersList = (state) =>
@@ -115,5 +120,7 @@ export const selectCustomerCarDriverName = (state) =>
 //modal
 export const selectCustomerCarDetailModal = (state) =>
   state.customer.customerCarDetailModal;
+export const selectCustomerOrderDeliveredModal = (state) =>
+  state.customer.customerOrderDeliveredModal;
 
 export default customerSlices.reducer;

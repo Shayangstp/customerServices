@@ -63,7 +63,7 @@ export const actionsBtn = [
   },
   {
     no: 5,
-    faName: "ماشین در حال بارگیری است",
+    faName: "ماشین بارگیری شد",
     enName: "Loading",
   },
   {

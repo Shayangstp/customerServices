@@ -8,40 +8,25 @@ import {
   RsetCustomerCarDetailModal,
 } from "../../../slices/customerSlices";
 import { selectCurrentOrder } from "../../../slices/mainSlices";
-import {
-  RsetCustomerCarPlate,
-  selectCustomerCarPlate,
-  selectCustomerCarModel,
-  RsetCustomerCarModel,
-  selectCustomerCarDriverName,
-  RsetCustomerCarDriverName,
-} from "../../../slices/customerSlices";
+
 import moment from "moment-jalaali";
 import { postCustomerCarDetail } from "../../../services/customersServices";
 import { errorMessage, successMessage } from "../../../utils/toast";
+import {
+  selectCustomerOrderDeliveredModal,
+  RsetCustomerOrderDeliveredModal,
+} from "../../../slices/customerSlices";
 
-const CustomerCarDetailModal = () => {
+const CustomerOrderDeliveredModal = () => {
   const dispatch = useDispatch();
-  const customerCarDetailModal = useSelector(selectCustomerCarDetailModal);
   const currentOrder = useSelector(selectCurrentOrder);
-  const customerCarPlate = useSelector(selectCustomerCarPlate);
-  const customerCarModel = useSelector(selectCustomerCarModel);
-  const customerCarDriverName = useSelector(selectCustomerCarDriverName);
+  const customerOrderDeliveredModal = useSelector(
+    selectCustomerOrderDeliveredModal
+  );
 
   const handleModalCancel = () => {
     dispatch(RsetCustomerCarDetailModal(false));
-    dispatch(RsetCustomerCarPlate(""));
-    dispatch(RsetCustomerCarModel(""));
-    dispatch(RsetCustomerCarDriverName(""));
   };
-
-  useEffect(() => {
-    if (currentOrder.carDetail !== null) {
-      dispatch(RsetCustomerCarPlate(currentOrder.carDetail.plate));
-      dispatch(RsetCustomerCarModel(currentOrder.carDetail.model));
-      dispatch(RsetCustomerCarDriverName(currentOrder.carDetail.driverName));
-    }
-  }, [currentOrder]);
 
   const modalStyles = {
     header: {
@@ -89,8 +74,8 @@ const CustomerCarDetailModal = () => {
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
-        title={`مشخصات ماشین`}
-        open={customerCarDetailModal}
+        title={`لطفا موارد زیر را پاسخ دهید`}
+        open={customerOrderDeliveredModal}
         styles={modalStyles}
         closable={false}
         onOk={handleModalCancel}
@@ -118,49 +103,26 @@ const CustomerCarDetailModal = () => {
         )}
       >
         <form>
-          <div className="flex" id="date">
-            <p className="font-bold">زمان ارسال ماشین : </p>
-            <p className="ms-5 font-bold">
-              {moment
-                .utc(currentOrder.sendCarDate, "YYYY/MM/DD")
-                .locale("fa")
-                .format("jYYYY/jMM/jDD")}
-            </p>
-          </div>
-          <div id="plate" className="flex flex-col mt-5">
-            <label className="font-bold">پلاک : </label>
-            <TextField
-              className="w-[50%] mt-2"
-              value={customerCarPlate}
-              onChange={(e) => {
-                dispatch(RsetCustomerCarPlate(e.target.value));
-              }}
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Label"
             />
-          </div>
-          <div id="carKind" className="flex flex-col mt-5">
-            <label className="font-bold">نوع ماشین : </label>
-            <TextField
-              className="w-[50%] mt-2"
-              value={customerCarModel}
-              onChange={(e) => {
-                dispatch(RsetCustomerCarModel(e.target.value));
-              }}
+            <FormControlLabel
+              required
+              control={<Checkbox />}
+              label="Required"
             />
-          </div>
-          <div id="carKind" className="flex flex-col mt-5">
-            <label className="font-bold">نام راننده : </label>
-            <TextField
-              className="w-[50%] mt-2"
-              value={customerCarDriverName}
-              onChange={(e) => {
-                dispatch(RsetCustomerCarDriverName(e.target.value));
-              }}
+            <FormControlLabel
+              disabled
+              control={<Checkbox />}
+              label="Disabled"
             />
-          </div>
+          </FormGroup>
         </form>
       </Modal>
     </ConfigProvider>
   );
 };
 
-export default CustomerCarDetailModal;
+export default CustomerOrderDeliveredModal;
