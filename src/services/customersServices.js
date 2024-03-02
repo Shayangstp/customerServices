@@ -16,3 +16,8 @@ export const postCustomerCarDetail = (values) => {
     timeout: 30000,
   });
 };
+export const postOrderDelivered = (values) => {
+  return http.post(`${config.local}/api/postOrderDelivered`, values, {
+    timeout: 30000,
+  });
+};

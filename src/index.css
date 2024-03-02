@@ -99,26 +99,26 @@ body {
 .list .ant-pagination-next,
 .list .ant-pagination-jump-prev,
 .list .ant-pagination-jump-next {
-  background-color: rgb(
-    73,
-    73,
-    73
-  ); /* Change the background color to your desired color */
+  background-color: rgb(87, 87, 87); /* Change the background color to your desired color */
   border-color: #d9d9d9; /* Change the border color to your desired color */
-  color: #fff; /* Change the text color to your desired color */
+  color: #252525; /* Change the text color to your desired color */
 }
 
 .list .ant-pagination-item-active {
   background-color: transparent; /* Change the background color of the active page to your desired color */
-  border-color: #fff; /* Change the border color of the active page to your desired color */
-  color: #fff; /* Change the text color of the active page to your desired color */
+  border-color: #b0ccff; /* Change the border color of the active page to your desired color */
+  color: #ffffff; /* Change the text color of the active page to your desired color */
+}
+
+.ant-pagination-item-active a {
+  color: #ffffff !important;
 }
 
 .list .ant-pagination {
-  background-color: #4c5a6e;
+  background-color: #424c58;
   padding: 20px;
   margin: 0 !important;
-  color: white;
+  color: rgb(0, 0, 0);
   border-bottom-right-radius: 13px;
   border-bottom-left-radius: 13px;
 }

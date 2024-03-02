@@ -11,6 +11,9 @@ const initialState = {
   customerCarPalte: "",
   customerCarModel: "",
   customerCarDriverName: "",
+  customerAcceptOrderNumber: "",
+  customerAcceptOrderLook: "",
+  cusotmerOrderListReloader: false,
   //modal
   customerCarDetailModal: false,
   customerOrderDeliveredModal: false,
@@ -47,7 +50,6 @@ export const handleCustomerOrderPerCompany = createAsyncThunk(
       customerCode: 40114,
       companyCode: String(companyCode),
     };
-    console.log(values);
     try {
       const postCustomerOrdersPerCompanyRes =
         await postCustomerOrdersPerCompany(values);
@@ -87,6 +89,15 @@ const customerSlices = createSlice({
     RsetCustomerCarDriverName: (state, { payload }) => {
       return { ...state, customerCarDriverName: payload };
     },
+    RsetCustomerAcceptOrderNumber: (state, { payload }) => {
+      return { ...state, customerAcceptOrderNumber: payload };
+    },
+    RsetCustomerAcceptOrderLook: (state, { payload }) => {
+      return { ...state, customerAcceptOrderLook: payload };
+    },
+    RsetCustomerOrderListReloader: (state, { payload }) => {
+      return { ...state, customerOrderListReloader: payload };
+    },
     //modals
     RsetCustomerCarDetailModal: (state, { payload }) => {
       return { ...state, customerCarDetailModal: payload };
@@ -105,6 +116,9 @@ export const {
   RsetCustomerCarModel,
   RsetCustomerCarDriverName,
   RsetCustomerOrderDeliveredModal,
+  RsetCustomerAcceptOrderNumber,
+  RsetCustomerAcceptOrderLook,
+  RsetCustomerOrderListReloader,
 } = customerSlices.actions;
 
 export const selectCustomerOrdersList = (state) =>
@@ -117,6 +131,12 @@ export const selectCustomerCarModel = (state) =>
   state.customer.customerCarModel;
 export const selectCustomerCarDriverName = (state) =>
   state.customer.customerCarDriverName;
+export const selectCustomerAcceptOrderNumber = (state) =>
+  state.customer.customerAcceptOrderNumber;
+export const selectCustomerAcceptOrderLook = (state) =>
+  state.customer.customerAcceptOrderLook;
+export const selectCustomerOrderListReloader = (state) =>
+  state.customer.customerOrderListReloader;
 //modal
 export const selectCustomerCarDetailModal = (state) =>
   state.customer.customerCarDetailModal;

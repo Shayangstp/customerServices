@@ -65,6 +65,13 @@ import CustomerDetailModal from "../modals/CustomerDetailModal";
 import ProductDetailModal from "../modals/ProductDetailModal";
 import moment from "jalali-moment";
 import CustomerCarDetailModal from "../modals/CustomerCarDetailModal";
+import {
+  RsetCustomerOrderDeliveredModal,
+  selectCustomerOrderDeliveredModal,
+  selectCustomerOrderListReloader,
+  RsetCustomerOrderListReloader,
+} from "../../../slices/customerSlices";
+import CustomerOrderDeliveredModal from "../modals/CusromerOrderDerliverdModal";
 
 const CustomerOrdersList = () => {
   const dispatch = useDispatch();
@@ -84,13 +91,20 @@ const CustomerOrdersList = () => {
   const customerDetailModal = useSelector(selectCustomerDetailModal);
   const productDetailModal = useSelector(selectProductDetailModal);
   const customerCarDetailModal = useSelector(selectCustomerCarDetailModal);
+  const customerOrderDeliveredModal = useSelector(
+    selectCustomerOrderDeliveredModal
+  );
+  const customerOrderListReloader = useSelector(
+    selectCustomerOrderListReloader
+  );
 
   //handleLists
 
   //customer list
   useEffect(() => {
+    dispatch(RsetCustomerOrderListReloader(false));
     dispatch(handleCustomerOrderPerCompany());
-  }, [companyCode]);
+  }, [companyCode, customerOrderListReloader]);
 
   //companies list buttons
   useEffect(() => {
@@ -204,7 +218,7 @@ const CustomerOrdersList = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const selectedColumns = [
+  let selectedColumns = [
     {
       ...getColumnSearchProps("date", "جستجو..."),
       title: <span style={{ fontSize: "14px" }}>تاریخ ثبت سفارش</span>,
@@ -267,6 +281,29 @@ const CustomerOrdersList = () => {
         }
 
         return a.CustomerName.localeCompare(b.CustomerName);
+      },
+
+      width: 50,
+    },
+    {
+      ...getColumnSearchProps("CompanyName", "جستجو..."),
+      title: <span style={{ fontSize: "16px" }}>کارخانه</span>,
+      dataIndex: "CompanyName",
+      key: "CompanyName",
+      sorter: (a, b) => {
+        if (!a.CompanyName && !b.CompanyName) {
+          return 0;
+        }
+
+        if (!a.CompanyName) {
+          return 1;
+        }
+
+        if (!b.CompanyName) {
+          return -1;
+        }
+
+        return a.CompanyName.localeCompare(b.CompanyName);
       },
 
       width: 50,
@@ -658,6 +695,13 @@ const CustomerOrdersList = () => {
     },
   ];
 
+  //handle the company column
+  if (companyCode !== "") {
+    selectedColumns = selectedColumns.filter(
+      (column) => column.key !== "CompanyName"
+    );
+  }
+
   const paginationConfig = {
     position: ["bottomCenter"],
     // showTotal: (total) => (
@@ -697,7 +741,7 @@ const CustomerOrdersList = () => {
             <div
               id="action-done"
               title="مشخصات ماشین را وارد کنید"
-              className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center"
+              className="bg-green-700 hover:bg-green-600 p-2 rounded-xl text-center text-white"
               active
               onClick={() => {
                 dispatch(RsetCurrentOrder(record));
@@ -718,7 +762,7 @@ const CustomerOrdersList = () => {
             <div
               id="action-done"
               title="مشخصات ماشین"
-              className="bg-blue-700 hover:bg-blue-600 p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
+              className="bg-blue-700 hover:bg-blue-600 p-2 rounded-xl flex flex-col gap-1 items-center justify-center text-white"
               active
               onClick={() => {
                 dispatch(RsetCurrentOrder(record));
@@ -726,7 +770,7 @@ const CustomerOrdersList = () => {
               }}
               size="small"
             >
-              <div id="sendCarDate" className="flex">
+              <div id="sendCarDate" className="flex ">
                 <label className="text-[12px]">زمان ارسال ماشین : </label>
                 <p className="ms-2 text-[12px]">
                   {" "}
@@ -756,7 +800,7 @@ const CustomerOrdersList = () => {
       return (
         <div
           id="action-done"
-          className="bg-gray-900 p-2 rounded-xl text-center"
+          className="dark:bg-gray-900 bg-gray-500 text-white p-2 rounded-xl text-center"
           active
           onClick={() => {
             // dispatch(RsetCurrentOrder(request));
@@ -782,8 +826,15 @@ const CustomerOrdersList = () => {
             className="bg-green-700 hover:bg-green-600  p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
             active
             size="small"
+            onClick={() => {
+              dispatch(RsetCurrentOrder(record));
+              dispatch(RsetCustomerOrderDeliveredModal(true));
+            }}
           >
-            <p>تحویل شد</p>
+            <p className="text-[12px] font-bold text-white">
+              {" "}
+              تکمیل تحویل کالا
+            </p>
           </div>
         </div>
       );
@@ -815,7 +866,7 @@ const CustomerOrdersList = () => {
               ref={swiperRef}
               // breakpoints={}
             > */}
-          <div className="flex gap-5">
+          <div className="flex gap-5 flex-wrap">
             {companiesList.map((item, idx) => {
               return (
                 // <SwiperSlide key={idx} virtualIndex={idx} className="">
@@ -878,7 +929,7 @@ const CustomerOrdersList = () => {
           {loading === false ? (
             <div
               id="detail_list"
-              className="bg-white rounded-2xl l mt-24 mx-5 "
+              className="bg-white rounded-2xl l mt-10 mx-5 mb-5"
             >
               <ConfigProvider
                 locale={faIR}
@@ -898,7 +949,7 @@ const CustomerOrdersList = () => {
                       borderColor: "#000",
                       rowHoverBg: `${!darkMode ? "#3b4157" : "#ccc"}`,
                       colorText: `${!darkMode ? "white" : "black"}`,
-                      headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
+                      headerBg: `${!darkMode ? "#1c283d" : "#424c58"}`,
                       headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
                       headerSortActiveBg: `${!darkMode ? "#000" : "#888a89"}`,
                       // headerFilterHoverIcon: "#fff",
@@ -939,6 +990,7 @@ const CustomerOrdersList = () => {
       {customerDetailModal && <CustomerDetailModal />}
       {productDetailModal && <ProductDetailModal />}
       {customerCarDetailModal && <CustomerCarDetailModal />}
+      {customerOrderDeliveredModal && <CustomerOrderDeliveredModal />}
     </div>
   );
 };

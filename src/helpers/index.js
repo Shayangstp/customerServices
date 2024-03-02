@@ -78,4 +78,10 @@ export const actionsBtn = [
     faName: " کالا از نظر تعداد و ظاهر تکمیل تحویل اینجانب شد",
     enName: "discharged",
   },
+  {
+    //customer action
+    no: 8,
+    faName: " کالا از نظر تعداد و ظاهر تکمیل تحویل شد",
+    enName: "discharged",
+  },
 ];

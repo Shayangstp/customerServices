@@ -70,6 +70,7 @@ import CustomerDetailModal from "../modals/CustomerDetailModal";
 import ProductDetailModal from "../modals/ProductDetailModal";
 import { actionsBtn } from "../../../helpers/index";
 import moment from "jalali-moment";
+import { errorMessage } from "../../../utils/toast";
 
 const CompanyOrdersList = () => {
   const dispatch = useDispatch();
@@ -226,8 +227,6 @@ const CompanyOrdersList = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
-  console.log(user.UserId === "3");
 
   let selectedColumns = [
     {
@@ -598,7 +597,6 @@ const CompanyOrdersList = () => {
     },
   ];
 
-  console.log(selectedColumns);
   //handle the table when conditionaly wants to render
   selectedColumns = selectedColumns.filter(
     (column) => Object.keys(column).length > 0
@@ -625,7 +623,7 @@ const CompanyOrdersList = () => {
   // handleSendCarDate
   const handleSendCarDate = (record) => {
     if (record.sendCarDate === null) {
-      return <span>هنوز زمانی مشخص نشده است</span>;
+      return <span className="text-white">هنوز زمانی مشخص نشده است</span>;
     } else {
       return (
         <div>
@@ -633,7 +631,7 @@ const CompanyOrdersList = () => {
             <div
               id="action-done"
               title="مشخصات ماشین را وارد کنید"
-              className="bg-gray-900 p-2 rounded-xl text-center"
+              className="dark:bg-gray-900 bg-gray-500  p-2 rounded-xl text-center text-white"
               active
             >
               {moment
@@ -646,7 +644,7 @@ const CompanyOrdersList = () => {
             <div
               id="action-done"
               title="مشخصات ماشین"
-              className="bg-green-700 p-2 rounded-xl flex flex-col gap-1 items-center justify-center"
+              className="bg-green-700 p-2 rounded-xl flex flex-col gap-1 items-center justify-center text-white"
               active
               size="small"
             >
@@ -687,14 +685,19 @@ const CompanyOrdersList = () => {
         <div
           id="action"
           title="تغییر وضعیت"
-          className="bg-blue-700 hover:bg-blue-900 py-2 px-4 rounded-xl text-center"
+          className={`text-white ${
+            user.UserId === "4" && request.carDetail === null
+              ? "dark:bg-gray-900 bg-gray-500"
+              : "bg-blue-700 hover:bg-blue-900"
+          } py-2 px-4 rounded-xl text-center`}
           active
           onClick={() => {
-            dispatch(RsetCurrentOrder(request));
-            // setTimeout(() => {
-            // }, 3000);
-            // dispatch(handleCompanyOrderActions());
-            dispatch(RsetCompanyAcceptModal(true));
+            if (user.UserId === "4" && request.carDetail === null) {
+              errorMessage("مشخصات ماشین توسط مشتری ایجاد نشده است");
+            } else {
+              dispatch(RsetCurrentOrder(request));
+              dispatch(RsetCompanyAcceptModal(true));
+            }
           }}
           size="small"
         >
@@ -710,7 +713,7 @@ const CompanyOrdersList = () => {
         <ThemeProvider theme={theme}>
           <div
             dir="ltr"
-            className="flex mx-10 mt-10 items-center justify-center"
+            className="flex mx-10 mt-10 mb-5 items-center justify-center"
           >
             {/* <Button
               variant="outlined"
@@ -804,7 +807,9 @@ const CompanyOrdersList = () => {
                       // colorPrimary: "#00b96b",
                       // Alias Token
                       colorBgContainer: `${!darkMode ? "#303030" : "#fff"}`,
-                      colorText: "white",
+                      // colorText: "white",
+                      colorText: `${!darkMode ? "white" : "black"}`,
+                      colorTextHeading: "white",
                       colorTextPlaceholder: `${!darkMode ? "white" : "black"}`,
                       // borderColor: "#000",
                     },
@@ -816,9 +821,12 @@ const CompanyOrdersList = () => {
                         borderColor: "#000",
                         rowHoverBg: `${!darkMode ? "#3b4157" : "#ccc"}`,
                         colorText: `${!darkMode ? "white" : "black"}`,
-                        headerBg: `${!darkMode ? "#1c283d" : "gray"}`,
+                        headerBg: `${!darkMode ? "#1c283d" : "#424c58"}`,
                         headerSortHoverBg: `${!darkMode ? "#000" : "#888a89"}`,
                         headerSortActiveBg: `${!darkMode ? "#000" : "#888a89"}`,
+                        filterDropdown: {
+                          colorText: `${!darkMode ? "white" : "white"}`, // Change text color in search box
+                        },
                         // headerFilterHoverIcon: "#fff",
                         // headerFilterIcon: "#fff",
                       },

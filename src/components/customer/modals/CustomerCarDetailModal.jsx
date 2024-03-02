@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectCustomerCarDetailModal,
   RsetCustomerCarDetailModal,
+  RsetCustomerOrderListReloader,
+  selectCustomerOrderListReloader,
 } from "../../../slices/customerSlices";
 import { selectCurrentOrder } from "../../../slices/mainSlices";
 import {
@@ -76,15 +78,22 @@ const CustomerCarDetailModal = () => {
       model: customerCarModel,
       driverName: customerCarDriverName,
       orderNo: currentOrder.OrderNo,
+      date: new Date(),
     };
     const postCustomerCarDetailRes = await postCustomerCarDetail(values);
     console.log(postCustomerCarDetailRes);
     if (postCustomerCarDetailRes.data.code === 200) {
       successMessage("مشخصات ماشین با موفقیت انجام شد");
+      dispatch(RsetCustomerOrderListReloader(true));
     } else {
       errorMessage("خطا");
     }
   };
+
+  const customerOrderListReloader = useSelector(
+    selectCustomerOrderListReloader
+  );
+  console.log(customerOrderListReloader);
 
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
@@ -127,6 +136,16 @@ const CustomerCarDetailModal = () => {
                 .format("jYYYY/jMM/jDD")}
             </p>
           </div>
+          <div id="carDriverName" className="flex flex-col mt-5">
+            <label className="font-bold">نام راننده : </label>
+            <TextField
+              className="w-[50%] mt-2"
+              value={customerCarDriverName}
+              onChange={(e) => {
+                dispatch(RsetCustomerCarDriverName(e.target.value));
+              }}
+            />
+          </div>
           <div id="plate" className="flex flex-col mt-5">
             <label className="font-bold">پلاک : </label>
             <TextField
@@ -144,16 +163,6 @@ const CustomerCarDetailModal = () => {
               value={customerCarModel}
               onChange={(e) => {
                 dispatch(RsetCustomerCarModel(e.target.value));
-              }}
-            />
-          </div>
-          <div id="carKind" className="flex flex-col mt-5">
-            <label className="font-bold">نام راننده : </label>
-            <TextField
-              className="w-[50%] mt-2"
-              value={customerCarDriverName}
-              onChange={(e) => {
-                dispatch(RsetCustomerCarDriverName(e.target.value));
               }}
             />
           </div>

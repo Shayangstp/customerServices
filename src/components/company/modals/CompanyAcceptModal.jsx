@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectCurrentOrder,
   RsetCurrentOrder,
+  RsetFormErrors,
+  selectFormErrors,
 } from "../../../slices/mainSlices";
 import {
   selectCompanyAcceptModal,
@@ -19,15 +21,30 @@ import {
 import jalaliMoment from "jalali-moment";
 import { postSendCarDate } from "../../../services/companiesServices";
 import { errorMessage, successMessage } from "../../../utils/toast";
+import moment from "jalali-moment";
 
 const CompanyAcceptModal = () => {
   const dispatch = useDispatch();
   const companyAcceptModal = useSelector(selectCompanyAcceptModal);
   const currentOrder = useSelector(selectCurrentOrder);
   const companySendCarDate = useSelector(selectCompanySendCarDate);
+  const formErrors = useSelector(selectFormErrors);
 
   const handleModalCancel = () => {
     dispatch(RsetCompanyAcceptModal(false));
+    dispatch(RsetFormErrors({}));
+  };
+
+  const companySendCarDateIsValid = companySendCarDate !== undefined;
+  console.log(companySendCarDateIsValid);
+  console.log(companySendCarDate);
+
+  const validation = () => {
+    let errors = {};
+    if (!companySendCarDateIsValid) {
+      errors.companySendCarDate = "انتخاب زمان ارسال ماشین اجباری است";
+    }
+    return errors;
   };
 
   const modalStyles = {
@@ -53,23 +70,47 @@ const CompanyAcceptModal = () => {
   };
 
   const handleCompanySendCarDate = async () => {
-    const values = {
-      orderNo: currentOrder.OrderNo,
-      sendCarDate: jalaliMoment(
-        `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
-        "jYYYY/jM/jD"
-      ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
-    };
-    const postSendCarDateRes = await postSendCarDate(values);
-    console.log(postSendCarDateRes);
-    if (postSendCarDateRes.data.code === 200) {
-      successMessage(postSendCarDateRes.data.message);
+    if (companySendCarDateIsValid === true) {
+      const values = {
+        orderNo: currentOrder.OrderNo,
+        sendCarDate: jalaliMoment(
+          `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
+          "jYYYY/jM/jD"
+        ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+      };
+      const postSendCarDateRes = await postSendCarDate(values);
+      console.log(postSendCarDateRes);
+      if (postSendCarDateRes.data.code === 200) {
+        successMessage(postSendCarDateRes.data.message);
+        dispatch(handleCompanyOrderActions());
+        dispatch(RsetCompanyOrderListReloader(true));
+        handleModalCancel();
+      } else {
+        errorMessage("خطا!");
+      }
     } else {
-      errorMessage("خطا!");
+      dispatch(
+        RsetFormErrors(
+          validation({
+            companySendCarDate,
+          })
+        )
+      );
     }
   };
 
-  console.log(currentOrder);
+  //min date for datePicker the package has problem
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const minDate = {
+    year: Number(
+      moment(tomorrow.getFullYear(), "YYYY").locale("fa").format("YYYY")
+    ),
+    month: Number(moment(tomorrow.getMonth(), "MM").locale("fa").format("MM")),
+    day: Number(moment(tomorrow.getDate(), "DD").locale("fa").format("DD")),
+  };
 
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
@@ -89,11 +130,13 @@ const CompanyAcceptModal = () => {
             <Button
               style={{ background: "#3d783b", color: "white" }}
               onClick={() => {
-                dispatch(handleCompanyOrderActions());
-                dispatch(RsetCompanyOrderListReloader(true));
-                handleModalCancel();
-                currentOrder.latestActionCode === 2 &&
+                if (currentOrder.latestActionCode === 2) {
                   handleCompanySendCarDate();
+                } else {
+                  dispatch(RsetCompanyOrderListReloader(true));
+                  dispatch(handleCompanyOrderActions());
+                  handleModalCancel();
+                }
               }}
             >
               تایید
@@ -113,13 +156,14 @@ const CompanyAcceptModal = () => {
           <form className="">
             <div id="date">
               <label className="font-bold">
-                تاریخ ارسال<span className="ms-1">:</span>
+                تاریخ ارسال ماشین<span className="ms-1">:</span>
                 <span className="me-2 ms-2 text-red-500">*</span>
               </label>
               <DtPicker
+                isRequired
                 inputClass="mt-3 p-5"
                 placeholder="انتخاب..."
-                minDate={24}
+                minDate={minDate}
                 onChange={(e) => {
                   dispatch(RsetCompanySendCarDate(e));
                 }}
@@ -127,6 +171,11 @@ const CompanyAcceptModal = () => {
                 local="fa"
                 showWeekend
               />
+              {!companySendCarDateIsValid && (
+                <p className="text-red-500 mt-1 text-[12px]">
+                  {formErrors.companySendCarDate}
+                </p>
+              )}
             </div>
           </form>
         ) : (

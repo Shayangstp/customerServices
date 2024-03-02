@@ -26,10 +26,8 @@ export const handleCompaniesOrdersList = createAsyncThunk(
       userID: user.UserId,
     };
 
-    console.log(values);
     try {
       const postCompaniesOrdersRes = await postCompaniesOrders(values);
-      console.log(postCompaniesOrdersRes);
       if (postCompaniesOrdersRes.data.code === 200) {
         dispatch(
           RsetCompanyOrdersList(postCompaniesOrdersRes.data.companyOrders)
