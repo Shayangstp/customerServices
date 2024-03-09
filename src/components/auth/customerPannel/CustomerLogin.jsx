@@ -67,7 +67,7 @@ const CustomerLogin = () => {
   });
 
   //validation
-  const customerCodeMeliIsValid = customerCodeMeli.length === 10;
+  const customerCodeMeliIsValid = customerCodeMeli.length <= 12;
   const customerPasswordIsValid = customerPassword !== "";
   const formIsValid = customerCodeMeliIsValid && customerPasswordIsValid;
 
@@ -119,18 +119,18 @@ const CustomerLogin = () => {
       customerCodeMeli,
       customerPassword,
     });
-    if (formIsValid) {
+    // if (formIsValid) {
       dispatch(handleCustomerLogin());
-    } else {
-      dispatch(
-        RsetFormErrors(
-          validation({
-            customerCodeMeli,
-            customerPassword,
-          })
-        )
-      );
-    }
+    // } else {
+    //   dispatch(
+    //     RsetFormErrors(
+    //       validation({
+    //         customerCodeMeli,
+    //         customerPassword,
+    //       })
+    //     )
+    //   );
+    // }
   };
 
   if (isLoggedIn === true) {
@@ -177,7 +177,7 @@ const CustomerLogin = () => {
                     >
                       <GoogleIcon />
                       <div className="mt-1 ms-2 font-semibold text-[12px]">
-                        ورود با اکانت گوگل
+                        ورود از طریق حساب گوگل
                       </div>
                     </Button>
                   )}
@@ -187,11 +187,11 @@ const CustomerLogin = () => {
                   onfocus="this.removeAttribute('readonly');"
                   error={formErrors.customerCodeMeli}
                   dir="rtl"
-                  type="number"
+                  // type="number"
                   label="کد/ شناسه ملی"
                   onChange={(e) => {
                     let inputValue = e.target.value;
-                    const maxLength = 10;
+                    const maxLength = 12;
                     if (inputValue.length > maxLength) {
                       inputValue = inputValue.slice(0, maxLength);
                     }
@@ -239,7 +239,7 @@ const CustomerLogin = () => {
                 <div>
                   <p className="text-[12px]">
                     <span className="dark:text-gray-400 text-gray-900">
-                      اکانت ندارید؟
+                      حساب کاربری ندارید؟
                     </span>
                     <span
                       className="cursor-pointer dark:text-blue-400 text-blue-700 hover:text-blue-500 hover:dark:text-blue-300 ms-2"

@@ -46,30 +46,30 @@ export const actionsBtn = [
   },
   {
     no: 2,
-    faName: " چیدمان بارانجام شد",
+    faName: "تغییر وضعیت بار به چیدمان",
     enName: "ArrangeOrder",
   },
   {
     //send car modal
     //car detail modal for customer action
     no: 3,
-    faName: "بار آماده بارگیری است",
+    faName: "تغییر وضعیت به بارگیری",
     enName: "ArrangeOrder",
   },
   {
     no: 4,
-    faName: "ماشین رسید",
+    faName: "تغییر وضعیت به ارسال ماشین",
     enName: "CarArrived",
   },
   {
     no: 5,
-    faName: "ماشین بارگیری شد",
+    faName: "تغییر وضعیت به بارگیری ماشین",
     enName: "Loading",
   },
   {
     //end of company work
     no: 6,
-    faName: "بار ترخیص شد",
+    faName: "تغییر وضعیت به ارسال بار",
     enName: "discharged",
   },
   {

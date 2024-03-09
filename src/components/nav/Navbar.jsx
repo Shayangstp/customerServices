@@ -152,6 +152,7 @@ const Navbar = () => {
                 className="text-blue-500 cursor-pointer me-1 mt-1"
                 onClick={() => {
                   localStorage.removeItem("token");
+                  dispatch(RsetIsLoggedIn(false));
                   navigate("/");
                 }}
               />
@@ -235,6 +236,7 @@ const Navbar = () => {
                 className="text-blue-500 cursor-pointer ms-5 mt-1"
                 onClick={() => {
                   localStorage.removeItem("token");
+                  dispatch(RsetIsLoggedIn(false));
                   navigate("/");
                 }}
               />

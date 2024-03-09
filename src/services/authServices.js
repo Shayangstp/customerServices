@@ -7,9 +7,9 @@ export const postDriverSMS = (values) => {
   });
 };
 
-export const loginStaff = (user) => {
+export const loginAPI = (user) => {
   return http.get(
-    `${config.localapi}/user/login`,
+    `${config.kaveh_server_login_online}/user/login`,
     { params: user },
     { timeout: 30000 }
   );
@@ -20,6 +20,7 @@ export const postCustomerSignUp = (values) => {
     timeout: 30000,
   });
 };
+
 export const postCustomerLogin = (values) => {
   return http.post(`${config.local}/api/postLoginCustomer`, values, {
     timeout: 30000,

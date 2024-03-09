@@ -27,18 +27,18 @@ export const darkInputs = styled(TextField)({
     "&.Mui-focused fieldset": {
       borderColor: "#5a8de0",
     },
-    "& input[type=number]": {
-      "-moz-appearance": "textfield",
-      "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-        display: "none",
-        "-webkit-appearance": "none",
-        margin: 0,
-      },
-      "&::placeholder": {
-        color: "gray",
-        fontStyle: "italic",
-      },
-    },
+    // "& input[type=number]": {
+    //   "-moz-appearance": "textfield",
+    //   "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+    //     display: "none",
+    //     "-webkit-appearance": "none",
+    //     margin: 0,
+    //   },
+    //   "&::placeholder": {
+    //     color: "gray",
+    //     fontStyle: "italic",
+    //   },
+    // },
   },
   "& input": {
     // Prevent browser from autofilling

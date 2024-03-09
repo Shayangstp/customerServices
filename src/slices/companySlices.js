@@ -28,6 +28,7 @@ export const handleCompaniesOrdersList = createAsyncThunk(
 
     try {
       const postCompaniesOrdersRes = await postCompaniesOrders(values);
+      console.log(postCompaniesOrdersRes);
       if (postCompaniesOrdersRes.data.code === 200) {
         dispatch(
           RsetCompanyOrdersList(postCompaniesOrdersRes.data.companyOrders)
@@ -47,76 +48,78 @@ export const handleCompanyOrderActions = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     const currentOrder = getState().main.currentOrder;
     const userIp = getState().auth.userIp;
+    const user = getState().main.user;
     try {
       let values = {};
 
-      if (currentOrder.latestActionCode === 1) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 2,
-          comments: "تایید چیدمان بار",
-          toPerson: "3",
-        };
-      } else if (currentOrder.latestActionCode === 2) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 3,
-          comments: "تایید آماده بارگیری",
-          toPerson: "4",
-        };
-      } else if (currentOrder.latestActionCode === 3) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 4,
-          comments: "تایید رسیدن ماشین",
-          toPerson: "5",
-        };
-      } else if (currentOrder.latestActionCode === 4) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 5,
-          comments: "تایید درحال بارگیری",
-          toPerson: "6",
-        };
-      } else if (currentOrder.latestActionCode === 5) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 6,
-          comments: "تایید ترخیص شده",
-          toPerson: "7",
-        };
-      } else if (currentOrder.latestActionCode === 6) {
-        values = {
-          companyCode: currentOrder.CompanyCode,
-          exports: currentOrder.Export,
-          orderNo: currentOrder.OrderNo,
-          userName: "system",
-          ipAddress: userIp,
-          actionCode: 7,
-          comments: "تایید تحویل شده",
-          toPerson: "8",
-        };
-      }
+      values = {
+        orderNo: currentOrder.OrderNo,
+        userId: user._id,
+        ipAddress: "192.168.1.1",
+        actionCode: 2,
+        comment: "تایید چیدمان بار",
+        toPerson: "3",
+      };
+
+      //make all the toperson === userId
+      // if (currentOrder.latestActionCode === "1") {
+
+      // } else if (currentOrder.latestActionCode === "2") {
+      //   values = {
+      //     companyCode: currentOrder.CompanyCode,
+      //     exports: currentOrder.Export,
+      //     orderNo: currentOrder.OrderNo,
+      //     userName: "system",
+      //     ipAddress: userIp,
+      //     actionCode: 3,
+      //     comments: "تایید آماده بارگیری",
+      //     toPerson: "4",
+      //   };
+      // } else if (currentOrder.latestActionCode === "3") {
+      //   values = {
+      //     companyCode: currentOrder.CompanyCode,
+      //     exports: currentOrder.Export,
+      //     orderNo: currentOrder.OrderNo,
+      //     userName: "system",
+      //     ipAddress: userIp,
+      //     actionCode: 4,
+      //     comments: "تایید رسیدن ماشین",
+      //     toPerson: "5",
+      //   };
+      // } else if (currentOrder.latestActionCode === "4") {
+      //   values = {
+      //     companyCode: currentOrder.CompanyCode,
+      //     exports: currentOrder.Export,
+      //     orderNo: currentOrder.OrderNo,
+      //     userName: "system",
+      //     ipAddress: userIp,
+      //     actionCode: 5,
+      //     comments: "تایید درحال بارگیری",
+      //     toPerson: "6",
+      //   };
+      // } else if (currentOrder.latestActionCode === "5") {
+      //   values = {
+      //     companyCode: currentOrder.CompanyCode,
+      //     exports: currentOrder.Export,
+      //     orderNo: currentOrder.OrderNo,
+      //     userName: "system",
+      //     ipAddress: userIp,
+      //     actionCode: 6,
+      //     comments: "تایید ترخیص شده",
+      //     toPerson: "7",
+      //   };
+      // } else if (currentOrder.latestActionCode === "6") {
+      //   values = {
+      //     companyCode: currentOrder.CompanyCode,
+      //     exports: currentOrder.Export,
+      //     orderNo: currentOrder.OrderNo,
+      //     userName: "system",
+      //     ipAddress: userIp,
+      //     actionCode: 7,
+      //     comments: "تایید تحویل شده",
+      //     toPerson: "8",
+      //   };
+      // }
 
       console.log(values);
       const postActionsOrderRes = await postActionsOrder(values);

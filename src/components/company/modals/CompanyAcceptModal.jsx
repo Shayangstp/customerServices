@@ -116,7 +116,7 @@ const CompanyAcceptModal = () => {
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
         title={
-          currentOrder.latestActionCode === 2
+          currentOrder.LastActionCode === 2
             ? `لطفا زمان ارسال ماشین را برای مشتری مشخص کنید`
             : ` تفییر وضعیت سفارش ${currentOrder.OrderNo}`
         }
@@ -130,7 +130,7 @@ const CompanyAcceptModal = () => {
             <Button
               style={{ background: "#3d783b", color: "white" }}
               onClick={() => {
-                if (currentOrder.latestActionCode === 2) {
+                if (currentOrder.LastActionCode === 2) {
                   handleCompanySendCarDate();
                 } else {
                   dispatch(RsetCompanyOrderListReloader(true));
@@ -152,7 +152,7 @@ const CompanyAcceptModal = () => {
           </>
         )}
       >
-        {currentOrder.latestActionCode === 2 ? (
+        {currentOrder.LastActionCode === 2 ? (
           <form className="">
             <div id="date">
               <label className="font-bold">

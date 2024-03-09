@@ -61,7 +61,7 @@ const StaffLogin = () => {
   let Inputs = !darkMode ? darkInputs : lightInputs;
 
   //validation
-  const staffCodeMeliIsValid = staffCodeMeli.length === 10;
+  const staffCodeMeliIsValid = staffCodeMeli.length <= 12;
   const staffPasswordIsValid = staffPassword && staffPassword.length >= 5;
   const formIsValid = staffCodeMeliIsValid && staffPasswordIsValid;
 
@@ -112,26 +112,26 @@ const StaffLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (formIsValid) {
-      console.log({
-        staffCodeMeli,
-        staffPassword,
-      });
-      dispatch(handleStaffLogin());
-    } else {
-      dispatch(
-        RsetFormErrors(
-          validation({
-            staffCodeMeli,
-            staffPassword,
-          })
-        )
-      );
-    }
+    // if (formIsValid) {
+    // console.log({
+    //   staffCodeMeli,
+    //   staffPassword,
+    // });
+    dispatch(handleStaffLogin());
+    // } else {
+    //   dispatch(
+    //     RsetFormErrors(
+    //       validation({
+    //         staffCodeMeli,
+    //         staffPassword,
+    //       })
+    //     )
+    //   );
+    // }
   };
 
   if (isLoggedIn === true) {
-    navigate("/home");
+    navigate("/companyOrdersList");
   }
 
   return (
@@ -178,13 +178,13 @@ const StaffLogin = () => {
                 error={formErrors.staffCodeMeli}
                 dir="rtl"
                 label="کد ملی"
-                type="number"
+                // type="number"
                 value={staffCodeMeli}
                 id="custom-css-outlined-input"
                 onChange={(e) => {
                   //limit the input
                   let inputValue = e.target.value;
-                  const maxLength = 10;
+                  const maxLength = 12;
                   if (inputValue.length > maxLength) {
                     inputValue = inputValue.slice(0, maxLength);
                   }

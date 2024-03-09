@@ -20,6 +20,7 @@ import {
   RsetShowOffCanvas,
   selectShowOffCanvas,
 } from "../../slices/mainSlices";
+import { RsetIsLoggedIn } from "../../slices/authSlices";
 
 const OffCanvas = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const OffCanvas = () => {
           } me-4 cursor-pointer`}
           onClick={() => {
             localStorage.removeItem("token");
+            dispatch(RsetIsLoggedIn(false));
             navigate("/");
           }}
         />

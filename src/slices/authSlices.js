@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   getUserIp,
-  loginStaff,
+  loginAPI,
   postCustomerLogin,
 } from "../services/authServices";
 import { RsetFormErrors, RsetUser } from "./mainSlices";
@@ -63,14 +63,15 @@ export const handleStaffLogin = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     const { staffCodeMeli, staffPassword } = getState().auth;
     const user = {
-      codeMeli: staffCodeMeli,
+      username: staffCodeMeli,
       password: staffPassword,
     };
     console.log(user);
     try {
       // const loginStaffRes = await loginStaff(user);
       const expirationTime = Date.now() + 4 * 60 * 60 * 1000;
-      const loginStaffRes = await postCustomerLogin(user);
+      const loginStaffRes = await loginAPI(user);
+      console.log(loginStaffRes);
       if (loginStaffRes.data.code === 415) {
         const userInfo = parseJwt(loginStaffRes.data.token);
         dispatch(RsetUser(userInfo));
@@ -108,12 +109,13 @@ export const handleCustomerLogin = createAsyncThunk(
   async (obj, { dispatch, getState }) => {
     const { customerCodeMeli, customerPassword } = getState().auth;
     const user = {
-      codeMeli: customerCodeMeli,
+      username: customerCodeMeli,
       password: customerPassword,
     };
     try {
       const expirationTime = Date.now() + 4 * 60 * 60 * 1000;
-      const postCustomerLoginRes = await postCustomerLogin(user);
+      const postCustomerLoginRes = await loginAPI(user);
+      console.log(postCustomerLoginRes);
       if (postCustomerLoginRes.data.code === 415) {
         const userInfo = parseJwt(postCustomerLoginRes.data.token);
         dispatch(RsetUser(userInfo));

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { loginSelectButtons } from "../../helpers/index";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +26,12 @@ const LoginSelect = () => {
     dispatch(RsetCustomerCodeMeli(""));
   };
 
+  useEffect(() => {
+    dispatch(RsetCustomerPannel(true));
+    dispatch(RsetDriverPannel(false));
+    dispatch(RsetStaffPannel(false));
+  }, []);
+
   return (
     <div>
       <div
@@ -47,9 +53,11 @@ const LoginSelect = () => {
         )}
       </div>
       <div className="flex flex-col justify-center items-center xl:mt-[50%]">
-        <h1 className="dark:text-white text-[40px]">خوش آمدید</h1>
+        <h1 className="dark:text-white text-[20px]">
+          سامانه رهگیری سفارشات مشتری
+        </h1>
         <p className="dark:text-white text-[13px] mt-4">
-          پنل ورود مورد نظر خود را انتخاب کنید
+          لطفا نقش خود را انتخاب نمایید
         </p>
         <div id="btns" className="xl:mt-10 mt-5">
           {loginSelectButtons.map((item, idx) => {

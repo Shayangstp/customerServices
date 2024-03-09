@@ -1,5 +1,7 @@
 {
   "local": "http://127.0.0.1:8080",
-  "kaveh_server": "http://172.30.20.227:5006",
-  "localapi": "http://185.134.96.77:9080"
+  "kaveh_server_login_local": "http://172.30.20.227:5006",
+  "kaveh_server_OT_local": "http://172.30.20.227:5008",
+  "kaveh_server_login_online": "http://185.134.96.77:9080",
+  "kaveh_server_OT_online": "http://185.134.96.77:9091"
 }

@@ -540,24 +540,24 @@ const CompanyOrdersList = () => {
       width: 50,
     },
     {
-      ...getColumnSearchProps("statusFa", "جستجو..."),
+      ...getColumnSearchProps("ActionFaName", "جستجو..."),
       title: <span style={{ fontSize: "16px" }}>آخرین وضعیت</span>,
-      dataIndex: "statusFa",
-      key: "statusFa",
+      dataIndex: "ActionFaName",
+      key: "ActionFaName",
       sorter: (a, b) => {
-        if (!a.statusFa && !b.statusFa) {
+        if (!a.ActionFaName && !b.ActionFaName) {
           return 0;
         }
 
-        if (!a.statusFa) {
+        if (!a.ActionFaName) {
           return 1;
         }
 
-        if (!b.statusFa) {
+        if (!b.ActionFaName) {
           return -1;
         }
 
-        return a.statusFa.localeCompare(b.statusFa);
+        return a.ActionFaName.localeCompare(b.ActionFaName);
       },
 
       width: 50,
@@ -589,7 +589,7 @@ const CompanyOrdersList = () => {
         : null),
     },
     {
-      title: <span style={{ fontSize: "16px" }}>عملیات</span>,
+      title: <span style={{ fontSize: "16px" }}>تغییر وضعیت سفارش</span>,
       dataIndex: "opration",
       key: "opration",
       render: (_, record) => <span>{operation(record)}</span>,
@@ -679,7 +679,9 @@ const CompanyOrdersList = () => {
   //handle opration
   const operation = (request) => {
     const loadingStatus =
-      actionsBtn.findIndex((item) => item.no === request.latestActionCode) + 1;
+      actionsBtn.findIndex(
+        (item) => item.no === Number(request.LastActionCode)
+      ) + 1;
     return (
       <div className="flex justify-center gap-2">
         <div

@@ -10,7 +10,7 @@ import ListIcon from "@mui/icons-material/List";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import Calender from "../common/Calender";
 import { BasicPie, BasicLineChart } from "../common/chart";
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 const dashBoardButtons = [
   {
@@ -57,28 +57,39 @@ const Home = () => {
   }, [token]);
   //end of fake auth
 
-
   return (
     <div className="min-h-[80vh] flex flex-col gap-10 justify-center items-center bg-transparent">
-      <h1 className="lg:text-[50px] text-[30px] font-bold dark:text-gray-200 text-black mt-5">
-        {user.fullName} عزیز خوش آمدید
-      </h1>
-      <div id="buttons" className="flex gap-3">
-        {dashBoardButtons.map((item, idx) => {
-          return (
-            <Button
-              variant="outlined"
-              className="hover:dark:bg-gray-800 dark:border-gray-500 hover:dark:border-white dark:text-gray-300 hover:dark:text-gray-100 py-3"
-              onClick={() => {
-                navigate(`/${item.href}`);
-              }}
-            >
-              <span className="me-2">{item.icon}</span>
-              {item.title}
-            </Button>
-          );
-        })}
-      </div>
+      {/* <h1 className="lg:text-[30px] text-[30px] font-bold dark:text-gray-200 text-black mt-5">
+        {user.fullName}
+      </h1> */}
+      {user.UserId === "9" ? (
+        <div id="buttons" className="flex gap-3">
+          {dashBoardButtons.map((item, idx) => {
+            return (
+              <Button
+                variant="outlined"
+                className="hover:dark:bg-gray-800 dark:border-gray-500 hover:dark:border-white dark:text-gray-300 hover:dark:text-gray-100 py-3"
+                onClick={() => {
+                  navigate(`/${item.href}`);
+                }}
+              >
+                <span className="me-2">{item.icon}</span>
+                {item.title}
+              </Button>
+            );
+          })}
+        </div>
+      ) : (
+        <Button
+          variant="outlined"
+          className="hover:dark:bg-gray-800 dark:border-gray-500 hover:dark:border-white dark:text-gray-300 hover:dark:text-gray-100 py-3"
+          onClick={() => {
+            navigate(`/companyOrdersList`);
+          }}
+        >
+          لیست سفارشات
+        </Button>
+      )}
       <div className="flex gap-2 shadow-lg">
         <Calender />
         <div
