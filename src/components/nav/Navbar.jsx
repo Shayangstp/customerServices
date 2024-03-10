@@ -54,6 +54,8 @@ const Navbar = () => {
     setNavOpen(!navOpen);
   };
 
+  console.log(user);
+
   return (
     <section className="bg-white dark:bg-black">
       <nav
@@ -88,7 +90,9 @@ const Navbar = () => {
                   id="profile_name"
                   className="text-black dark:text-white ms-3"
                 >
-                  <div className="font-bold">{user.fullName}</div>
+                  <div className="font-bold">
+                    {user.FirstName + " " + user.LastName}
+                  </div>
                   <div>122388822</div>
                 </div>
               </div>
@@ -188,7 +192,7 @@ const Navbar = () => {
                   <AccountCircleIcon className="text-[30px]" />
                 </div>
                 <span className="dark:text-white text-black ms-2 text-[12px] my-auto">
-                  {user.fullName}
+                {user.FirstName + " " + user.LastName}
                 </span>
               </div>
             </div>

@@ -19,9 +19,30 @@ import {
   selectCompanySendCarDate,
 } from "../../../slices/companySlices";
 import jalaliMoment from "jalali-moment";
-import { postSendCarDate } from "../../../services/companiesServices";
+import { postOutputLog } from "../../../services/companiesServices";
 import { errorMessage, successMessage } from "../../../utils/toast";
 import moment from "jalali-moment";
+import {
+  FormLabel,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  Typography,
+  TextField,
+} from "@mui/material";
+import {
+  selectCarDriverName,
+  RsetCarDriverName,
+  selectCarPlate,
+  RsetCarPlate,
+  selectCarModel,
+  RsetCarModel,
+  selectSendCarBy,
+  RsetSendCarBy,
+  selectOutputNo,
+  RsetOutputNo,
+} from "../../../slices/mainSlices";
 
 const CompanyAcceptModal = () => {
   const dispatch = useDispatch();
@@ -30,14 +51,25 @@ const CompanyAcceptModal = () => {
   const companySendCarDate = useSelector(selectCompanySendCarDate);
   const formErrors = useSelector(selectFormErrors);
 
+  const carPlate = useSelector(selectCarPlate);
+  const carModel = useSelector(selectCarModel);
+  const carDriverName = useSelector(selectCarDriverName);
+  const sendCarBy = useSelector(selectSendCarBy);
+  const outputNo = useSelector(selectOutputNo);
+
+  console.log(sendCarBy);
+
   const handleModalCancel = () => {
     dispatch(RsetCompanyAcceptModal(false));
     dispatch(RsetFormErrors({}));
+    dispatch(RsetCarPlate(""));
+    dispatch(RsetCarModel(""));
+    dispatch(RsetCarDriverName(""));
+    dispatch(RsetOutputNo(""));
+    dispatch(RsetSendCarBy(""));
   };
 
   const companySendCarDateIsValid = companySendCarDate !== undefined;
-  console.log(companySendCarDateIsValid);
-  console.log(companySendCarDate);
 
   const validation = () => {
     let errors = {};
@@ -70,33 +102,39 @@ const CompanyAcceptModal = () => {
   };
 
   const handleCompanySendCarDate = async () => {
-    if (companySendCarDateIsValid === true) {
-      const values = {
-        orderNo: currentOrder.OrderNo,
-        sendCarDate: jalaliMoment(
-          `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
-          "jYYYY/jM/jD"
-        ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
-      };
-      const postSendCarDateRes = await postSendCarDate(values);
-      console.log(postSendCarDateRes);
-      if (postSendCarDateRes.data.code === 200) {
-        successMessage(postSendCarDateRes.data.message);
-        dispatch(handleCompanyOrderActions());
-        dispatch(RsetCompanyOrderListReloader(true));
-        handleModalCancel();
-      } else {
-        errorMessage("خطا!");
-      }
-    } else {
-      dispatch(
-        RsetFormErrors(
-          validation({
-            companySendCarDate,
-          })
-        )
-      );
-    }
+    // if (companySendCarDateIsValid === true) {
+    const values = {
+      orderNo: currentOrder.OrderNo,
+      outputNo: Number(outputNo),
+      carModel: carModel,
+      carPlate: carPlate,
+      driverName: carDriverName,
+      date: jalaliMoment(
+        `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
+        "jYYYY/jM/jD"
+      ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+      carByCustomer: sendCarBy,
+    };
+    console.log(values);
+    const postOutputLogRes = await postOutputLog(values);
+    console.log(postOutputLogRes);
+    // if (postSendCarDateRes.data.code === 200) {
+    //   successMessage(postSendCarDateRes.data.message);
+    //   dispatch(handleCompanyOrderActions());
+    //   dispatch(RsetCompanyOrderListReloader(true));
+    //   handleModalCancel();
+    // } else {
+    //   errorMessage("خطا!");
+    // }
+    // } else {
+    //   dispatch(
+    //     RsetFormErrors(
+    //       validation({
+    //         companySendCarDate,
+    //       })
+    //     )
+    //   );
+    // }
   };
 
   //min date for datePicker the package has problem
@@ -112,12 +150,16 @@ const CompanyAcceptModal = () => {
     day: Number(moment(tomorrow.getDate(), "DD").locale("fa").format("DD")),
   };
 
+  const handleSendCar = (e) => {
+    dispatch(RsetSendCarBy(Number(e.target.value)));
+  };
+
   return (
     <ConfigProvider direction="rtl" locale={fa_IR}>
       <Modal
         title={
           currentOrder.LastActionCode === 2
-            ? `لطفا زمان ارسال ماشین را برای مشتری مشخص کنید`
+            ? ` اطلاعات زیر را وارد کنید`
             : ` تفییر وضعیت سفارش ${currentOrder.OrderNo}`
         }
         open={companyAcceptModal}
@@ -155,10 +197,10 @@ const CompanyAcceptModal = () => {
         {currentOrder.LastActionCode === 2 ? (
           <form className="">
             <div id="date">
-              <label className="font-bold">
+              <FormLabel className="text-[12px] mt-2 text-black">
                 تاریخ ارسال ماشین<span className="ms-1">:</span>
                 <span className="me-2 ms-2 text-red-500">*</span>
-              </label>
+              </FormLabel>
               <DtPicker
                 isRequired
                 inputClass="mt-3 p-5"
@@ -171,6 +213,99 @@ const CompanyAcceptModal = () => {
                 local="fa"
                 showWeekend
               />
+              <div id="OrderOutput" className="flex flex-col mt-5">
+                <FormLabel
+                  id="demo-radio-buttons-group-label"
+                  className="text-[12px] mt-2 text-black"
+                >
+                  شماره حواله خروجی :
+                  <span className="me-2 ms-2 text-red-500">*</span>
+                </FormLabel>
+                <TextField
+                  className="w-[50%] mt-3"
+                  value={outputNo}
+                  onChange={(e) => {
+                    dispatch(RsetOutputNo(e.target.value));
+                  }}
+                />
+              </div>
+              <FormControl className="mt-3">
+                <FormLabel
+                  id="demo-radio-buttons-group-label"
+                  className="text-[12px] mt-2 text-black"
+                >
+                  لطفا روش ارسال ماشین را انتخاب کنید :
+                  <span className="me-2 ms-2 text-red-500">*</span>
+                </FormLabel>
+                <RadioGroup
+                  name="sendCar"
+                  row
+                  className="mt-3"
+                  onChange={handleSendCar}
+                >
+                  <FormControlLabel
+                    value={0}
+                    id="sendCarByCompany"
+                    control={<Radio size="small" />}
+                    label={
+                      <Typography variant="body1" style={{ fontSize: "12px" }}>
+                        شرکت
+                      </Typography>
+                    }
+                    className="ms-3"
+                  />
+                  <FormControlLabel
+                    value={1}
+                    id="sendCarByCustomer"
+                    control={<Radio size="small" />}
+                    label={
+                      <Typography variant="body1" style={{ fontSize: "12px" }}>
+                        مشتری
+                      </Typography>
+                    }
+                  />
+                </RadioGroup>
+              </FormControl>
+              {sendCarBy === 0 ? (
+                <form>
+                  <div id="carDriverName" className="flex flex-col mt-5">
+                    <FormLabel className="text-[12px] mt-2 text-black">
+                      نام راننده :{" "}
+                    </FormLabel>
+                    <TextField
+                      className="w-[50%] mt-2"
+                      value={carDriverName}
+                      onChange={(e) => {
+                        dispatch(RsetCarDriverName(e.target.value));
+                      }}
+                    />
+                  </div>
+                  <div id="plate" className="flex flex-col mt-5">
+                    <FormLabel className="text-[12px] mt-2 text-black">
+                      پلاک :{" "}
+                    </FormLabel>
+                    <TextField
+                      className="w-[50%] mt-2"
+                      value={carPlate}
+                      onChange={(e) => {
+                        dispatch(RsetCarPlate(e.target.value));
+                      }}
+                    />
+                  </div>
+                  <div id="carKind" className="flex flex-col mt-5">
+                    <FormLabel className="text-[12px] mt-2 text-black">
+                      نوع ماشین :{" "}
+                    </FormLabel>
+                    <TextField
+                      className="w-[50%] mt-2"
+                      value={carModel}
+                      onChange={(e) => {
+                        dispatch(RsetCarModel(e.target.value));
+                      }}
+                    />
+                  </div>
+                </form>
+              ) : null}
               {!companySendCarDateIsValid && (
                 <p className="text-red-500 mt-1 text-[12px]">
                   {formErrors.companySendCarDate}

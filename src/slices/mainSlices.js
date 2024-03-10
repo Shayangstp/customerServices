@@ -13,6 +13,12 @@ const initialState = {
   sentOrderModal: false,
   customerDetailModal: false,
   productDetailModal: false,
+  //carDetail
+  carDriverName: "",
+  carPlate: "",
+  carModel: "",
+  sendCarBy: "",
+  outputNo: "",
 };
 
 export const handleCompaniesList = createAsyncThunk(
@@ -59,6 +65,21 @@ const mainSlices = createSlice({
     RsetCurrentOrder: (state, { payload }) => {
       return { ...state, currentOrder: payload };
     },
+    RsetCarDriverName: (state, { payload }) => {
+      return { ...state, carDriverName: payload };
+    },
+    RsetCarPlate: (state, { payload }) => {
+      return { ...state, carPlate: payload };
+    },
+    RsetCarModel: (state, { payload }) => {
+      return { ...state, carModel: payload };
+    },
+    RsetSendCarBy: (state, { payload }) => {
+      return { ...state, sendCarBy: payload };
+    },
+    RsetOutputNo: (state, { payload }) => {
+      return { ...state, outputNo: payload };
+    },
     //modal
     RsetSentOrderModal: (state, { payload }) => {
       return { ...state, sentOrderModal: payload };
@@ -80,6 +101,11 @@ export const {
   RsetFormErrors,
   RsetCompaniesList,
   RsetCurrentOrder,
+  RsetCarDriverName,
+  RsetCarPlate,
+  RsetCarModel,
+  RsetSendCarBy,
+  RsetOutputNo,
   //modal
   RsetSentOrderModal,
   RsetCustomerDetailModal,
@@ -93,6 +119,11 @@ export const selectDarkMode = (state) => state.main.darkMode;
 export const selectShowOffCanvas = (state) => state.main.showOffCanvas;
 export const selectCompaniesList = (state) => state.main.companiesList;
 export const selectCurrentOrder = (state) => state.main.currentOrder;
+export const selectCarDriverName = (state) => state.main.carDriverName;
+export const selectCarPlate = (state) => state.main.carPlate;
+export const selectCarModel = (state) => state.main.carModel;
+export const selectSendCarBy = (state) => state.main.sendCarBy;
+export const selectOutputNo = (state) => state.main.outputNo;
 //modal
 export const selectSentOrderModal = (state) => state.main.sentOrderModal;
 export const selectCustomerDetailModal = (state) =>

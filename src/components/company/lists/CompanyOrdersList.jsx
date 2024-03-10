@@ -71,6 +71,7 @@ import ProductDetailModal from "../modals/ProductDetailModal";
 import { actionsBtn } from "../../../helpers/index";
 import moment from "jalali-moment";
 import { errorMessage } from "../../../utils/toast";
+import { FixedSizeList as List } from "react-window";
 
 const CompanyOrdersList = () => {
   const dispatch = useDispatch();

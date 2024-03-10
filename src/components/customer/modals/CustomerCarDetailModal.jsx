@@ -10,38 +10,39 @@ import {
   selectCustomerOrderListReloader,
 } from "../../../slices/customerSlices";
 import { selectCurrentOrder } from "../../../slices/mainSlices";
-import {
-  RsetCustomerCarPlate,
-  selectCustomerCarPlate,
-  selectCustomerCarModel,
-  RsetCustomerCarModel,
-  selectCustomerCarDriverName,
-  RsetCustomerCarDriverName,
-} from "../../../slices/customerSlices";
+
 import moment from "moment-jalaali";
 import { postCustomerCarDetail } from "../../../services/customersServices";
 import { errorMessage, successMessage } from "../../../utils/toast";
+import {
+  selectCarDriverName,
+  RsetCarDriverName,
+  selectCarPlate,
+  RsetCarPlate,
+  selectCarModel,
+  RsetCarModel,
+} from "../../../slices/mainSlices";
 
 const CustomerCarDetailModal = () => {
   const dispatch = useDispatch();
   const customerCarDetailModal = useSelector(selectCustomerCarDetailModal);
   const currentOrder = useSelector(selectCurrentOrder);
-  const customerCarPlate = useSelector(selectCustomerCarPlate);
-  const customerCarModel = useSelector(selectCustomerCarModel);
-  const customerCarDriverName = useSelector(selectCustomerCarDriverName);
+  const carPlate = useSelector(selectCarPlate);
+  const carModel = useSelector(selectCarModel);
+  const carDriverName = useSelector(selectCarDriverName);
 
   const handleModalCancel = () => {
     dispatch(RsetCustomerCarDetailModal(false));
-    dispatch(RsetCustomerCarPlate(""));
-    dispatch(RsetCustomerCarModel(""));
-    dispatch(RsetCustomerCarDriverName(""));
+    dispatch(RsetCarPlate(""));
+    dispatch(RsetCarModel(""));
+    dispatch(RsetCarDriverName(""));
   };
 
   useEffect(() => {
     if (currentOrder.carDetail !== null) {
-      dispatch(RsetCustomerCarPlate(currentOrder.carDetail.plate));
-      dispatch(RsetCustomerCarModel(currentOrder.carDetail.model));
-      dispatch(RsetCustomerCarDriverName(currentOrder.carDetail.driverName));
+      dispatch(RsetCarPlate(currentOrder.carDetail.plate));
+      dispatch(RsetCarModel(currentOrder.carDetail.model));
+      dispatch(RsetCarDriverName(currentOrder.carDetail.driverName));
     }
   }, [currentOrder]);
 
@@ -68,15 +69,10 @@ const CustomerCarDetailModal = () => {
   };
 
   const handleCustomerCarDetail = async () => {
-    console.log({
-      customerCarPlate,
-      customerCarModel,
-      customerCarDriverName,
-    });
     const values = {
-      plate: customerCarPlate,
-      model: customerCarModel,
-      driverName: customerCarDriverName,
+      plate: carPlate,
+      model: carModel,
+      driverName: carDriverName,
       orderNo: currentOrder.OrderNo,
       date: new Date(),
     };
@@ -140,9 +136,9 @@ const CustomerCarDetailModal = () => {
             <label className="font-bold">نام راننده : </label>
             <TextField
               className="w-[50%] mt-2"
-              value={customerCarDriverName}
+              value={carDriverName}
               onChange={(e) => {
-                dispatch(RsetCustomerCarDriverName(e.target.value));
+                dispatch(RsetCarDriverName(e.target.value));
               }}
             />
           </div>
@@ -150,9 +146,9 @@ const CustomerCarDetailModal = () => {
             <label className="font-bold">پلاک : </label>
             <TextField
               className="w-[50%] mt-2"
-              value={customerCarPlate}
+              value={carPlate}
               onChange={(e) => {
-                dispatch(RsetCustomerCarPlate(e.target.value));
+                dispatch(RsetCarPlate(e.target.value));
               }}
             />
           </div>
@@ -160,9 +156,9 @@ const CustomerCarDetailModal = () => {
             <label className="font-bold">نوع ماشین : </label>
             <TextField
               className="w-[50%] mt-2"
-              value={customerCarModel}
+              value={carModel}
               onChange={(e) => {
-                dispatch(RsetCustomerCarModel(e.target.value));
+                dispatch(RsetCarModel(e.target.value));
               }}
             />
           </div>
