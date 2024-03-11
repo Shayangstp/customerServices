@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useDebugValue } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 //antD
 import {
@@ -45,6 +45,7 @@ import {
   selectUser,
   RsetCurrentOrder,
   selectCurrentOrder,
+  selectTotalOrder,
 } from "../../../slices/mainSlices";
 import {
   handleCustomerOrderList,
@@ -63,6 +64,8 @@ import {
   RsetCompanyCode,
   selectCompanyCode,
   RsetCompanyOrderLastAction,
+  RsetCompanyListPageNumber,
+  RsetCompanyListPageSize,
 } from "../../../slices/companySlices";
 import CompanyAcceptModal from "../modals/CompanyAcceptModal";
 import Loading from "../../common/Loading";
@@ -72,13 +75,31 @@ import { actionsBtn } from "../../../helpers/index";
 import moment from "jalali-moment";
 import { errorMessage } from "../../../utils/toast";
 import { FixedSizeList as List } from "react-window";
+import axios from "axios";
 
 const CompanyOrdersList = () => {
   const dispatch = useDispatch();
   //
   const [active, setActive] = useState(-1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedName, setSelectedName] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState([]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  console.log(pagination);
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ ...pagination, current: page, pageSize });
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    dispatch(RsetCompanyListPageNumber(pagination.current));
+    dispatch(RsetCompanyListPageSize(pagination.pageSize));
+  }, [pagination]);
+
   //selects
   const user = useSelector(selectUser);
   const darkMode = useSelector(selectDarkMode);
@@ -94,6 +115,7 @@ const CompanyOrdersList = () => {
   const loading = useSelector(selectLoading);
   const customerDetailModal = useSelector(selectCustomerDetailModal);
   const productDetailModal = useSelector(selectProductDetailModal);
+  const totalOrders = useSelector(selectTotalOrder);
 
   //handleLists
 
@@ -112,7 +134,12 @@ const CompanyOrdersList = () => {
   useEffect(() => {
     dispatch(RsetCompanyOrderListReloader(false));
     dispatch(handleCompaniesOrdersList());
-  }, [companyCode, companyOrderListReloader]);
+  }, [
+    companyCode,
+    companyOrderListReloader,
+    pagination.current,
+    pagination.pageSize,
+  ]);
 
   //mui theme
 
@@ -617,8 +644,11 @@ const CompanyOrdersList = () => {
     // ),
     pageSize: 10,
     showSizeChanger: false,
-    pageSizeOptions: [],
+    pageSizeOptions: ["10", "20", "50", "100"],
     size: "middle",
+    onChange: handlePaginationChange,
+    total: totalOrders,
+    current: currentPage,
   };
 
   // handleSendCarDate
@@ -848,6 +878,10 @@ const CompanyOrdersList = () => {
                     pagination={paginationConfig}
                     scroll={{ x: "max-content" }}
                     size="middle"
+                    // onChange={handlePaginationChange}
+                    // showTotal={(totalOrders, range) =>
+                    //   `${range[0]}-${range[1]} of ${totalOrders} items`
+                    // }
                     // onRow={(record) => ({
                     //   onClick: () => handleRowClick(record),
                     // })}

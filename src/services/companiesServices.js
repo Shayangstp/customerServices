@@ -13,10 +13,28 @@ export const postActionsOrder = (values) => {
   });
 };
 
-export const postCompaniesOrders = (values) => {
-  return http.post(`${config.local}/api/postCompaniesOrders`, values, {
-    timeout: 30000,
-  });
+// export const postCompaniesOrders = (values, paramsValues) => {
+//   console.log(paramsValues);
+//   return http.post(
+//     `${config.local}/api/postCompaniesOrders`,
+//     values,
+//     { params: { pageNumber: 1, pageSize: 10 } },
+//     {
+//       timeout: 30000,
+//     }
+//   );
+// };
+export const postCompaniesOrders = (values, paramsValues) => {
+  console.log(paramsValues);
+  const { pageNumber, pageSize } = paramsValues;
+  console.log(pageNumber, pageSize);
+  return http.post(
+    `${config.local}/api/postCompaniesOrders/${pageNumber}/${pageSize}`,
+    values,
+    {
+      timeout: 30000,
+    }
+  );
 };
 
 export const postOutputLog = (values) => {

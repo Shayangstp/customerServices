@@ -9,6 +9,7 @@ const initialState = {
   formErrors: {},
   companiesList: [],
   currentOrder: {},
+  totalOrder: "",
   //modals
   sentOrderModal: false,
   customerDetailModal: false,
@@ -80,6 +81,9 @@ const mainSlices = createSlice({
     RsetOutputNo: (state, { payload }) => {
       return { ...state, outputNo: payload };
     },
+    RsetTotalOrder: (state, { payload }) => {
+      return { ...state, totalOrder: payload };
+    },
     //modal
     RsetSentOrderModal: (state, { payload }) => {
       return { ...state, sentOrderModal: payload };
@@ -106,6 +110,7 @@ export const {
   RsetCarModel,
   RsetSendCarBy,
   RsetOutputNo,
+  RsetTotalOrder,
   //modal
   RsetSentOrderModal,
   RsetCustomerDetailModal,
@@ -124,6 +129,7 @@ export const selectCarPlate = (state) => state.main.carPlate;
 export const selectCarModel = (state) => state.main.carModel;
 export const selectSendCarBy = (state) => state.main.sendCarBy;
 export const selectOutputNo = (state) => state.main.outputNo;
+export const selectTotalOrder = (state) => state.main.totalOrder;
 //modal
 export const selectSentOrderModal = (state) => state.main.sentOrderModal;
 export const selectCustomerDetailModal = (state) =>

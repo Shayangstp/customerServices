@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { getCompanies, postActionsOrder } from "../services/companiesServices";
 import { postCompaniesOrders } from "../services/companiesServices";
-import { RsetLoading } from "./mainSlices";
+import { RsetLoading, RsetTotalOrder } from "./mainSlices";
 import { errorMessage, successMessage } from "../utils/toast";
 
 const initialState = {
@@ -10,6 +10,8 @@ const initialState = {
   companyOrderListReloader: false,
   companyCode: "",
   companySendCarDate: null,
+  companyListPageSize: "",
+  companyListPageNumber: "",
   //modals
   companyAcceptModal: false,
 };
@@ -20,19 +22,29 @@ export const handleCompaniesOrdersList = createAsyncThunk(
     dispatch(RsetLoading(true));
     const companyCode = getState().company.companyCode;
     const user = getState().main.user;
+    const pageNumber = getState().company.companyListPageNumber;
+    const pageSize = getState().company.companyListPageSize;
 
     const values = {
       companyCode: companyCode,
-      userID: user.UserId,
+      userID: user._id,
     };
-
+    const paramsValues = {
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+    };
+    console.log(paramsValues);
     try {
-      const postCompaniesOrdersRes = await postCompaniesOrders(values);
+      const postCompaniesOrdersRes = await postCompaniesOrders(
+        values,
+        paramsValues
+      );
       console.log(postCompaniesOrdersRes);
       if (postCompaniesOrdersRes.data.code === 200) {
         dispatch(
           RsetCompanyOrdersList(postCompaniesOrdersRes.data.companyOrders)
         );
+        dispatch(RsetTotalOrder(postCompaniesOrdersRes.data.totalOrders));
         dispatch(RsetLoading(false));
       } else {
         console.log("error on postCompaniesOrdersRes API");
@@ -154,6 +166,12 @@ const companySlices = createSlice({
     RsetCompanySendCarDate: (state, { payload }) => {
       return { ...state, companySendCarDate: payload };
     },
+    RsetCompanyListPageNumber: (state, { payload }) => {
+      return { ...state, companyListPageNumber: payload };
+    },
+    RsetCompanyListPageSize: (state, { payload }) => {
+      return { ...state, companyListPageSize: payload };
+    },
     //accept modal
     RsetCompanyAcceptModal: (state, { payload }) => {
       return { ...state, companyAcceptModal: payload };
@@ -167,6 +185,8 @@ export const {
   RsetCompanyOrderListReloader,
   RsetCompanyCode,
   RsetCompanySendCarDate,
+  RsetCompanyListPageNumber,
+  RsetCompanyListPageSize,
   //modal
   RsetCompanyAcceptModal,
   RsetCompanyOrderLastAction,
@@ -180,6 +200,10 @@ export const selectCompanyOrderListReloader = (state) =>
 export const selectCompanyCode = (state) => state.company.companyCode;
 export const selectCompanySendCarDate = (state) =>
   state.company.companySendCarDate;
+export const selectCompanyListPageNumber = (state) =>
+  state.company.companyListPageNumber;
+export const selectCompanyListPageSize = (state) =>
+  state.company.companyListPageSize;
 
 //modal
 export const selectCompanyAcceptModal = (state) =>
