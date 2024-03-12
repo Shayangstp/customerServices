@@ -13,21 +13,9 @@ export const postActionsOrder = (values) => {
   });
 };
 
-// export const postCompaniesOrders = (values, paramsValues) => {
-//   console.log(paramsValues);
-//   return http.post(
-//     `${config.local}/api/postCompaniesOrders`,
-//     values,
-//     { params: { pageNumber: 1, pageSize: 10 } },
-//     {
-//       timeout: 30000,
-//     }
-//   );
-// };
+//get the list base on the pageNumber and pageSize
 export const postCompaniesOrders = (values, paramsValues) => {
-  console.log(paramsValues);
   const { pageNumber, pageSize } = paramsValues;
-  console.log(pageNumber, pageSize);
   return http.post(
     `${config.local}/api/postCompaniesOrders/${pageNumber}/${pageSize}`,
     values,

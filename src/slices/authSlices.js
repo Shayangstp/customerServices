@@ -125,9 +125,9 @@ export const handleCustomerLogin = createAsyncThunk(
         dispatch(RsetCustomerCodeMeli(""));
         dispatch(RsetCustomerPassword(""));
         dispatch(RsetFormErrors({}));
-        successMessage(postCustomerLoginRes.data.message);
+        successMessage("ورود با موفقیت انجام شد");
       } else {
-        errorMessage(postCustomerLoginRes.data.message);
+        errorMessage("کد ملی یا رمز عبور اشتباه است!");
       }
     } catch (ex) {
       console.log(ex);

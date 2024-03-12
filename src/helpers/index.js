@@ -58,7 +58,7 @@ export const actionsBtn = [
   },
   {
     no: 4,
-    faName: "تغییر وضعیت به ارسال ماشین",
+    faName: "تغییر وضعیت به ماشین رسید",
     enName: "CarArrived",
   },
   {

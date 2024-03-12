@@ -89,7 +89,7 @@ const CompanyOrdersList = () => {
     pageSize: 10,
   });
 
-  console.log(pagination);
+  //handle pagination pageNumber and page size
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ ...pagination, current: page, pageSize });
     setCurrentPage(page);
@@ -119,11 +119,11 @@ const CompanyOrdersList = () => {
 
   //handleLists
 
-  //customer list
-  useEffect(() => {
-    dispatch(RsetCompanyCode(""));
-    dispatch(handleCustomerOrderList());
-  }, []);
+  // //customer list
+  // useEffect(() => {
+  //   dispatch(RsetCompanyCode(""));
+  //   dispatch(handleCustomerOrderList());
+  // }, []);
 
   //companies list
   useEffect(() => {
@@ -152,19 +152,19 @@ const CompanyOrdersList = () => {
 
   //swiper
 
-  const swiperRef = useRef(null);
+  // const swiperRef = useRef(null);
 
-  const slideNext = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
-    }
-  };
+  // const slideNext = () => {
+  //   if (swiperRef.current && swiperRef.current.swiper) {
+  //     swiperRef.current.swiper.slideNext();
+  //   }
+  // };
 
-  const slidePrev = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
-    }
-  };
+  // const slidePrev = () => {
+  //   if (swiperRef.current && swiperRef.current.swiper) {
+  //     swiperRef.current.swiper.slidePrev();
+  //   }
+  // };
 
   //antd table
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -591,7 +591,14 @@ const CompanyOrdersList = () => {
       width: 50,
     },
     {
-      ...(user.UserId === "4" || user.UserId === "5" || user.UserId === "6"
+      ...(companyOrdersList.some(
+        (item) =>
+          item.LastActionCode === 3 ||
+          item.LastActionCode === 4 ||
+          item.LastActionCode === 5 ||
+          item.LastActionCode === 6 ||
+          item.LastActionCode === 7
+      )
         ? {
             title: <span style={{ fontSize: "16px" }}>زمان ارسال ماشین</span>,
             dataIndex: "sendCarDate",
@@ -653,12 +660,14 @@ const CompanyOrdersList = () => {
 
   // handleSendCarDate
   const handleSendCarDate = (record) => {
-    if (record.sendCarDate === null) {
+    if (record.outputLog === null) {
       return <span className="text-white">هنوز زمانی مشخص نشده است</span>;
     } else {
       return (
         <div>
-          {record.carDetail === null ? (
+          {record.outputLog.CarModel === "" ||
+          record.outputLog.CarPlate === "" ||
+          record.outputLog.DriverName === "" ? (
             <div
               id="action-done"
               title="مشخصات ماشین را وارد کنید"
@@ -666,10 +675,10 @@ const CompanyOrdersList = () => {
               active
             >
               {moment
-                .utc(record.sendCarDate, "YYYY/MM/DD")
+                .utc(record.outputLog.Date, "YYYY/MM/DD")
                 .locale("fa")
                 .format("jYYYY/jMM/jDD")}{" "}
-              <span className="text-[10px]">مشخصات ماشین تعیین نشده است</span>
+              <span className="text-[10px]">مشخصات ماشین توسط مشتری تعیین نشده است</span>
             </div>
           ) : (
             <div
@@ -683,22 +692,22 @@ const CompanyOrdersList = () => {
                 <p className="ms-2 text-[12px]">
                   {" "}
                   {moment
-                    .utc(record.sendCarDate, "YYYY/MM/DD")
+                    .utc(record.outputLog.Date, "YYYY/MM/DD")
                     .locale("fa")
                     .format("jYYYY/jMM/jDD")}
                 </p>
               </div>
               <div id="driverName" className="flex">
                 <p>نام راننده : </p>
-                <p className="ms-2">{record.carDetail.driverName}</p>
+                <p className="ms-2">{record.outputLog.DriverName}</p>
               </div>
               <div id="driverName" className="flex">
                 <p>پلاک : </p>
-                <p className="ms-2">{record.carDetail.plate}</p>
+                <p className="ms-2">{record.outputLog.CarPlate}</p>
               </div>
               <div id="driverName" className="flex">
                 <p>مدل : </p>
-                <p className="ms-2">{record.carDetail.model}</p>
+                <p className="ms-2">{record.outputLog.CarModel}</p>
               </div>
             </div>
           )}
@@ -719,13 +728,19 @@ const CompanyOrdersList = () => {
           id="action"
           title="تغییر وضعیت"
           className={`text-white ${
-            user.UserId === "4" && request.carDetail === null
+            request.outputLog.CarModel === "" ||
+            request.outputLog.CarPlate === "" ||
+            request.outputLog.DriverName === ""
               ? "dark:bg-gray-900 bg-gray-500"
               : "bg-blue-700 hover:bg-blue-900"
           } py-2 px-4 rounded-xl text-center`}
           active
           onClick={() => {
-            if (user.UserId === "4" && request.carDetail === null) {
+            if (
+              request.outputLog.CarModel === "" ||
+              request.outputLog.CarPlate === "" ||
+              request.outputLog.DriverName === ""
+            ) {
               errorMessage("مشخصات ماشین توسط مشتری ایجاد نشده است");
             } else {
               dispatch(RsetCurrentOrder(request));

@@ -70,12 +70,39 @@ const CompanyAcceptModal = () => {
   };
 
   const companySendCarDateIsValid = companySendCarDate !== undefined;
+  const outputNoIsValid = outputNo !== "";
+  const sendCarByIsValid = sendCarBy !== "";
+  const carPlateIsValid = carPlate !== "";
+  const carDriverNameIsValid = carDriverName !== "";
+  const carModelIsValid = carModel !== "";
+
+  const sendCarByCompanyIsValid =
+    carPlateIsValid && carDriverNameIsValid && carModelIsValid;
+
+  const formIsValid =
+    companySendCarDateIsValid && outputNoIsValid && sendCarByIsValid;
 
   const validation = () => {
     let errors = {};
     if (!companySendCarDateIsValid) {
       errors.companySendCarDate = "انتخاب زمان ارسال ماشین اجباری است";
     }
+    if (!outputNoIsValid) {
+      errors.outputNo = " شماره حواله خروجی اجباری است";
+    }
+    if (!sendCarByIsValid) {
+      errors.sendCarBy = "  مشخص کردن روش ارسال ماشین اجباری است";
+    }
+    if (!carDriverNameIsValid) {
+      errors.carDriverName = "  مشخص کردن راننده ماشین اجباری است";
+    }
+    if (!carModelIsValid) {
+      errors.carModel = "  مشخص کردن مدل ماشین اجباری است";
+    }
+    if (!carPlateIsValid) {
+      errors.carPlate = "  مشخص کردن پلاک ماشین اجباری است";
+    }
+
     return errors;
   };
 
@@ -102,39 +129,83 @@ const CompanyAcceptModal = () => {
   };
 
   const handleCompanySendCarDate = async () => {
-    // if (companySendCarDateIsValid === true) {
-    const values = {
-      orderNo: currentOrder.OrderNo,
-      outputNo: Number(outputNo),
-      carModel: carModel,
-      carPlate: carPlate,
-      driverName: carDriverName,
-      date: jalaliMoment(
-        `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
-        "jYYYY/jM/jD"
-      ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
-      carByCustomer: sendCarBy,
-    };
-    console.log(values);
-    const postOutputLogRes = await postOutputLog(values);
-    console.log(postOutputLogRes);
-    // if (postSendCarDateRes.data.code === 200) {
-    //   successMessage(postSendCarDateRes.data.message);
-    //   dispatch(handleCompanyOrderActions());
-    //   dispatch(RsetCompanyOrderListReloader(true));
-    //   handleModalCancel();
-    // } else {
-    //   errorMessage("خطا!");
-    // }
-    // } else {
-    //   dispatch(
-    //     RsetFormErrors(
-    //       validation({
-    //         companySendCarDate,
-    //       })
-    //     )
-    //   );
-    // }
+    if (formIsValid) {
+      //sendCarbyCustomer
+      if (sendCarBy === 1) {
+        const values = {
+          orderNo: currentOrder.OrderNo,
+          outputNo: Number(outputNo),
+          carModel: carModel,
+          carPlate: carPlate,
+          driverName: carDriverName,
+          date: jalaliMoment(
+            `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
+            "jYYYY/jM/jD"
+          ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+          carByCustomer: sendCarBy,
+        };
+        console.log(values);
+        const postOutputLogRes = await postOutputLog(values);
+        console.log(postOutputLogRes);
+        if (postOutputLogRes.data.code === 200) {
+          successMessage(postOutputLogRes.data.message);
+          dispatch(handleCompanyOrderActions());
+          dispatch(RsetCompanyOrderListReloader(true));
+          handleModalCancel();
+          dispatch(RsetFormErrors({}));
+        } else {
+          errorMessage("خطا!");
+        }
+      }
+      // sendCarbyCompany
+      if (sendCarBy === 0 && sendCarByCompanyIsValid) {
+        const values = {
+          orderNo: currentOrder.OrderNo,
+          outputNo: Number(outputNo),
+          carModel: carModel,
+          carPlate: carPlate,
+          driverName: carDriverName,
+          date: jalaliMoment(
+            `${companySendCarDate.year}/${companySendCarDate.month}/${companySendCarDate.day}`,
+            "jYYYY/jM/jD"
+          ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+          carByCustomer: sendCarBy,
+        };
+        console.log(values);
+        const postOutputLogRes = await postOutputLog(values);
+        console.log(postOutputLogRes);
+        if (postOutputLogRes.data.code === 200) {
+          successMessage(postOutputLogRes.data.message);
+          dispatch(handleCompanyOrderActions());
+          dispatch(RsetCompanyOrderListReloader(true));
+          handleModalCancel();
+          dispatch(RsetFormErrors({}));
+        } else {
+          errorMessage("خطا!");
+        }
+      } else {
+        dispatch(
+          RsetFormErrors(
+            validation({
+              carPlate,
+              carDriverName,
+              carModel,
+            })
+          )
+        );
+      }
+      //endof the sendCarByCopany
+    } else {
+      dispatch(
+        RsetFormErrors(
+          validation({
+            companySendCarDate,
+            outputNo,
+            sendCarBy,
+          })
+        )
+      );
+    }
   };
 
   //min date for datePicker the package has problem
@@ -159,7 +230,7 @@ const CompanyAcceptModal = () => {
       <Modal
         title={
           currentOrder.LastActionCode === 2
-            ? ` اطلاعات زیر را وارد کنید`
+            ? ` لطفا اطلاعات زیر را وارد کنید `
             : ` تفییر وضعیت سفارش ${currentOrder.OrderNo}`
         }
         open={companyAcceptModal}
@@ -196,7 +267,19 @@ const CompanyAcceptModal = () => {
       >
         {currentOrder.LastActionCode === 2 ? (
           <form className="">
-            <div id="date">
+            <div id="orderNo">
+              <FormLabel className="text-[12px] mt-2 text-black">
+                شماره حواله :
+              </FormLabel>
+              <span className="ms-2">{currentOrder.OrderNo}</span>
+            </div>
+            <div id="customerName" className="mt-3">
+              <FormLabel className="text-[12px] mt-2 text-black">
+                نام مشتری :
+              </FormLabel>
+              <span className="ms-2">{currentOrder.CustomerName}</span>
+            </div>
+            <div id="date" className="mt-4">
               <FormLabel className="text-[12px] mt-2 text-black">
                 تاریخ ارسال ماشین<span className="ms-1">:</span>
                 <span className="me-2 ms-2 text-red-500">*</span>
@@ -213,6 +296,11 @@ const CompanyAcceptModal = () => {
                 local="fa"
                 showWeekend
               />
+              {!companySendCarDateIsValid && (
+                <p className="text-red-500 mt-2 text-[12px]">
+                  {formErrors.companySendCarDate}
+                </p>
+              )}
               <div id="OrderOutput" className="flex flex-col mt-5">
                 <FormLabel
                   id="demo-radio-buttons-group-label"
@@ -222,6 +310,15 @@ const CompanyAcceptModal = () => {
                   <span className="me-2 ms-2 text-red-500">*</span>
                 </FormLabel>
                 <TextField
+                  type="number"
+                  InputProps={{
+                    inputProps: { min: 0, style: { appearance: "textfield" } },
+                    inputComponent: "input",
+                    endAdornment: null,
+                    incrementButton: {
+                      children: null,
+                    },
+                  }}
                   className="w-[50%] mt-3"
                   value={outputNo}
                   onChange={(e) => {
@@ -229,6 +326,11 @@ const CompanyAcceptModal = () => {
                   }}
                 />
               </div>
+              {!outputNoIsValid && (
+                <p className="text-red-500 mt-1 text-[12px]">
+                  {formErrors.outputNo}
+                </p>
+              )}
               <FormControl className="mt-3">
                 <FormLabel
                   id="demo-radio-buttons-group-label"
@@ -265,6 +367,11 @@ const CompanyAcceptModal = () => {
                     }
                   />
                 </RadioGroup>
+                {!sendCarByIsValid && (
+                  <p className="text-red-500 mt-1 text-[12px]">
+                    {formErrors.sendCarBy}
+                  </p>
+                )}
               </FormControl>
               {sendCarBy === 0 ? (
                 <form>
@@ -280,6 +387,11 @@ const CompanyAcceptModal = () => {
                       }}
                     />
                   </div>
+                  {!carDriverNameIsValid && (
+                    <p className="text-red-500 mt-1 text-[12px]">
+                      {formErrors.carDriverName}
+                    </p>
+                  )}
                   <div id="plate" className="flex flex-col mt-5">
                     <FormLabel className="text-[12px] mt-2 text-black">
                       پلاک :{" "}
@@ -292,6 +404,11 @@ const CompanyAcceptModal = () => {
                       }}
                     />
                   </div>
+                  {!carPlateIsValid && (
+                    <p className="text-red-500 mt-1 text-[12px]">
+                      {formErrors.carPlate}
+                    </p>
+                  )}
                   <div id="carKind" className="flex flex-col mt-5">
                     <FormLabel className="text-[12px] mt-2 text-black">
                       نوع ماشین :{" "}
@@ -303,14 +420,14 @@ const CompanyAcceptModal = () => {
                         dispatch(RsetCarModel(e.target.value));
                       }}
                     />
+                    {!carModelIsValid && (
+                      <p className="text-red-500 mt-1 text-[12px]">
+                        {formErrors.carModel}
+                      </p>
+                    )}
                   </div>
                 </form>
               ) : null}
-              {!companySendCarDateIsValid && (
-                <p className="text-red-500 mt-1 text-[12px]">
-                  {formErrors.companySendCarDate}
-                </p>
-              )}
             </div>
           </form>
         ) : (

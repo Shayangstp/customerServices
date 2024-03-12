@@ -10,6 +10,13 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s; /* Ensure the transition lasts a long time */
 }
 
+/* how remove increment and decreament of inputs number in mui  */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @font-face {
   font-family: "iranSans";
   src: url("../public/fonts/iranSans.ttf") format("woff");
@@ -99,7 +106,11 @@ body {
 .list .ant-pagination-next,
 .list .ant-pagination-jump-prev,
 .list .ant-pagination-jump-next {
-  background-color: rgb(87, 87, 87); /* Change the background color to your desired color */
+  background-color: rgb(
+    87,
+    87,
+    87
+  ); /* Change the background color to your desired color */
   border-color: #d9d9d9; /* Change the border color to your desired color */
   color: #252525; /* Change the text color to your desired color */
 }
